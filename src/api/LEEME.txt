@@ -1,0 +1,1 @@
+Configuración central de Axios y comunicación base con el servidor

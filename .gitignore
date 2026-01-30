@@ -7,25 +7,41 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
-.DS_Store
+.pnp
+.pnp.js
+
+# Testing
+coverage
+.nyc_output
+
+# Production / Build
 dist
 dist-ssr
-coverage
-*.local
+*.tsbuildinfo
 
-# Editor directories and files
+# Local Environment & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Editor / IDE
 .vscode/*
 !.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
 .idea
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-*.tsbuildinfo
-
+# Vite / Vue Specific
+*.local
 .eslintcache
 
 # Cypress
@@ -35,6 +51,7 @@ coverage
 # Vitest
 __screenshots__/
 
-# .NET / Visual Studio folders
-bin/
-obj/
+# System Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

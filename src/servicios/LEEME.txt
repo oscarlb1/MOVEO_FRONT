@@ -1,0 +1,1 @@
+Lógica de llamadas a los endpoints de la API (Equivalente a los Services del backend)

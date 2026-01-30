@@ -1,0 +1,1 @@
+Definición de tipos e interfaces de datos que coinciden con los DTOs de C#

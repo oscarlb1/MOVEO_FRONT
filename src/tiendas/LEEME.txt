@@ -1,0 +1,1 @@
+Gestión del estado global de la aplicación (Autenticación y datos persistentes)
