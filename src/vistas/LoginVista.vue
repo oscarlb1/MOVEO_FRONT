@@ -1,45 +1,83 @@
 <template>
-  <div class="login-container">
-    <div class="login-card">
-      <div class="login-header">
-        <h1>Bienvenido</h1>
-        <p>Ingresa tus credenciales para continuar</p>
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] p-6 relative overflow-hidden">
+    <!-- Elementos decorativos de fondo (opcionales, estilo sutil) -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+       <div class="absolute top-[10%] left-[10%] w-96 h-96 bg-[#E67E50]/10 rounded-full blur-3xl animate-pulse"></div>
+       <div class="absolute bottom-[10%] right-[10%] w-96 h-96 bg-[#374B54]/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    </div>
+
+    <div 
+      v-motion
+      :initial="{ opacity: 0, y: 20 }"
+      :enter="{ opacity: 1, y: 0, transition: { duration: 600 } }"
+      class="w-full max-w-md bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-2xl p-8 relative z-10"
+    >
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center p-3 bg-[#E67E50]/10 rounded-xl mb-4 group">
+          <Zap class="w-8 h-8 text-[#E67E50] group-hover:scale-110 transition-transform" />
+        </div>
+        <h1 class="text-3xl font-bold text-white mb-2">Bienvenido a Moveo</h1>
+        <p class="text-gray-300">Gestión logística inteligente</p>
       </div>
       
-      <form @submit.prevent="manejarLogin" class="login-form">
-        <div class="form-group">
-          <label for="usuario">Usuario</label>
-          <input 
-            id="usuario" 
-            v-model="credenciales.usuario" 
-            type="text" 
-            placeholder="ej. usuario@moveo.com"
-            required 
-            class="form-input"
-          />
+      <form @submit.prevent="manejarLogin" class="space-y-6">
+        <!-- Usuario Input -->
+        <div class="space-y-2">
+          <label for="usuario" class="text-sm font-medium text-gray-200">Usuario</label>
+          <div class="relative group">
+            <User class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#E67E50] transition-colors" />
+            <input 
+              id="usuario" 
+              v-model="credenciales.usuario" 
+              type="text" 
+              placeholder="ej. admin@moveo.com"
+              required 
+              class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#E67E50] focus:border-transparent transition-all"
+            />
+          </div>
         </div>
         
-        <div class="form-group">
-          <label for="clave">Contraseña</label>
-          <input 
-            id="clave" 
-            v-model="credenciales.clave" 
-            type="password" 
-            placeholder="••••••••"
-            required 
-            class="form-input"
-          />
+        <!-- Password Input -->
+        <div class="space-y-2">
+          <label for="clave" class="text-sm font-medium text-gray-200">Contraseña</label>
+          <div class="relative group">
+            <Lock class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-[#E67E50] transition-colors" />
+            <input 
+              id="clave" 
+              v-model="credenciales.clave" 
+              type="password" 
+              placeholder="••••••••"
+              required 
+              class="w-full bg-white/5 border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#E67E50] focus:border-transparent transition-all"
+            />
+          </div>
         </div>
         
-        <div v-if="error" class="alerta-error">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-alert-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <!-- Error Message -->
+        <div v-if="error" class="bg-red-500/10 border border-red-500/20 text-red-200 p-3 rounded-lg text-sm flex items-center gap-2">
+          <AlertCircle class="w-4 h-4 text-red-400" />
           {{ error }}
         </div>
         
-        <BotonBase type="submit" :cargando="cargando" class="btn-full">
-          Ingresar
-        </BotonBase>
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          :disabled="cargando"
+          class="w-full bg-[#E67E50] hover:bg-[#d66d40] text-white font-bold py-3.5 px-4 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-lg shadow-[#E67E50]/20 disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          <Loader2 v-if="cargando" class="w-5 h-5 animate-spin" />
+          <span v-else>Iniciar Sesión</span>
+          <ArrowRight v-if="!cargando" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </button>
       </form>
+
+      <!-- Footer/Link opcional -->
+      <div class="mt-6 text-center">
+        <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors">
+          ¿Olvidaste tu contraseña?
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +86,7 @@
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSesionStore } from '@/tiendas/sesion';
-import BotonBase from '@/componentes/comunes/BotonBase.vue';
+import { User, Lock, ArrowRight, Zap, Loader2, AlertCircle } from 'lucide-vue-next';
 
 const router = useRouter();
 const sesionStore = useSesionStore();
@@ -63,6 +101,9 @@ const error = ref('');
 async function manejarLogin() {
   cargando.value = true;
   error.value = '';
+  // Simular un pequeño delay para que se vea la animación de carga (opcional, quitar en prod si es instantáneo)
+  // await new Promise(r => setTimeout(r, 800)); 
+  
   try {
     await sesionStore.iniciarSesion(credenciales);
     router.push('/');
@@ -73,100 +114,3 @@ async function manejarLogin() {
   }
 }
 </script>
-
-<style scoped>
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  padding: 1rem;
-}
-
-.login-card {
-  background: var(--color-surface);
-  padding: 2.5rem;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  max-width: 400px;
-  animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.login-header h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--color-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.login-header p {
-  color: var(--color-text-light);
-  font-size: 0.95rem;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-weight: 500;
-  font-size: 0.9rem;
-  color: var(--color-text);
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #cbd5e1;
-  border-radius: var(--radius-md);
-  font-size: 1rem;
-  transition: all 0.2s;
-  background-color: #fff;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-.alerta-error {
-  background-color: #fef2f2;
-  color: var(--color-error);
-  padding: 0.75rem;
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid #fee2e2;
-}
-
-.btn-full {
-  width: 100%;
-  padding: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  margin-top: 0.5rem;
-}
-</style>
