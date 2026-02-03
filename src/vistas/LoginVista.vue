@@ -264,6 +264,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useSesionStore } from '@/tiendas/sesion';
 import { 
   LogIn, 
   Eye, 
@@ -278,6 +279,7 @@ import {
 
 // Router (equivalent to onNavigate)
 const router = useRouter();
+const sesionStore = useSesionStore();
 
 // State
 const showPassword = ref(false);
@@ -306,11 +308,15 @@ const features = [
 const handleLogin = async () => {
   isLoading.value = true;
   
-  // Simulación de login
-  setTimeout(() => {
-    isLoading.value = false;
+  try {
+    await sesionStore.iniciarSesion({ email: email.value, password: password.value });
     navigate('dashboard');
-  }, 1500);
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    // TODO: Show error message to user
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const navigate = (page: 'home' | 'services' | 'dashboard') => {

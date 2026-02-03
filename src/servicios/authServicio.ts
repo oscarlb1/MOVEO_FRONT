@@ -3,7 +3,8 @@ import type { LoginPeticion, LoginRespuesta } from '@/modelos/Auth';
 
 export default {
     async login(credenciales: LoginPeticion): Promise<LoginRespuesta> {
-        const respuesta = await clienteApi.post<LoginRespuesta>('/auth/login', credenciales);
+        // Backend endpoint is /Auth/iniciar-sesion
+        const respuesta = await clienteApi.post<LoginRespuesta>('/Auth/iniciar-sesion', credenciales);
         return respuesta.data;
     },
 
