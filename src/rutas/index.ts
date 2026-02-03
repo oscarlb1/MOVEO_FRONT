@@ -17,6 +17,12 @@ const router = createRouter({
             name: 'inicio',
             component: InicioVista,
             meta: { requiereAuth: true }
+        },
+        {
+            path: '/dashboard',
+            name: 'dashboard',
+            component: InicioVista,
+            meta: { requiereAuth: true }
         }
     ]
 });
