@@ -13,6 +13,12 @@ const router = createRouter({
             meta: { publico: true }
         },
         {
+            path: '/contacto',
+            name: 'contacto',
+            component: () => import('@/vistas/ContactoVista.vue'),
+            meta: { publico: true }
+        },
+        {
             path: '/',
             name: 'inicio',
             component: InicioVista,

@@ -3,7 +3,7 @@ import { Truck, ChevronDown, Settings, LogOut } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion';
 import { computed, ref } from 'vue';
 
-type Pagina = 'home' | 'services' | 'dashboard' | 'login'
+type Pagina = 'home' | 'services' | 'dashboard' | 'login' | 'contacto'
 
 interface Props {
   paginaActiva: Pagina
@@ -120,7 +120,12 @@ const cerrarSesion = async () => {
           >
             Iniciar sesión
           </button>
-          <button class="bg-[#E67E50] text-white px-6 py-2 rounded-lg hover:bg-[#d66d40] transition-colors shadow-md hover:shadow-lg">
+          
+          <!-- Contacto Button -->
+          <button 
+            @click="emit('navegar', 'contacto')"
+            class="bg-[#E67E50] text-white px-6 py-2 rounded-lg hover:bg-[#d66d40] transition-colors shadow-md hover:shadow-lg"
+          >
             Contacto
           </button>
         </div>
