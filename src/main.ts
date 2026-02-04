@@ -4,6 +4,7 @@ import { MotionPlugin } from '@vueuse/motion'
 import App from './App.vue'
 import router from './rutas'
 import './assets/main.css'
+import 'vue-sonner/style.css'
 
 const app = createApp(App)
 

@@ -52,11 +52,16 @@ export const useSesionStore = defineStore('sesion', () => {
         }
     }
 
-    function cerrarSesion() {
-        usuario.value = null;
-        token.value = null;
-        localStorage.removeItem('token');
-        authServicio.logout();
+    async function cerrarSesion() {
+        try {
+            await authServicio.logout();
+        } catch (error) {
+            console.error('Error al cerrar sesión', error);
+        } finally {
+            usuario.value = null;
+            token.value = null;
+            localStorage.removeItem('token');
+        }
     }
 
     return {

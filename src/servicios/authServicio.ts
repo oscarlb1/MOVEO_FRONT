@@ -8,8 +8,7 @@ export default {
         return respuesta.data;
     },
 
-    logout() {
-        // Si el backend requiere notificar el logout, se hace aquí.
-        // De lo contrario, solo se limpia el cliente/token localmente (manejado en la tienda).
+    async logout(): Promise<void> {
+        await clienteApi.post('/Auth/cerrar-sesion');
     }
 };
