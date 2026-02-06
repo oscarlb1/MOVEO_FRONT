@@ -23,6 +23,12 @@ const paginaActiva = computed(() => {
   return 'home'
 })
 
+const mostrarNavegacion = computed(() => {
+  if (paginaActiva.value === 'login') return false
+  if (paginaActiva.value === 'contacto' && route.query.sinHeader === 'true') return false
+  return true
+})
+
 const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion') => {
   switch (pagina) {
     case 'home':
@@ -49,9 +55,11 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
 
 <template>
   <Toaster position="top-center" richColors closeButton theme="dark" />
-  <Encabezado v-if="paginaActiva !== 'login'" :pagina-activa="paginaActiva" @navegar="navegar" />
-  <RouterView />
-  <PieDePagina v-if="paginaActiva !== 'login'" />
+  <Encabezado v-if="mostrarNavegacion" :pagina-activa="paginaActiva" @navegar="navegar" />
+  <main :class="{ 'pt-0': !mostrarNavegacion }">
+    <RouterView />
+  </main>
+  <PieDePagina v-if="mostrarNavegacion" />
 </template>
 
 <style>
