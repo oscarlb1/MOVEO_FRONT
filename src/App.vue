@@ -4,6 +4,10 @@ import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import PieDePagina from '@/componentes/PieDePagina.vue'
 import Encabezado from '@/componentes/Encabezado.vue'
+import { useTemaStore } from '@/tiendas/tema'
+
+const temaStore = useTemaStore()
+temaStore.aplicarTema()
 
 const router = useRouter()
 const route = useRoute()

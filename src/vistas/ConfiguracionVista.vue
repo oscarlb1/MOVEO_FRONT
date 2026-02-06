@@ -2,18 +2,22 @@
 import { ref, computed } from 'vue'
 import { 
   User, Settings, Shield, Bell, CreditCard, 
-  ChevronRight, Save, Camera, Mail, Phone, MapPin
+  ChevronRight, Save, Camera, Mail, Phone, MapPin,
+  Moon, Sun, Monitor
 } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion'
+import { useTemaStore } from '@/tiendas/tema'
 
 const sesionStore = useSesionStore()
+const temaStore = useTemaStore()
 const usuario = computed(() => sesionStore.usuario)
 
-type Seccion = 'perfil' | 'cuenta' | 'seguridad' | 'notificaciones'
+type Seccion = 'perfil' | 'cuenta' | 'seguridad' | 'notificaciones' | 'apariencia'
 const seccionActiva = ref<Seccion>('perfil')
 
 const menuSecciones = [
   { id: 'perfil', tag: 'Perfil', icon: User, desc: 'Información personal y avatar' },
+  { id: 'apariencia', tag: 'Apariencia', icon: Moon, desc: 'Personaliza el estilo visual' },
   { id: 'cuenta', tag: 'Cuenta', icon: Settings, desc: 'Preferencias de la cuenta y facturación' },
   { id: 'seguridad', tag: 'Seguridad', icon: Shield, desc: 'Contraseña y autenticación' },
   { id: 'notificaciones', tag: 'Notificaciones', icon: Bell, desc: 'Alertas y avisos por correo' }
@@ -184,6 +188,78 @@ const guardarCambios = () => {
                 </div>
               </div>
             </Transition>
+          </div>
+
+          <!-- Section: Apariencia -->
+          <div v-else-if="seccionActiva === 'apariencia'" class="p-8">
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mb-8">Personalización Visual</h2>
+            
+            <div class="space-y-8">
+              <div>
+                <h3 class="text-lg font-bold text-[#092C4C] dark:text-white mb-2">Tema de la interfaz</h3>
+                <p class="text-gray-500 mb-6 font-normal">Escoge el modo que mejor se adapte a tu comodidad visual.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <!-- Light Mode -->
+                  <button 
+                    @click="temaStore.setTema('claro')"
+                    class="p-4 rounded-2xl border-2 transition-all text-left group"
+                    :class="temaStore.tema === 'claro' 
+                      ? 'border-[#E67E50] bg-[#E67E50]/5' 
+                      : 'border-gray-100 hover:border-gray-200'"
+                  >
+                    <div class="w-full aspect-video bg-white border border-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                      <Sun class="w-8 h-8 text-yellow-500" />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#092C4C]">Claro</span>
+                      <div v-if="temaStore.tema === 'claro'" class="w-2 h-2 bg-[#E67E50] rounded-full"></div>
+                    </div>
+                  </button>
+
+                  <!-- Dark Mode -->
+                  <button 
+                    @click="temaStore.setTema('oscuro')"
+                    class="p-4 rounded-2xl border-2 transition-all text-left group"
+                    :class="temaStore.tema === 'oscuro' 
+                      ? 'border-[#E67E50] bg-[#E67E50]/5' 
+                      : 'border-gray-100 hover:border-gray-200 dark:border-gray-800'"
+                  >
+                    <div class="w-full aspect-video bg-[#092C4C] border border-white/10 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                      <Moon class="w-8 h-8 text-blue-400" />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#092C4C] dark:text-white">Oscuro</span>
+                      <div v-if="temaStore.tema === 'oscuro'" class="w-2 h-2 bg-[#E67E50] rounded-full"></div>
+                    </div>
+                  </button>
+
+                  <!-- System Mode -->
+                  <button 
+                    @click="temaStore.setTema('sistema')"
+                    class="p-4 rounded-2xl border-2 transition-all text-left group"
+                    :class="temaStore.tema === 'sistema' 
+                      ? 'border-[#E67E50] bg-[#E67E50]/5' 
+                      : 'border-gray-100 hover:border-gray-200 dark:border-gray-800'"
+                  >
+                    <div class="w-full aspect-video bg-gradient-to-r from-white to-[#092C4C] border border-gray-100 dark:border-white/10 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                      <Monitor class="w-8 h-8 text-purple-500" />
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-[#092C4C] dark:text-white">Sistema</span>
+                      <div v-if="temaStore.tema === 'sistema'" class="w-2 h-2 bg-[#E67E50] rounded-full"></div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="pt-8 border-t border-gray-100 dark:border-gray-800">
+                <h3 class="text-lg font-bold text-[#092C4C] dark:text-white mb-2">Consejo</h3>
+                <p class="text-gray-500 font-normal">
+                  El modo oscuro ayuda a reducir la fatiga visual en entornos con poca luz y puede ahorrar batería en dispositivos con pantallas OLED.
+                </p>
+              </div>
+            </div>
           </div>
 
           <!-- Other Sections Shell -->
