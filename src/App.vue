@@ -15,10 +15,11 @@ const paginaActiva = computed(() => {
   if (current === '/login') return 'login'
   if (current === '/services') return 'services'
   if (current === '/contacto') return 'contacto'
+  if (current === '/configuracion') return 'configuracion'
   return 'home'
 })
 
-const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto') => {
+const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion') => {
   switch (pagina) {
     case 'home':
       router.push('/')
@@ -34,6 +35,9 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
       break
     case 'contacto':
       router.push('/contacto')
+      break
+    case 'configuracion':
+      router.push('/configuracion')
       break
   }
 }

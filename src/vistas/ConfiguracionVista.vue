@@ -1,0 +1,213 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { 
+  User, Settings, Shield, Bell, CreditCard, 
+  ChevronRight, Save, Camera, Mail, Phone, MapPin
+} from 'lucide-vue-next'
+import { useSesionStore } from '@/tiendas/sesion'
+
+const sesionStore = useSesionStore()
+const usuario = computed(() => sesionStore.usuario)
+
+type Seccion = 'perfil' | 'cuenta' | 'seguridad' | 'notificaciones'
+const seccionActiva = ref<Seccion>('perfil')
+
+const menuSecciones = [
+  { id: 'perfil', tag: 'Perfil', icon: User, desc: 'Información personal y avatar' },
+  { id: 'cuenta', tag: 'Cuenta', icon: Settings, desc: 'Preferencias de la cuenta y facturación' },
+  { id: 'seguridad', tag: 'Seguridad', icon: Shield, desc: 'Contraseña y autenticación' },
+  { id: 'notificaciones', tag: 'Notificaciones', icon: Bell, desc: 'Alertas y avisos por correo' }
+]
+
+const formularioPerfil = ref({
+  nombre: usuario.value?.nombre || '',
+  email: usuario.value?.email || '',
+  telefono: '+34 600 000 000',
+  cargo: 'Director de Logística',
+  biografia: 'Profesional con más de 10 años de experiencia en el sector.'
+})
+
+const guardando = ref(false)
+const mensajeExito = ref(false)
+
+const guardarCambios = () => {
+  guardando.value = true
+  // Simulación de guardado
+  setTimeout(() => {
+    guardando.value = false
+    mensajeExito.value = true
+    setTimeout(() => mensajeExito.value = false, 3000)
+  }, 1000)
+}
+</script>
+
+<template>
+  <div class="min-h-screen bg-gray-50/50 pb-20">
+    <div class="max-w-7xl mx-auto px-6 pt-10">
+      <div class="mb-10">
+        <h1 class="text-3xl font-bold text-[#092C4C] mb-2">Configuración</h1>
+        <p class="text-gray-500">Gestiona tu información personal y preferencias de la plataforma.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-[280px_1fr] gap-8">
+        <!-- Sidebar Navigation -->
+        <aside class="space-y-2">
+          <button
+            v-for="item in menuSecciones"
+            :key="item.id"
+            @click="seccionActiva = item.id as Seccion"
+            class="w-full flex items-center gap-4 p-4 rounded-xl transition-all duration-200 group text-left"
+            :class="seccionActiva === item.id 
+              ? 'bg-white shadow-md border-l-4 border-[#E67E50] text-[#092C4C]' 
+              : 'text-gray-500 hover:bg-white hover:shadow-sm'"
+          >
+            <div class="p-2 rounded-lg transition-colors" :class="seccionActiva === item.id ? 'bg-[#E67E50]/10 text-[#E67E50]' : 'bg-gray-100 text-gray-400 group-hover:bg-white'">
+              <component :is="item.icon" class="w-5 h-5" />
+            </div>
+            <div>
+              <p class="font-bold text-sm leading-none mb-1">{{ item.tag }}</p>
+              <p class="text-xs text-secondary-500 opacity-70">{{ item.desc }}</p>
+            </div>
+          </button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <!-- Section: Perfil -->
+          <div v-if="seccionActiva === 'perfil'" class="p-8">
+            <div class="flex items-center justify-between mb-8">
+              <h2 class="text-2xl font-bold text-[#092C4C]">Perfil Público</h2>
+              <button 
+                @click="guardarCambios"
+                class="bg-[#E67E50] text-white px-6 py-2.5 rounded-xl font-semibold flex items-center gap-2 hover:bg-[#d66d40] transition-colors shadow-lg shadow-[#E67E50]/20 active:scale-95 disabled:opacity-50"
+                :disabled="guardando"
+              >
+                <Save v-if="!guardando" class="w-4 h-4" />
+                <div v-else class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+              </button>
+            </div>
+
+            <!-- Avatar Upload -->
+            <div class="flex items-center gap-8 mb-10 pb-8 border-b border-gray-50">
+              <div class="relative group">
+                <div class="w-24 h-24 bg-gradient-to-br from-[#E67E50] to-[#374B54] rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">
+                  {{ usuario?.nombre.substring(0, 2).toUpperCase() }}
+                </div>
+                <button class="absolute -bottom-2 -right-2 p-2 bg-white rounded-lg shadow-md border border-gray-100 text-gray-500 hover:text-[#E67E50] transition-colors">
+                  <Camera class="w-4 h-4" />
+                </button>
+              </div>
+              <div>
+                <h4 class="font-bold text-[#092C4C] mb-1">Tu Foto de Perfil</h4>
+                <p class="text-sm text-gray-500 mb-3">Recomendado 400x400px. Máximo 2MB.</p>
+                <div class="flex gap-3">
+                  <button class="text-sm font-bold text-[#E67E50] hover:underline">Subir nueva</button>
+                  <button class="text-sm font-bold text-red-400 hover:underline">Eliminar</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Form -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-700">Nombre completo</label>
+                <div class="relative group">
+                  <User class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50] transition-colors" />
+                  <input 
+                    v-model="formularioPerfil.nombre"
+                    type="text" 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] focus:ring-4 focus:ring-[#E67E50]/5 outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-700">Correo electrónico</label>
+                <div class="relative group">
+                  <Mail class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input 
+                    v-model="formularioPerfil.email"
+                    type="email" 
+                    disabled
+                    class="w-full pl-11 pr-4 py-3 bg-gray-100 border border-transparent rounded-xl text-gray-500 cursor-not-allowed"
+                  />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-700">Teléfono</label>
+                <div class="relative group">
+                  <Phone class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50]" />
+                  <input 
+                    v-model="formularioPerfil.telefono"
+                    type="tel" 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-gray-700">Cargo / Posición</label>
+                <div class="relative group">
+                  <Settings class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50]" />
+                  <input 
+                    v-model="formularioPerfil.cargo"
+                    type="text" 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all"
+                  />
+                </div>
+              </div>
+              <div class="md:col-span-2 space-y-2">
+                <label class="text-sm font-bold text-gray-700">Biografía</label>
+                <textarea 
+                  v-model="formularioPerfil.biografia"
+                  rows="4"
+                  class="w-full p-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all resize-none"
+                ></textarea>
+              </div>
+            </div>
+            
+            <!-- Success Message Toast-like -->
+            <Transition
+              enter-active-class="transform transition duration-300 ease-out"
+              enter-from-class="translate-y-10 opacity-0"
+              enter-to-class="translate-y-0 opacity-100"
+              leave-active-class="transition duration-200 ease-in"
+              leave-from-class="opacity-100"
+              leave-to-class="opacity-0"
+            >
+              <div v-if="mensajeExito" class="fixed bottom-10 right-10 bg-[#092C4C] text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 z-50 border border-white/10">
+                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                  <Save class="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p class="font-bold">¡Cambios guardados!</p>
+                  <p class="text-xs text-gray-400">Tu perfil ha sido actualizado correctamente.</p>
+                </div>
+              </div>
+            </Transition>
+          </div>
+
+          <!-- Other Sections Shell -->
+          <div v-else class="p-12 text-center">
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <component :is="menuSecciones.find(s => s.id === seccionActiva)?.icon" class="w-10 h-10 text-gray-300" />
+            </div>
+            <h3 class="text-xl font-bold text-[#092C4C] mb-2">Sección {{ menuSecciones.find(s => s.id === seccionActiva)?.tag }}</h3>
+            <p class="text-gray-500 mb-8">Esta sección está actualmente en desarrollo. Pronto podrás configurar tus preferencias detalladas.</p>
+            <button class="text-[#E67E50] font-bold hover:underline">Volver a Perfil</button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.animate-in {
+  animation: slide-up 0.4s ease-out;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>

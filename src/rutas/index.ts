@@ -25,6 +25,12 @@ const router = createRouter({
             meta: { requiereAuth: true }
         },
         {
+            path: '/configuracion',
+            name: 'configuracion',
+            component: () => import('@/vistas/ConfiguracionVista.vue'),
+            meta: { requiereAuth: true }
+        },
+        {
             path: '/dashboard',
             name: 'dashboard',
             component: InicioVista,

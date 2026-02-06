@@ -3,7 +3,7 @@ import { Truck, ChevronDown, Settings, LogOut } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion';
 import { computed, ref } from 'vue';
 
-type Pagina = 'home' | 'services' | 'dashboard' | 'login' | 'contacto'
+type Pagina = 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion'
 
 interface Props {
   paginaActiva: Pagina
@@ -32,8 +32,7 @@ const toggleMenu = () => {
 
 const irAConfiguracion = () => {
   menuAbierto.value = false;
-  // TODO: Implementar navegación a configuración
-  console.log("Navegar a configuración");
+  emit('navegar', 'configuracion');
 };
 
 const cerrarSesion = async () => {
