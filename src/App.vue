@@ -61,6 +61,7 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
     <RouterView />
   </main>
   <PieDePagina v-if="mostrarNavegacion" />
+  <AvisoCookies />
 </template>
 
 <style>

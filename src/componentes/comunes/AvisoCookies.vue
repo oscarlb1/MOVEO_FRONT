@@ -45,7 +45,7 @@ const toggleConfig = () => {
   <Transition name="slide-up">
     <div 
       v-if="visible" 
-      class="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
+      class="fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6"
     >
       <div class="max-w-4xl mx-auto bg-[#092C4C] rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col">
         
