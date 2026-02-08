@@ -31,6 +31,12 @@ const router = createRouter({
             meta: { requiereAuth: true }
         },
         {
+            path: '/cookies',
+            name: 'cookies',
+            component: () => import('@/vistas/CookiesVista.vue'),
+            meta: { publico: true }
+        },
+        {
             path: '/dashboard',
             name: 'dashboard',
             component: InicioVista,
