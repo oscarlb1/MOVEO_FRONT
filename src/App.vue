@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import PieDePagina from '@/componentes/PieDePagina.vue'
 import Encabezado from '@/componentes/Encabezado.vue'
+import AvisoCookies from '@/componentes/comunes/AvisoCookies.vue'
 import { useTemaStore } from '@/tiendas/tema'
 
 const temaStore = useTemaStore()
