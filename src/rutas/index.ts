@@ -25,6 +25,12 @@ const router = createRouter({
             meta: { requiereAuth: true }
         },
         {
+            path: '/terminos',
+            name: 'terminos',
+            component: () => import('@/vistas/TerminosVista.vue'),
+            meta: { publico: true }
+        },
+        {
             path: '/configuracion',
             name: 'configuracion',
             component: () => import('@/vistas/ConfiguracionVista.vue'),

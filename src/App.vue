@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import PieDePagina from '@/componentes/PieDePagina.vue'
 import Encabezado from '@/componentes/Encabezado.vue'
+import AvisoCookies from '@/componentes/comunes/AvisoCookies.vue'
 import { useTemaStore } from '@/tiendas/tema'
 
 const temaStore = useTemaStore()
@@ -52,6 +53,7 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
   <Encabezado v-if="paginaActiva !== 'login'" :pagina-activa="paginaActiva" @navegar="navegar" />
   <RouterView />
   <PieDePagina v-if="paginaActiva !== 'login'" />
+  <AvisoCookies />
 </template>
 
 <style>
