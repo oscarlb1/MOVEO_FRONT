@@ -19,6 +19,12 @@ const router = createRouter({
             meta: { publico: true }
         },
         {
+            path: '/privacidad',
+            name: 'privacidad',
+            component: () => import('@/vistas/PrivacidadVista.vue'),
+            meta: { publico: true }
+        },
+        {
             path: '/',
             name: 'inicio',
             component: InicioVista,
