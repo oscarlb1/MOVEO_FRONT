@@ -26,7 +26,7 @@ const socialLinks = [
 const legalLinks = [
   { label: 'Privacidad', href: '#' },
   { label: 'Términos', href: '#' },
-  { label: 'Cookies', href: '#' },
+  { label: 'Cookies', href: '/cookies' },
 ]
 </script>
 
