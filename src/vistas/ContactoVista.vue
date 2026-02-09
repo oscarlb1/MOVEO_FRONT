@@ -62,7 +62,7 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
   <div class="bg-white">
 
     <!-- ==================== HERO + FORMULARIO ==================== -->
-    <section class="relative bg-gradient-to-br from-[#092C4C] via-[#1a3a52] to-[#092C4C] pt-28 pb-40 overflow-hidden">
+    <section class="relative bg-gradient-to-br from-[#092C4C] via-[#1a3a52] to-[#092C4C] pt-28 pb-40 lg:py-0 lg:min-h-[calc(100vh-80px)] flex items-center overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
         <div class="burbuja-naranja absolute top-0 right-0 w-[500px] h-[500px] bg-[#E67E50] rounded-full blur-[120px] opacity-20" />
         <div class="burbuja-azul absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#374B54] rounded-full blur-[120px] opacity-20" />
@@ -71,10 +71,10 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
         <div class="absolute inset-0" :style="{ backgroundImage: 'radial-gradient(circle, #E67E50 1px, transparent 1px)', backgroundSize: '40px 40px' }" />
       </div>
 
-      <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
           <!-- Info -->
-          <div class="animar-izquierda text-white pr-4">
+          <div class="animar-izquierda text-white lg:pr-4 text-center lg:text-left">
             <div class="animar-arriba inline-flex items-center gap-2 bg-[#E67E50]/20 border border-[#E67E50]/30 rounded-full px-5 py-2 mb-8">
               <Zap class="w-5 h-5 text-[#E67E50]" />
               <span class="text-white font-medium">Contáctanos ahora</span>
@@ -86,16 +86,16 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
               Completa el formulario y uno de nuestros expertos se pondrá en contacto
               contigo para mostrarte cómo Moveo puede revolucionar tu operación.
             </p>
-            <div class="flex flex-col gap-4 mb-10">
+            <div class="flex flex-col gap-4 mb-10 items-center lg:items-start">
               <div
                 v-for="(b, i) in beneficios" :key="i"
                 class="animar-beneficio flex items-center gap-4"
                 :style="{ animationDelay: `${0.4 + i * 0.1}s` }"
               >
-                <div class="w-12 h-12 bg-[#E67E50]/20 backdrop-blur-sm border border-[#E67E50]/30 rounded-xl flex items-center justify-center">
+                <div class="w-12 h-12 bg-[#E67E50]/20 backdrop-blur-sm border border-[#E67E50]/30 rounded-xl flex items-center justify-center shrink-0">
                   <component :is="b.icon" class="w-6 h-6 text-[#E67E50]" />
                 </div>
-                <span class="text-white text-lg">{{ b.text }}</span>
+                <span class="text-white text-lg text-left">{{ b.text }}</span>
               </div>
             </div>
             <div class="grid grid-cols-3 gap-6">
