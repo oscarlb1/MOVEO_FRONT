@@ -41,19 +41,13 @@ const router = createRouter({
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: DashboardDemoVista,
+            component: () => import('@/vistas/DashboardVista.vue'),
             meta: { publico: true }
-        },
-        {
-            path: '/mis-servicios',
-            name: 'mis-servicios',
-            component: ServiciosContratadosVista,
-            meta: { requiereAuth: true }
         },
         {
             path: '/configuracion',
             name: 'configuracion',
-            component: ConfiguracionVista,
+            component: () => import('@/vistas/ConfiguracionVista.vue'),
             meta: { requiereAuth: true }
         },
         {
@@ -86,7 +80,7 @@ router.beforeEach((to, from, next) => {
     }
     // Evita que usuarios autenticados vayan al login
     else if (to.name === 'login' && sesionStore.estaAutenticado) {
-        next({ name: 'mis-servicios' });
+        next({ name: 'dashboard' });
     }
     else {
         next();

@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { Toaster } from 'vue-sonner'
 import PieDePagina from '@/componentes/PieDePagina.vue'
 import Encabezado from '@/componentes/Encabezado.vue'
-import AvisoCookies from '@/componentes/comunes/AvisoCookies.vue'
+import BannerCookies from '@/componentes/comunes/BannerCookies.vue'
 import { useTemaStore } from '@/tiendas/tema'
 
 const temaStore = useTemaStore()
@@ -21,17 +21,14 @@ const paginaActiva = computed(() => {
   if (current === '/services' || current === '/servicios') return 'services'
   if (current === '/contacto') return 'contacto'
   if (current === '/configuracion') return 'configuracion'
-  if (current === '/mis-servicios') return 'mis-servicios'
   return 'home'
 })
 
-const mostrarNavegacion = computed(() => {
-  if (paginaActiva.value === 'login') return false
-  if (paginaActiva.value === 'contacto' && route.query.sinHeader === 'true') return false
-  return true
+const mostrarLayout = computed(() => {
+  return route.name !== 'login'
 })
 
-const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion' | 'mis-servicios') => {
+const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion') => {
   switch (pagina) {
     case 'home':
       router.push('/')
@@ -51,21 +48,16 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
     case 'configuracion':
       router.push('/configuracion')
       break
-    case 'mis-servicios':
-      router.push('/mis-servicios')
-      break
   }
 }
 </script>
 
 <template>
   <Toaster position="top-center" richColors closeButton theme="dark" />
-  <Encabezado v-if="mostrarNavegacion" :pagina-activa="paginaActiva" @navegar="navegar" />
-  <main :class="{ 'pt-0': !mostrarNavegacion }">
-    <RouterView />
-  </main>
-  <PieDePagina v-if="mostrarNavegacion" />
-  <AvisoCookies />
+  <Encabezado v-if="mostrarLayout" :pagina-activa="paginaActiva" @navegar="navegar" />
+  <RouterView />
+  <PieDePagina v-if="mostrarLayout" />
+  <BannerCookies />
 </template>
 
 <style>

@@ -375,7 +375,7 @@ const handleLogin = async () => {
       localStorage.removeItem('savedEmail');
     }
 
-    navigate('mis-servicios');
+    navigate('dashboard');
   } catch (error: any) {
     console.error("Error al iniciar sesión:", error);
     isError.value = true;
@@ -388,7 +388,7 @@ const handleLogin = async () => {
   }
 };
 
-const navigate = (page: 'home' | 'services' | 'dashboard' | 'mis-servicios') => {
+const navigate = (page: 'home' | 'services' | 'dashboard') => {
   // Map page strings to route names or paths
   switch (page) {
     case 'home':
@@ -400,9 +400,6 @@ const navigate = (page: 'home' | 'services' | 'dashboard' | 'mis-servicios') => 
       break;
     case 'services':
       router.push('/services');
-      break;
-    case 'mis-servicios':
-      router.push('/mis-servicios');
       break;
   }
 };

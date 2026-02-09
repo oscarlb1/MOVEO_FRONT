@@ -3,7 +3,7 @@ import { Truck, ChevronDown, Settings, LogOut } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion';
 import { computed, ref } from 'vue';
 
-type Pagina = 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion' | 'mis-servicios'
+type Pagina = 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion'
 
 interface Props {
   paginaActiva: Pagina
@@ -24,19 +24,10 @@ const enlaces = computed(() => {
   const base = [
     { pagina: 'home' as Pagina, texto: 'Inicio' },
     { pagina: 'services' as Pagina, texto: 'Servicios' },
+    { pagina: 'dashboard' as Pagina, texto: 'Dashboard' },
   ];
 
-  if (estaAutenticado.value) {
-    return [
-      ...base,
-      { pagina: 'mis-servicios' as Pagina, texto: 'Mis Servicios' }
-    ];
-  }
-
-  return [
-    ...base,
-    { pagina: 'dashboard' as Pagina, texto: 'Dashboard Demo' }
-  ];
+  return base;
 });
 
 const toggleMenu = () => {
