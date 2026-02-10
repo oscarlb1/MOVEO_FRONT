@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import type { ApexOptions } from 'apexcharts'
 import { 
   Truck, Package, Users, TrendingUp, TrendingDown,
   AlertCircle, CheckCircle2, Clock, MapPin, Activity,
@@ -7,8 +9,13 @@ import {
   Download, RefreshCw, ChevronDown, Eye, XCircle, Zap,
   Moon, Sun
 } from 'lucide-vue-next'
+import VueApexCharts from 'vue3-apexcharts'
+
+import { useSesionStore } from '@/tiendas/sesion'
 
 // State
+const router = useRouter()
+const sesionStore = useSesionStore()
 const darkMode = ref(false) // Toggle for demo purposes, could sync with store
 const dateRange = ref("Hoy")
 const selectedFilter = ref("Todos")
@@ -16,7 +23,7 @@ const notifications = ref(5)
 const menuPerfilAbierto = ref(false)
 
 // Chart Options (Computes based on darkMode)
-const chartOptionsArea = computed(() => ({
+const chartOptionsArea = computed<ApexOptions>(() => ({
   chart: {
     type: 'area',
     toolbar: { show: false },
@@ -59,7 +66,7 @@ const chartSeriesArea = [
   { name: 'Completadas', data: [42, 50, 46, 58, 53, 36, 24] }
 ]
 
-const chartOptionsDonut = computed(() => ({
+const chartOptionsDonut = computed<ApexOptions>(() => ({
   chart: { type: 'donut', background: 'transparent' },
   labels: ['En ruta', 'Disponibles', 'Mantenimiento', 'Fuera de servicio'],
   colors: ['#E67E50', '#374B54', '#092C4C', '#BDBDBD'],
@@ -149,79 +156,40 @@ onMounted(() => {
     'min-h-screen transition-colors duration-300',
     darkMode ? 'bg-[#0a0f1a] text-white' : 'bg-[#EEEEEE] text-[#424242]'
   ]">
-    <!-- Header -->
-    <header class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-95 border-b transition-colors duration-300"
-      :class="darkMode ? 'bg-[#1a2332]/90 border-gray-700' : 'bg-white/90 border-gray-200'">
-      <div class="max-w-[1600px] mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-          <!-- Left -->
-          <div class="flex items-center gap-8">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-[#E67E50] rounded-lg flex items-center justify-center">
-                <Truck class="w-6 h-6 text-white" />
-              </div>
-              <span class="text-xl font-bold text-[#E67E50]">Dashboard</span>
-            </div>
-            
-            <div class="hidden lg:flex items-center gap-1">
-              <button class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-medium">Vista General</button>
-              <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
-                :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Rutas</button>
-              <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
-                :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Flota</button>
-            </div>
-          </div>
+    <!-- Toolbar / Filter Bar -->
+    <div class="max-w-[1600px] mx-auto px-6 pt-6 pb-2">
+      <div class="flex items-center justify-between p-4 rounded-2xl border transition-all"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200 shadow-sm'">
+        
+        <!-- Left: Secondary Navigation -->
+        <div class="hidden lg:flex items-center gap-1">
+          <button class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-medium">Vista General</button>
+          <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
+            :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Rutas</button>
+          <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
+            :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Flota</button>
+        </div>
+        
+        <!-- Right: Controls -->
+        <div class="flex items-center gap-4">
+          <!-- Date -->
+          <button class="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
+            :class="darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-[#424242]'">
+            <Calendar class="w-4 h-4" />
+            <span>{{ dateRange }}</span>
+            <ChevronDown class="w-4 h-4" />
+          </button>
 
-          <!-- Right -->
-          <div class="flex items-center gap-4">
-            <!-- Date -->
-            <button class="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
-              :class="darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-[#424242]'">
-              <Calendar class="w-4 h-4" />
-              <span>{{ dateRange }}</span>
-              <ChevronDown class="w-4 h-4" />
-            </button>
-
-            <!-- Notifications -->
-            <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-              <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
-              <span v-if="notifications > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-xs rounded-full flex items-center justify-center">
-                {{ notifications }}
-              </span>
-            </button>
-
-            <!-- Dark Mode Toggle -->
-            <button
-              @click="darkMode = !darkMode"
-              class="relative w-14 h-7 rounded-full transition-colors focus:outline-none"
-              :class="darkMode ? 'bg-[#E67E50]' : 'bg-gray-300'"
-            >
-              <div
-                class="absolute top-1 w-5 h-5 bg-white rounded-full flex items-center justify-center transition-transform duration-300 shadow-sm"
-                :class="darkMode ? 'translate-x-7' : 'translate-x-1'"
-              >
-                <Moon v-if="darkMode" class="w-3 h-3 text-[#E67E50]" />
-                <Sun v-else class="w-3 h-3 text-gray-600" />
-              </div>
-            </button>
-
-            <!-- Profile -->
-            <div class="relative pl-4 border-l" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-              <button @click="menuPerfilAbierto = !menuPerfilAbierto" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <div class="w-10 h-10 bg-[#E67E50] rounded-full flex items-center justify-center text-white font-bold">
-                  AD
-                </div>
-                <div class="hidden lg:block text-left">
-                  <p class="text-sm font-semibold leading-none" :class="darkMode ? 'text-white' : 'text-[#424242]'">Admin</p>
-                  <p class="text-xs mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">admin@moveo.com</p>
-                </div>
-                <ChevronDown class="w-4 h-4" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
-              </button>
-            </div>
-          </div>
+          <!-- Notifications -->
+          <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
+            <span v-if="notifications > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-xs rounded-full flex items-center justify-center">
+              {{ notifications }}
+            </span>
+          </button>
         </div>
       </div>
-    </header>
+    </div>
 
     <div class="max-w-[1600px] mx-auto px-6 py-8">
       
@@ -273,7 +241,7 @@ onMounted(() => {
             </div>
           </div>
           <div class="w-full h-[300px]">
-            <apexchart height="100%" width="100%" :options="chartOptionsArea" :series="chartSeriesArea" />
+            <VueApexCharts height="100%" width="100%" :options="chartOptionsArea" :series="chartSeriesArea" />
           </div>
         </div>
 
@@ -282,7 +250,7 @@ onMounted(() => {
           :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
           <h3 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#424242]'">Estado de Flota</h3>
           <div class="w-full h-[250px] flex items-center justify-center">
-            <apexchart height="100%" width="100%" :options="chartOptionsDonut" :series="chartSeriesDonut" />
+            <VueApexCharts height="100%" width="100%" :options="chartOptionsDonut" :series="chartSeriesDonut" />
           </div>
           <div class="space-y-3 mt-4">
              <div v-for="(item, i) in [
