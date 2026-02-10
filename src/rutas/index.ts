@@ -5,7 +5,7 @@ import InicioVista from '@/vistas/InicioVista.vue';
 import ContactoVista from '@/vistas/ContactoVista.vue';
 import ServiciosVista from '@/vistas/ServiciosVista.vue';
 import DashboardDemoVista from '@/vistas/DashboardDemoVista.vue';
-import ServiciosContratadosVista from '@/vistas/ServiciosContratadosVista.vue';
+// Removed unused import
 import ConfiguracionVista from '@/vistas/ConfiguracionVista.vue';
 import PrivacidadVista from '@/vistas/PrivacidadVista.vue';
 import TerminosVista from '@/vistas/TerminosVista.vue';
@@ -36,6 +36,12 @@ const router = createRouter({
             path: '/servicios',
             name: 'servicios',
             component: ServiciosVista,
+            meta: { publico: true }
+        },
+        {
+            path: '/dashboard-demo',
+            name: 'dashboard-demo',
+            component: () => import('@/vistas/DashboardDemoVista.vue'),
             meta: { publico: true }
         },
         {

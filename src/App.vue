@@ -6,9 +6,11 @@ import PieDePagina from '@/componentes/PieDePagina.vue'
 import Encabezado from '@/componentes/Encabezado.vue'
 import BannerCookies from '@/componentes/comunes/BannerCookies.vue'
 import { useTemaStore } from '@/tiendas/tema'
+import { useSesionStore } from '@/tiendas/sesion'
 
 const temaStore = useTemaStore()
 temaStore.aplicarTema()
+const sesionStore = useSesionStore()
 
 const router = useRouter()
 const route = useRoute()
@@ -37,7 +39,11 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
       router.push('/servicios')
       break
     case 'dashboard':
-      router.push('/dashboard')
+      if (sesionStore.estaAutenticado) {
+        router.push('/dashboard')
+      } else {
+        router.push('/dashboard-demo')
+      }
       break
     case 'login':
       router.push('/login')
