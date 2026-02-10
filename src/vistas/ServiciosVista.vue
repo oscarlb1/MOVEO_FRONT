@@ -2,7 +2,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { 
   Truck, Zap, Brain, Map, Bell, Clock, Shield, 
-  BarChart3, Users, FileText, Lock, CheckCircle2 
+  BarChart3, Users, FileText, Lock, CheckCircle2,
+  Route, Radio
 } from 'lucide-vue-next'
 import ContadorAnimado from '@/componentes/comunes/ContadorAnimado.vue'
 
@@ -108,8 +109,8 @@ function esVisible(id: string) {
           class="transicion-seccion"
           :class="{ 'visible': esVisible('sec-serv-1') }"
         >
-          <span class="bg-[#E67E50]/10 text-[#E67E50] px-4 py-1 rounded-full text-sm font-bold mb-6 inline-block">
-            🚀 Servicio #1
+          <span class="bg-[#E67E50]/10 text-[#E67E50] px-4 py-1 rounded-full text-sm font-bold mb-6 flex items-center gap-2 w-fit">
+            <Route class="w-4 h-4" /> Servicio #1
           </span>
           <h2 class="text-3xl font-bold text-[#092C4C] mb-6">Optimización de Rutas con IA</h2>
           <p class="text-gray-600 mb-8 leading-relaxed">
@@ -244,8 +245,8 @@ function esVisible(id: string) {
             :class="{ 'visible': esVisible('sec-serv-2') }"
             style="transition-delay: 200ms"
           >
-            <span class="bg-gray-200 text-gray-700 px-4 py-1 rounded-full text-sm font-bold mb-6 inline-block">
-              📡 Servicio #2
+            <span class="bg-gray-200 text-gray-700 px-4 py-1 rounded-full text-sm font-bold mb-6 flex items-center gap-2 w-fit">
+              <Radio class="w-4 h-4" /> Servicio #2
             </span>
             <h2 class="text-3xl font-bold text-[#092C4C] mb-6">Seguimiento en Tiempo Real</h2>
             <p class="text-gray-600 mb-8 leading-relaxed">
@@ -291,8 +292,8 @@ function esVisible(id: string) {
           class="text-center mb-16 transicion-seccion"
           :class="{ 'visible': esVisible('sec-analitica') }"
         >
-          <span class="bg-[#1e293b] border border-gray-600 text-gray-300 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">
-            📊 Servicio #3
+          <span class="bg-[#1e293b] border border-gray-600 text-gray-300 px-4 py-1 rounded-full text-sm font-bold mb-4 flex items-center gap-2 w-fit mx-auto">
+            <BarChart3 class="w-4 h-4 text-[#E67E50]" /> Servicio #3
           </span>
           <h2 class="text-3xl font-bold mb-4">Analítica Avanzada</h2>
           <p class="text-gray-400 max-w-2xl mx-auto">
