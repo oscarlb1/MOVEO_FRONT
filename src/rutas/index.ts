@@ -39,6 +39,12 @@ const router = createRouter({
             meta: { publico: true }
         },
         {
+            path: '/dashboard-demo',
+            name: 'dashboard-demo',
+            component: () => import('@/vistas/DashboardDemoVista.vue'),
+            meta: { publico: true }
+        },
+        {
             path: '/dashboard',
             name: 'dashboard',
             component: () => import('@/vistas/DashboardVista.vue'),

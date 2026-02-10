@@ -1,153 +1,487 @@
 <script setup lang="ts">
+import { ref, onMounted, computed, watch } from 'vue'
 import { 
-  Truck, Package, Clock, TrendingUp, MoreHorizontal, 
-  MapPin, AlertCircle, CheckCircle2, User 
+  Truck, Package, Users, TrendingUp, TrendingDown,
+  AlertCircle, CheckCircle2, Clock, MapPin, Activity,
+  Bell, Calendar, Filter, Search, MoreVertical,
+  Download, RefreshCw, ChevronDown, Eye, XCircle, Zap,
+  Moon, Sun
 } from 'lucide-vue-next'
 
-const stats = [
-  { label: 'Entregas Hoy', value: '1,248', change: '+12%', icon: Package, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-  { label: 'En Tránsito', value: '42', change: '+5%', icon: Truck, color: 'text-[#E67E50]', bg: 'bg-[#E67E50]/10' },
-  { label: 'Tiempo Promedio', value: '45m', change: '-8%', icon: Clock, color: 'text-green-500', bg: 'bg-green-500/10' },
-  { label: 'Eficiencia', value: '98.5%', change: '+2%', icon: TrendingUp, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+// State
+const darkMode = ref(false) // Toggle for demo purposes, could sync with store
+const dateRange = ref("Hoy")
+const selectedFilter = ref("Todos")
+const notifications = ref(5)
+const menuPerfilAbierto = ref(false)
+
+// Chart Options (Computes based on darkMode)
+const chartOptionsArea = computed(() => ({
+  chart: {
+    type: 'area',
+    toolbar: { show: false },
+    background: 'transparent',
+    fontFamily: 'inherit'
+  },
+  colors: ['#E67E50', '#374B54'],
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.3,
+      opacityTo: 0.05,
+      stops: [0, 90, 100]
+    }
+  },
+  dataLabels: { enabled: false },
+  stroke: { curve: 'smooth', width: 2 },
+  xaxis: {
+    categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+    axisBorder: { show: false },
+    axisTicks: { show: false },
+    labels: { style: { colors: darkMode.value ? '#9ca3af' : '#757575' } }
+  },
+  yaxis: {
+    labels: { style: { colors: darkMode.value ? '#9ca3af' : '#757575' } }
+  },
+  grid: {
+    borderColor: darkMode.value ? '#2a3441' : '#EEEEEE',
+    strokeDashArray: 4,
+  },
+  tooltip: {
+    theme: darkMode.value ? 'dark' : 'light'
+  },
+  legend: { show: false }
+}))
+
+const chartSeriesArea = [
+  { name: 'Entregas', data: [45, 52, 48, 61, 55, 38, 25] },
+  { name: 'Completadas', data: [42, 50, 46, 58, 53, 36, 24] }
 ]
 
-const recentActivity = [
-  { id: 1, type: 'delivery', message: 'Entrega completada #FL-2938', time: 'Hace 5 min', status: 'success' },
-  { id: 2, type: 'alert', message: 'Retraso detectado en ruta R-402', time: 'Hace 12 min', status: 'warning' },
-  { id: 3, type: 'maintenance', message: 'Vehículo T-882 requiere revisión', time: 'Hace 45 min', status: 'info' },
-  { id: 4, type: 'delivery', message: 'Entrega completada #FL-2930', time: 'Hace 1 hora', status: 'success' },
+const chartOptionsDonut = computed(() => ({
+  chart: { type: 'donut', background: 'transparent' },
+  labels: ['En ruta', 'Disponibles', 'Mantenimiento', 'Fuera de servicio'],
+  colors: ['#E67E50', '#374B54', '#092C4C', '#BDBDBD'],
+  plotOptions: {
+    pie: {
+      donut: {
+        size: '75%',
+        labels: {
+          show: true,
+          value: { color: darkMode.value ? '#ffffff' : '#424242' },
+          total: { show: true, label: 'Total', color: darkMode.value ? '#9ca3af' : '#757575' }
+        }
+      }
+    }
+  },
+  stroke: { show: false },
+  dataLabels: { enabled: false },
+  legend: { show: false },
+  tooltip: { theme: darkMode.value ? 'dark' : 'light' }
+}))
+
+const chartSeriesDonut = [35, 18, 5, 2]
+
+// Mock Data
+const heatmapData = [
+  { zone: 'Centro', actividad: 95 },
+  { zone: 'Norte', actividad: 78 },
+  { zone: 'Sur', actividad: 85 },
+  { zone: 'Este', actividad: 62 },
+  { zone: 'Oeste', actividad: 88 },
 ]
 
-const activeDrivers = [
-  { name: 'Juan Pérez', status: 'En ruta', location: 'Madrid Centro', battery: 85 },
-  { name: 'Ana López', status: 'Entregando', location: 'Pozuelo', battery: 60 },
-  { name: 'Carlos Ruíz', status: 'Descanso', location: 'Alcobendas', battery: 90 },
+const recentDeliveries = [
+  { id: '#D-1247', driver: 'Carlos Martínez', vehicle: 'V-023', route: 'Centro-Norte', status: 'completada', time: '14:32', location: 'Madrid Centro', packages: 12, delay: 0 },
+  { id: '#D-1248', driver: 'Ana García', vehicle: 'V-017', route: 'Este-Oeste', status: 'en-ruta', time: '14:45', location: 'Barcelona', packages: 8, delay: 0 },
+  { id: '#D-1249', driver: 'Luis Rodríguez', vehicle: 'V-031', route: 'Sur', status: 'completada', time: '14:28', location: 'Valencia', packages: 15, delay: -5 },
+  { id: '#D-1250', driver: 'María López', vehicle: 'V-008', route: 'Norte', status: 'en-ruta', time: '14:50', location: 'Sevilla', packages: 10, delay: 3 },
+  { id: '#D-1251', driver: 'Pedro Sánchez', vehicle: 'V-042', route: 'Centro', status: 'pendiente', time: '15:00', location: 'Bilbao', packages: 6, delay: 0 },
 ]
+
+const topDrivers = [
+  { name: 'Carlos Martínez', deliveries: 156, rating: 4.9, efficiency: 96, onTime: 98 },
+  { name: 'Ana García', deliveries: 148, rating: 4.8, efficiency: 94, onTime: 96 },
+  { name: 'Luis Rodríguez', deliveries: 142, rating: 4.7, efficiency: 93, onTime: 95 },
+  { name: 'María López', deliveries: 138, rating: 4.9, efficiency: 97, onTime: 99 },
+]
+
+const incidents = [
+  { id: 1, type: 'warning', title: 'Mantenimiento Preventivo', description: '3 vehículos necesitan revisión esta semana', time: 'Hace 15 min', icon: AlertCircle },
+  { id: 2, type: 'success', title: 'Meta Alcanzada', description: 'Has superado el objetivo de entregas del mes', time: 'Hace 1 hora', icon: CheckCircle2 },
+  { id: 3, type: 'error', title: 'Retraso en Ruta', description: 'Ruta #R-458 con 15 minutos de retraso por tráfico', time: 'Hace 2 horas', icon: Clock },
+  { id: 4, type: 'info', title: 'Actualización disponible', description: 'Nuevas funciones disponibles en la app móvil', time: 'Hace 3 horas', icon: Zap },
+]
+
+// Animated Vehicles Logic
+const vehicles = ref([
+  { id: 1, x: 20, y: 30, status: 'moving', vx: 0.5, vy: 0.2 },
+  { id: 2, x: 60, y: 50, status: 'moving', vx: -0.3, vy: 0.4 },
+  { id: 3, x: 40, y: 70, status: 'stopped', vx: 0, vy: 0 },
+  { id: 4, x: 80, y: 40, status: 'moving', vx: 0.2, vy: -0.5 },
+  { id: 5, x: 15, y: 60, status: 'moving', vx: 0.4, vy: 0.3 },
+])
+
+// Basic animation loop for vehicles
+let animationFrameId: number
+const animateVehicles = () => {
+  vehicles.value.forEach(v => {
+    if (v.status === 'moving') {
+      v.x += v.vx
+      v.y += v.vy
+      // Bounce off walls (0-100)
+      if (v.x <= 0 || v.x >= 100) v.vx *= -1
+      if (v.y <= 0 || v.y >= 100) v.vy *= -1
+    }
+  })
+  animationFrameId = requestAnimationFrame(animateVehicles)
+}
+
+onMounted(() => {
+  animateVehicles()
+})
+
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50/50 p-6 lg:p-10">
-    <!-- Header Demo -->
-    <div class="max-w-7xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <h1 class="text-3xl font-bold text-[#092C4C]">Dashboard Demo</h1>
-          <span class="bg-[#E67E50] text-white text-xs px-2 py-1 rounded-md font-bold uppercase tracking-wide">Live Preview</span>
-        </div>
-        <p class="text-gray-500">Visualización en tiempo real de tu operación logística.</p>
-      </div>
-      <div class="flex gap-3">
-        <button class="bg-white border text-gray-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50">Exportar Reporte</button>
-        <button class="bg-[#092C4C] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#092C4C]/90">Configurar Vista</button>
-      </div>
-    </div>
+  <div :class="[
+    'min-h-screen transition-colors duration-300',
+    darkMode ? 'bg-[#0a0f1a] text-white' : 'bg-[#EEEEEE] text-[#424242]'
+  ]">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 backdrop-blur-lg bg-opacity-95 border-b transition-colors duration-300"
+      :class="darkMode ? 'bg-[#1a2332]/90 border-gray-700' : 'bg-white/90 border-gray-200'">
+      <div class="max-w-[1600px] mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <!-- Left -->
+          <div class="flex items-center gap-8">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-[#E67E50] rounded-lg flex items-center justify-center">
+                <Truck class="w-6 h-6 text-white" />
+              </div>
+              <span class="text-xl font-bold text-[#E67E50]">Dashboard</span>
+            </div>
+            
+            <div class="hidden lg:flex items-center gap-1">
+              <button class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-medium">Vista General</button>
+              <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
+                :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Rutas</button>
+              <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
+                :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Flota</button>
+            </div>
+          </div>
 
-    <!-- Main Content -->
-    <div class="max-w-7xl mx-auto grid gap-8">
+          <!-- Right -->
+          <div class="flex items-center gap-4">
+            <!-- Date -->
+            <button class="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
+              :class="darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-[#424242]'">
+              <Calendar class="w-4 h-4" />
+              <span>{{ dateRange }}</span>
+              <ChevronDown class="w-4 h-4" />
+            </button>
+
+            <!-- Notifications -->
+            <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
+              <span v-if="notifications > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-xs rounded-full flex items-center justify-center">
+                {{ notifications }}
+              </span>
+            </button>
+
+            <!-- Dark Mode Toggle -->
+            <button
+              @click="darkMode = !darkMode"
+              class="relative w-14 h-7 rounded-full transition-colors focus:outline-none"
+              :class="darkMode ? 'bg-[#E67E50]' : 'bg-gray-300'"
+            >
+              <div
+                class="absolute top-1 w-5 h-5 bg-white rounded-full flex items-center justify-center transition-transform duration-300 shadow-sm"
+                :class="darkMode ? 'translate-x-7' : 'translate-x-1'"
+              >
+                <Moon v-if="darkMode" class="w-3 h-3 text-[#E67E50]" />
+                <Sun v-else class="w-3 h-3 text-gray-600" />
+              </div>
+            </button>
+
+            <!-- Profile -->
+            <div class="relative pl-4 border-l" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
+              <button @click="menuPerfilAbierto = !menuPerfilAbierto" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div class="w-10 h-10 bg-[#E67E50] rounded-full flex items-center justify-center text-white font-bold">
+                  AD
+                </div>
+                <div class="hidden lg:block text-left">
+                  <p class="text-sm font-semibold leading-none" :class="darkMode ? 'text-white' : 'text-[#424242]'">Admin</p>
+                  <p class="text-xs mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">admin@moveo.com</p>
+                </div>
+                <ChevronDown class="w-4 h-4" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-[1600px] mx-auto px-6 py-8">
       
-      <!-- Stats Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div v-for="stat in stats" :key="stat.label" class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100/50 hover:shadow-md transition-shadow">
-          <div class="flex justify-between items-start mb-4">
-            <div :class="[stat.bg, 'p-3 rounded-xl']">
-              <component :is="stat.icon" :class="[stat.color, 'w-6 h-6']" />
+      <!-- KPI Cards -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div v-for="(kpi, i) in [
+          { icon: Truck, label: 'Vehículos Activos', value: '35', change: 12, trend: 'up', color: '#E67E50', subtitle: 'de 60 totales' },
+          { icon: Package, label: 'Entregas Hoy', value: '248', change: 8, trend: 'up', color: '#374B54', subtitle: '15 pendientes' },
+          { icon: Users, label: 'Repartidores', value: '42', change: 5, trend: 'up', color: '#092C4C', subtitle: '38 activos ahora' },
+          { icon: Activity, label: 'Eficiencia Global', value: '94%', change: 3, trend: 'up', color: '#E67E50', subtitle: 'vs 91% ayer' }
+        ]" :key="i"
+        class="p-6 rounded-2xl shadow-sm border transition-all hover:shadow-lg animate-fade-in-up"
+        :style="{ animationDelay: `${i * 100}ms` }"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'"
+        >
+          <div class="flex items-start justify-between mb-4">
+            <div class="p-3 rounded-xl" :style="{ backgroundColor: `${kpi.color}20` }">
+              <component :is="kpi.icon" class="w-6 h-6" :style="{ color: kpi.color }" />
             </div>
-            <span :class="[stat.change.startsWith('+') ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50', 'text-xs font-bold px-2 py-1 rounded-full']">
-              {{ stat.change }}
-            </span>
+            <div class="flex items-center gap-1" :class="kpi.trend === 'up' ? 'text-green-500' : 'text-red-500'">
+              <TrendingUp v-if="kpi.trend === 'up'" class="w-4 h-4" />
+              <TrendingDown v-else class="w-4 h-4" />
+              <span class="text-sm font-semibold">+{{ kpi.change }}%</span>
+            </div>
           </div>
-          <div class="text-3xl font-bold text-[#092C4C] mb-1">{{ stat.value }}</div>
-          <p class="text-gray-400 text-sm font-medium">{{ stat.label }}</p>
+          <p class="text-sm font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
+          <div class="text-3xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ kpi.value }}</div>
+          <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
         </div>
       </div>
 
-      <div class="grid lg:grid-cols-3 gap-8">
-        <!-- Main Chart Area (Mockup) -->
-        <div class="lg:col-span-2 bg-white rounded-3xl p-8 shadow-sm border border-gray-100/50 relative overflow-hidden group">
-          <div class="flex justify-between items-center mb-8">
-            <h3 class="text-xl font-bold text-[#092C4C]">Rendimiento de Flota</h3>
-            <button class="text-gray-400 hover:text-[#092C4C]"><MoreHorizontal class="w-5 h-5" /></button>
-          </div>
-          
-          <!-- Mock Chart -->
-          <div class="h-64 flex items-end justify-between gap-2 px-4 relative z-10">
-             <div v-for="(h, i) in [40, 65, 45, 80, 55, 70, 60, 85, 50, 65, 75, 90]" :key="i"
-                  class="flex-1 bg-gradient-to-t from-[#E67E50]/10 to-[#E67E50] rounded-t-lg transition-all duration-500 hover:opacity-80 cursor-pointer group-hover:scale-y-105 origin-bottom"
-                  :style="{ height: `${h}%` }"
-             ></div>
-          </div>
-          <!-- Grid lines -->
-          <div class="absolute inset-x-8 bottom-8 top-20 flex flex-col justify-between pointer-events-none">
-            <div v-for="i in 4" :key="i" class="h-px bg-gray-100 w-full"></div>
-          </div>
-        </div>
-
-        <!-- Recent Activity -->
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100/50">
-          <h3 class="text-xl font-bold text-[#092C4C] mb-6">Actividad Reciente</h3>
-          <div class="space-y-6">
-            <div v-for="activity in recentActivity" :key="activity.id" class="flex gap-4 items-start">
-              <div class="mt-1 relative">
-                <div v-if="activity.status === 'success'" class="w-2 h-2 rounded-full bg-green-500 ring-4 ring-green-100"></div>
-                <div v-else-if="activity.status === 'warning'" class="w-2 h-2 rounded-full bg-orange-500 ring-4 ring-orange-100"></div>
-                <div v-else class="w-2 h-2 rounded-full bg-blue-500 ring-4 ring-blue-100"></div>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">{{ activity.message }}</p>
-                <span class="text-xs text-gray-400">{{ activity.time }}</span>
-              </div>
+      <!-- Charts Row -->
+      <div class="grid lg:grid-cols-3 gap-6 mb-8">
+        <!-- Main Chart -->
+        <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 200ms;"
+          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Entregas Semanales</h3>
+              <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Comparativa de rendimiento</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <Download class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
+              </button>
+              <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                <RefreshCw class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
+              </button>
             </div>
           </div>
-          <button class="w-full mt-6 text-sm text-[#E67E50] font-bold hover:underline">Ver todo el historial</button>
+          <div class="w-full h-[300px]">
+            <apexchart height="100%" width="100%" :options="chartOptionsArea" :series="chartSeriesArea" />
+          </div>
         </div>
-      </div>
 
-      <!-- Active Drivers Map Mockup -->
-      <div class="grid lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 bg-[#092C4C] rounded-3xl p-8 relative overflow-hidden text-white min-h-[300px]">
-           <div class="absolute inset-0 opacity-20">
-             <div class="absolute inset-0" :style="{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }" />
-           </div>
-           <!-- Content -->
-           <div class="relative z-10 flex justify-between items-center mb-6">
-             <h3 class="text-xl font-bold">Mapa en Vivo</h3>
-             <div class="flex gap-2">
-               <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-               <span class="text-xs font-mono">LIVE</span>
+        <!-- Donut Chart -->
+        <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 300ms;"
+          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+          <h3 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#424242]'">Estado de Flota</h3>
+          <div class="w-full h-[250px] flex items-center justify-center">
+            <apexchart height="100%" width="100%" :options="chartOptionsDonut" :series="chartSeriesDonut" />
+          </div>
+          <div class="space-y-3 mt-4">
+             <div v-for="(item, i) in [
+               { label: 'En ruta', val: 35, color: '#E67E50' },
+               { label: 'Disponibles', val: 18, color: '#374B54' },
+               { label: 'Mantenimiento', val: 5, color: '#092C4C' },
+               { label: 'Fuera de servicio', val: 2, color: '#BDBDBD' }
+             ]" :key="i" class="flex items-center justify-between text-sm">
+               <div class="flex items-center gap-2">
+                 <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: item.color }"></div>
+                 <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ item.label }}</span>
+               </div>
+               <span class="font-semibold" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ item.val }}</span>
              </div>
-           </div>
-           
-           <!-- Map Dots -->
-           <div class="absolute top-1/2 left-1/3 w-4 h-4 bg-[#E67E50] rounded-full shadow-[0_0_20px_rgba(230,126,80,0.6)] animate-ping"></div>
-           <div class="absolute top-1/2 left-1/3 w-4 h-4 bg-[#E67E50] rounded-full border-2 border-white"></div>
-           
-           <div class="absolute bottom-1/3 right-1/4 w-3 h-3 bg-blue-500 rounded-full border-2 border-white"></div>
-        </div>
-
-        <div class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100/50">
-          <h3 class="text-xl font-bold text-[#092C4C] mb-6">Conductores Activos</h3>
-          <div class="space-y-4">
-            <div v-for="(driver, i) in activeDrivers" :key="i" class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer group">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 group-hover:bg-[#E67E50]/10 group-hover:text-[#E67E50] transition-colors">
-                  <User class="w-5 h-5" />
-                </div>
-                <div>
-                  <p class="font-bold text-sm text-gray-800">{{ driver.name }}</p>
-                  <p class="text-xs text-gray-500 flex items-center gap-1">
-                    <MapPin class="w-3 h-3" /> {{ driver.location }}
-                  </p>
-                </div>
-              </div>
-              <div class="text-right">
-                <span class="inline-block w-2 h-2 rounded-full bg-green-500 mb-1"></span>
-                <p class="text-xs font-bold text-gray-600">{{ driver.battery }}%</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
+
+       <!-- Map + Heatmap -->
+       <div class="grid lg:grid-cols-3 gap-6 mb-8">
+          <!-- Live Map Simulation -->
+          <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 400ms;"
+            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Mapa en Tiempo Real</h3>
+                <div class="flex items-center gap-2 text-sm">
+                  <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">35 vehículos activos</span>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                 <button v-for="filter in ['Todos', 'En ruta', 'Parados']" :key="filter"
+                   @click="selectedFilter = filter"
+                   class="px-3 py-1 text-xs rounded-lg transition-colors border"
+                   :class="selectedFilter === filter 
+                    ? 'bg-[#E67E50] text-white border-[#E67E50]' 
+                    : (darkMode ? 'bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700' : 'bg-gray-100 text-[#757575] border-gray-200 hover:bg-gray-200')"
+                 >
+                   {{ filter }}
+                 </button>
+              </div>
+            </div>
+
+            <!-- Map mock -->
+            <div class="aspect-video rounded-xl relative overflow-hidden bg-gray-100 dark:bg-gray-900 border" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
+               <!-- Grid pattern -->
+               <div class="absolute inset-0 opacity-10" 
+                 :style="{ backgroundImage: `linear-gradient(${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px)`, backgroundSize: '40px 40px' }">
+               </div>
+
+               <!-- Vehicles -->
+               <div v-for="v in vehicles" :key="v.id"
+                 class="absolute w-4 h-4 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125 cursor-pointer"
+                 :style="{ left: `${v.x}%`, top: `${v.y}%`, backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }"
+               >
+                 <div class="absolute inset-0 rounded-full animate-ping opacity-50" 
+                   :style="{ backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }"></div>
+               </div>
+            </div>
+          </div>
+
+          <!-- Heatmap Zones -->
+          <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 500ms;"
+            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+            <h3 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#424242]'">Actividad por Zona</h3>
+            <div class="space-y-5">
+              <div v-for="(zone, i) in heatmapData" :key="i">
+                <div class="flex justify-between mb-2 text-sm">
+                  <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ zone.zone }}</span>
+                  <span class="font-semibold" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ zone.actividad }}%</span>
+                </div>
+                <div class="h-2 rounded-full overflow-hidden" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
+                  <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                    :style="{ width: `${zone.actividad}%`, background: `linear-gradient(90deg, #E67E50 0%, ${zone.actividad > 80 ? '#10b981' : '#f59e0b'} 100%)` }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 p-4 rounded-xl" :class="darkMode ? 'bg-gray-800' : 'bg-gray-50'">
+              <h4 class="text-sm font-semibold mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Zona más activa</h4>
+              <p class="text-lg font-bold text-[#E67E50]">Centro (95%)</p>
+              <p class="text-xs mt-1" :class="darkMode ? 'text-gray-500' : 'text-[#757575]'">+18% vs semana anterior</p>
+            </div>
+          </div>
+       </div>
+
+       <!-- Table & Incidents -->
+       <div class="grid lg:grid-cols-3 gap-6">
+          <!-- Table -->
+          <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 600ms;"
+            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#424242]'">Entregas Recientes</h3>
+              <div class="flex gap-2">
+                <div class="relative">
+                  <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input type="text" placeholder="Buscar..." 
+                    class="pl-10 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent"
+                    :class="[
+                      darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242] placeholder-gray-400'
+                    ]"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left">
+                <thead>
+                  <tr class="border-b" :class="darkMode ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-[#757575]'">
+                    <th class="py-3 px-2 font-medium">ID</th>
+                    <th class="py-3 px-2 font-medium">Repartidor</th>
+                    <th class="py-3 px-2 font-medium">Ruta</th>
+                    <th class="py-3 px-2 font-medium">Estado</th>
+                    <th class="py-3 px-2 font-medium">Hora</th>
+                    <th class="py-3 px-2 font-medium">Paquetes</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y" :class="darkMode ? 'divide-gray-700' : 'divide-gray-100'">
+                  <tr v-for="d in recentDeliveries" :key="d.id" class="hover:bg-opacity-50 transition-colors"
+                    :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-50'">
+                    <td class="py-4 px-2 font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.id }}</td>
+                    <td class="py-4 px-2">
+                      <p class="font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.driver }}</p>
+                      <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#757575]'">{{ d.vehicle }}</p>
+                    </td>
+                    <td class="py-4 px-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ d.route }}</td>
+                    <td class="py-4 px-2">
+                      <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+                        :class="d.status === 'completada' 
+                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                          : d.status === 'en-ruta'
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                          : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'"
+                      >
+                        {{ d.status }}
+                      </span>
+                    </td>
+                    <td class="py-4 px-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ d.time }}</td>
+                    <td class="py-4 px-2 font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.packages }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Incidents -->
+          <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 700ms;"
+            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#424242]'">Alertas</h3>
+              <span class="w-6 h-6 bg-[#E67E50] text-white rounded-full flex items-center justify-center text-xs font-bold">{{ incidents.length }}</span>
+            </div>
+
+            <div class="space-y-4">
+              <div v-for="inc in incidents" :key="inc.id" class="p-4 rounded-xl border transition-all hover:scale-[1.02]"
+                :class="[
+                   inc.type === 'warning' ? 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800' :
+                   inc.type === 'error' ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800' :
+                   inc.type === 'success' ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800' :
+                   'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800'
+                ]"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="p-2 rounded-lg"
+                    :class="[
+                      inc.type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' :
+                      inc.type === 'error' ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' :
+                      inc.type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' :
+                      'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                    ]"
+                  >
+                    <component :is="inc.icon" class="w-5 h-5" />
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-semibold text-sm mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ inc.title }}</h4>
+                    <p class="text-xs mb-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ inc.description }}</p>
+                    <p class="text-[10px] opacity-70" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ inc.time }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+       </div>
 
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+</style>
