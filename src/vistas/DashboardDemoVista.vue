@@ -56,7 +56,13 @@ const chartOptionsArea = computed<ApexOptions>(() => ({
     strokeDashArray: 4,
   },
   tooltip: {
-    theme: darkMode.value ? 'dark' : 'light'
+    theme: darkMode.value ? 'dark' : 'light',
+    style: {
+      fontSize: '12px',
+      color: darkMode.value ? '#fff' : '#000'
+    },
+    marker: { show: true },
+    x: { show: true }
   },
   legend: { show: false }
 }))
@@ -85,7 +91,13 @@ const chartOptionsDonut = computed<ApexOptions>(() => ({
   stroke: { show: false },
   dataLabels: { enabled: false },
   legend: { show: false },
-  tooltip: { theme: darkMode.value ? 'dark' : 'light' }
+  tooltip: { 
+    theme: darkMode.value ? 'dark' : 'light',
+    style: {
+        fontSize: '12px',
+        color: darkMode.value ? '#fff' : '#000'
+    }
+  }
 }))
 
 const chartSeriesDonut = [35, 18, 5, 2]
@@ -164,24 +176,25 @@ onMounted(() => {
         <!-- Left: Secondary Navigation -->
         <div class="hidden lg:flex items-center gap-1">
           <button class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-medium">Vista General</button>
-          <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
-            :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Rutas</button>
-          <button class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-sm font-medium" 
-            :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Flota</button>
+          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium" 
+            :class="darkMode ? 'text-gray-400 hover:bg-gray-700' : 'text-[#757575] hover:bg-gray-100'">Rutas</button>
+          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium" 
+            :class="darkMode ? 'text-gray-400 hover:bg-gray-700' : 'text-[#757575] hover:bg-gray-100'">Flota</button>
         </div>
         
         <!-- Right: Controls -->
         <div class="flex items-center gap-4">
           <!-- Date -->
-          <button class="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
-            :class="darkMode ? 'border-gray-700 text-gray-300' : 'border-gray-200 text-[#424242]'">
+          <button class="flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors text-sm"
+            :class="darkMode ? 'border-gray-700 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-[#424242] hover:bg-gray-50'">
             <Calendar class="w-4 h-4" />
             <span>{{ dateRange }}</span>
             <ChevronDown class="w-4 h-4" />
           </button>
 
           <!-- Notifications -->
-          <button class="relative p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+          <button class="relative p-2 rounded-lg transition-colors"
+            :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
             <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
             <span v-if="notifications > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-xs rounded-full flex items-center justify-center">
               {{ notifications }}
@@ -232,10 +245,10 @@ onMounted(() => {
               <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Comparativa de rendimiento</p>
             </div>
             <div class="flex gap-2">
-              <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button class="p-2 rounded-lg transition-colors" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
                 <Download class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
               </button>
-              <button class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button class="p-2 rounded-lg transition-colors" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
                 <RefreshCw class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
               </button>
             </div>
@@ -381,12 +394,12 @@ onMounted(() => {
                     </td>
                     <td class="py-4 px-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ d.route }}</td>
                     <td class="py-4 px-2">
-                      <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
+                      <span class="px-2.5 py-1 rounded-full text-xs font-semibold border"
                         :class="d.status === 'completada' 
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
                           : d.status === 'en-ruta'
-                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                          : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'"
+                          ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800'
+                          : 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800'"
                       >
                         {{ d.status }}
                       </span>
@@ -408,29 +421,30 @@ onMounted(() => {
             </div>
 
             <div class="space-y-4">
-              <div v-for="inc in incidents" :key="inc.id" class="p-4 rounded-xl border transition-all hover:scale-[1.02]"
+              <div v-for="inc in incidents" :key="inc.id" class="p-4 rounded-xl border-l-4 shadow-sm transition-all hover:shadow-md"
                 :class="[
-                   inc.type === 'warning' ? 'bg-yellow-50 dark:bg-yellow-900/10 border-yellow-200 dark:border-yellow-800' :
-                   inc.type === 'error' ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800' :
-                   inc.type === 'success' ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800' :
-                   'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800'
+                   darkMode ? 'bg-[#1a2332] border-r border-t border-b border-gray-700' : 'bg-white border-r border-t border-b border-gray-100',
+                   inc.type === 'warning' ? 'border-l-yellow-500' :
+                   inc.type === 'error' ? 'border-l-red-500' :
+                   inc.type === 'success' ? 'border-l-green-500' :
+                   'border-l-blue-500'
                 ]"
               >
                 <div class="flex items-start gap-3">
                   <div class="p-2 rounded-lg"
                     :class="[
-                      inc.type === 'warning' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' :
-                      inc.type === 'error' ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400' :
-                      inc.type === 'success' ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' :
-                      'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+                      inc.type === 'warning' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
+                      inc.type === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' :
+                      inc.type === 'success' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
+                      'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
                     ]"
                   >
                     <component :is="inc.icon" class="w-5 h-5" />
                   </div>
                   <div class="flex-1">
                     <h4 class="font-semibold text-sm mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ inc.title }}</h4>
-                    <p class="text-xs mb-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ inc.description }}</p>
-                    <p class="text-[10px] opacity-70" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ inc.time }}</p>
+                    <p class="text-xs mb-2 leading-relaxed" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ inc.description }}</p>
+                    <p class="text-[10px] font-medium" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">{{ inc.time }}</p>
                   </div>
                 </div>
               </div>

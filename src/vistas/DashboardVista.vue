@@ -66,7 +66,15 @@ const chartOptionsMain = computed<ApexOptions>(() => ({
     strokeDashArray: 4,
   },
   legend: { show: false },
-  tooltip: { theme: darkMode.value ? 'dark' : 'light' }
+  tooltip: {
+    theme: darkMode.value ? 'dark' : 'light',
+    style: {
+      fontSize: '12px',
+      color: darkMode.value ? '#fff' : '#000'
+    },
+    marker: { show: true },
+    x: { show: true }
+  }
 }))
 
 const chartSeriesMain = [
@@ -110,7 +118,8 @@ const alertasRecientes = [
              <!-- Dark Mode Toggle -->
              <button
               @click="darkMode = !darkMode"
-              class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              class="p-2 rounded-lg transition-colors"
+              :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'"
             >
               <Moon v-if="darkMode" class="w-5 h-5 text-[#E67E50]" />
               <Sun v-else class="w-5 h-5 text-gray-500" />
@@ -174,8 +183,8 @@ const alertasRecientes = [
               <h3 class="font-bold text-lg mb-4" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Mis Servicios Contratados</h3>
               <div class="grid md:grid-cols-2 gap-4">
                 <div v-for="serv in serviciosActivos" :key="serv.id" 
-                  class="flex items-center p-4 rounded-xl border transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
-                  :class="darkMode ? 'border-gray-700' : 'border-gray-100'"
+                  class="flex items-center p-4 rounded-xl border transition-colors"
+                  :class="darkMode ? 'border-gray-700 hover:bg-gray-800' : 'border-gray-100 hover:bg-gray-50'"
                 >
                   <div :class="[serv.color, 'bg-opacity-10 w-12 h-12 rounded-lg flex items-center justify-center mr-4']">
                     <component :is="serv.icon" :class="[serv.color.replace('bg-', 'text-'), 'w-6 h-6']" />
@@ -200,14 +209,28 @@ const alertasRecientes = [
                 <span class="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">New</span>
               </div>
               <div class="space-y-4">
-                <div v-for="alerta in alertasRecientes" :key="alerta.id" class="flex gap-3">
+                <div v-for="alerta in alertasRecientes" :key="alerta.id" 
+                  class="flex gap-3 p-4 rounded-xl border-l-4 shadow-sm"
+                  :class="[
+                    darkMode ? 'bg-[#1a2332] border-r border-t border-b border-gray-700' : 'bg-white border-r border-t border-b border-gray-100',
+                    alerta.type === 'info' ? 'border-l-blue-500' : 
+                    alerta.type === 'success' ? 'border-l-green-500' : 
+                    'border-l-yellow-500'
+                  ]"
+                >
                   <div class="mt-1">
-                    <component :is="alerta.icon" class="w-5 h-5 text-[#E67E50]" />
+                    <component :is="alerta.icon" class="w-5 h-5" 
+                      :class="[
+                        alerta.type === 'info' ? 'text-blue-500' :
+                        alerta.type === 'success' ? 'text-green-500' :
+                        'text-yellow-500'
+                      ]"
+                    />
                   </div>
                   <div>
                     <h4 class="text-sm font-semibold" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ alerta.title }}</h4>
-                    <p class="text-xs mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ alerta.description }}</p>
-                    <span class="text-[10px] text-gray-400 block mt-1">{{ alerta.time }}</span>
+                    <p class="text-xs mt-1 leading-relaxed" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ alerta.description }}</p>
+                    <span class="text-[10px] text-gray-400 block mt-1 font-medium">{{ alerta.time }}</span>
                   </div>
                 </div>
               </div>

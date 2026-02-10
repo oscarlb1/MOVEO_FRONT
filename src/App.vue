@@ -17,12 +17,15 @@ const route = useRoute()
 
 // Map current route name/path to 'Pagina' type for the header
 const paginaActiva = computed(() => {
-  const current = route.path
-  if (current === '/dashboard') return 'dashboard'
-  if (current === '/login') return 'login'
-  if (current === '/services' || current === '/servicios') return 'services'
-  if (current === '/contacto') return 'contacto'
-  if (current === '/configuracion') return 'configuracion'
+  const name = route.name as string
+  const path = route.path
+
+  if (name === 'dashboard' || path.startsWith('/dashboard')) return 'dashboard'
+  if (name === 'login' || path === '/login') return 'login'
+  if (name === 'servicios' || path.startsWith('/servicios')) return 'services'
+  if (name === 'contacto') return 'contacto'
+  if (name === 'configuracion') return 'configuracion'
+  
   return 'home'
 })
 
