@@ -36,26 +36,26 @@ const mostrarLayout = computed(() => {
 const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion') => {
   switch (pagina) {
     case 'home':
-      router.push('/')
+      router.push({ name: 'inicio' })
       break
     case 'services':
-      router.push('/servicios')
+      router.push({ name: 'servicios' })
       break
     case 'dashboard':
       if (sesionStore.estaAutenticado) {
-        router.push('/dashboard')
+        router.push({ name: 'dashboard' })
       } else {
-        router.push('/dashboard-demo')
+        router.push({ name: 'dashboard-demo' })
       }
       break
     case 'login':
-      router.push('/login')
+      router.push({ name: 'login' })
       break
     case 'contacto':
-      router.push('/contacto')
+      router.push({ name: 'contacto' })
       break
     case 'configuracion':
-      router.push('/configuracion')
+      router.push({ name: 'configuracion' })
       break
   }
 }
@@ -64,7 +64,9 @@ const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto
 <template>
   <Toaster position="top-center" richColors closeButton theme="dark" />
   <Encabezado v-if="mostrarLayout" :pagina-activa="paginaActiva" @navegar="navegar" />
-  <RouterView />
+  <RouterView v-slot="{ Component }">
+    <component :is="Component" @navegar="navegar" />
+  </RouterView>
   <PieDePagina v-if="mostrarLayout" />
   <BannerCookies />
 </template>

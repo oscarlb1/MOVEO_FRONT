@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Truck, ChevronDown, Settings, LogOut } from 'lucide-vue-next'
+import { useRouter } from 'vue-router';
 import { useSesionStore } from '@/tiendas/sesion';
 import { computed, ref } from 'vue';
 
@@ -16,15 +17,16 @@ const emit = defineEmits<{
 }>()
 
 const sesionStore = useSesionStore();
+const router = useRouter();
 const usuario = computed(() => sesionStore.usuario);
 const estaAutenticado = computed(() => sesionStore.estaAutenticado);
 const menuAbierto = ref(false);
 
 const enlaces = computed(() => {
   const base = [
-    { pagina: 'home' as Pagina, texto: 'Inicio' },
-    { pagina: 'services' as Pagina, texto: 'Servicios' },
-    { pagina: 'dashboard' as Pagina, texto: 'Dashboard' },
+    { to: '/', texto: 'Inicio', activeKey: 'home' },
+    { to: '/servicios', texto: 'Servicios', activeKey: 'services' },
+    { to: '/dashboard-demo', texto: 'Dashboard', activeKey: 'dashboard' },
   ];
 
   return base;
@@ -42,8 +44,7 @@ const irAConfiguracion = () => {
 const cerrarSesion = async () => {
   menuAbierto.value = false;
   await sesionStore.cerrarSesion();
-  // We emit 'login' or let the parent handle it, or we could redirect here if we had router
-  emit('navegar', 'login');
+  router.push('/login');
 };
 </script>
 
@@ -52,29 +53,28 @@ const cerrarSesion = async () => {
     <div class="max-w-7xl mx-auto px-6 py-5">
       <div class="flex items-center justify-between">
         <!-- Logo -->
-        <div 
+        <router-link 
+          to="/"
           class="flex items-center gap-3 cursor-pointer group" 
-          @click="emit('navegar', 'home')"
         >
           <div class="w-12 h-12 bg-[#E67E50] rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
             <Truck class="w-7 h-7 text-white" />
           </div>
           <span class="text-2xl font-bold text-[#E67E50]">Moveo</span>
-        </div>
+        </router-link>
 
-        <!-- Navigation Links -->
         <div class="flex items-center gap-8">
-          <button
+          <router-link
             v-for="enlace in enlaces"
-            :key="enlace.pagina"
-            @click="emit('navegar', enlace.pagina)"
+            :key="enlace.to"
+            :to="enlace.to"
             class="text-[17px] font-medium transition-colors"
-            :class="paginaActiva === enlace.pagina 
+            :class="paginaActiva === enlace.activeKey 
               ? 'text-[#E67E50]' 
               : 'text-[#424242] hover:text-[#E67E50]'"
           >
             {{ enlace.texto }}
-          </button>
+          </router-link>
         </div>
 
         <!-- CTA Buttons -->
@@ -119,19 +119,19 @@ const cerrarSesion = async () => {
 
           <button 
             v-else
-            @click="emit('navegar', 'login')"
-            class="text-[#424242] hover:text-[#E67E50] transition-colors px-5 py-2.5 font-medium text-[17px]"
+            @click="router.push({ name: 'login' })"
+            class="text-[#424242] hover:text-[#E67E50] transition-colors px-5 py-2.5 font-medium text-[17px] cursor-pointer"
           >
             Iniciar sesión
           </button>
           
           <!-- Contacto Button -->
-          <button 
-            @click="emit('navegar', 'contacto')"
+          <router-link 
+            to="/contacto"
             class="bg-[#E67E50] text-white px-7 py-2.5 rounded-xl hover:bg-[#d66d40] transition-colors shadow-md hover:shadow-lg font-semibold text-[17px]"
           >
             Contacto
-          </button>
+          </router-link>
         </div>
       </div>
     </div>

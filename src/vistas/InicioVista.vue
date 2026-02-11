@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   Truck, MapPin, BarChart3, Shield, Clock, Users,
   Zap, Globe, ArrowRight, CheckCircle2, Play,
@@ -12,6 +13,9 @@ import PiePagina from '@/componentes/PieDePagina.vue'
 const emit = defineEmits<{
   (e: 'navegar', pagina: string): void
 }>()
+
+const router = useRouter() // Import usage
+
 
 /* ─── Datos ─── */
 
@@ -173,16 +177,19 @@ function esVisible(id: string) {
           </p>
 
           <div class="flex flex-wrap gap-4 mb-20 hero-botones">
-            <button
+            <router-link
+              to="/dashboard-demo"
               class="bg-[#E67E50] text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#d66d40] transition-all shadow-[0_15px_30px_-10px_rgba(230,126,80,0.3)] flex items-center gap-2 group"
-              @click="emit('navegar', 'contacto')"
             >
               Ver Dashboard Demo
               <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button class="bg-[#3D4D5C]/50 border border-white/10 text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#3D4D5C]/70 transition-all backdrop-blur-md">
+            </router-link>
+            <router-link 
+              to="/servicios"
+              class="bg-[#3D4D5C]/50 border border-white/10 text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#3D4D5C]/70 transition-all backdrop-blur-md"
+            >
               Explorar Servicios
-            </button>
+            </router-link>
           </div>
 
           <!-- Hero stats -->
@@ -464,18 +471,18 @@ function esVisible(id: string) {
         </p>
         <div class="flex flex-wrap justify-center gap-4">
           <button
-            class="bg-white text-[#E67E50] px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2"
-            @click="emit('navegar', 'contacto')"
+            @click="router.push({ name: 'login' })"
+            class="bg-white text-[#E67E50] px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 cursor-pointer"
           >
             Empezar Ahora
             <ArrowRight class="w-5 h-5" />
           </button>
-          <button
-            class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all"
-            @click="emit('navegar', 'contacto')"
+          <router-link
+            to="/contacto"
+            class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all text-center"
           >
             Solicitar Demo
-          </button>
+          </router-link>
         </div>
       </div>
     </section>

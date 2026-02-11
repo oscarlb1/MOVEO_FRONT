@@ -8,7 +8,7 @@ export const useSesionStore = defineStore('sesion', () => {
     const usuario = ref<Usuario | null>(null);
     const token = ref<string | null>(localStorage.getItem('token'));
 
-    const estaAutenticado = computed(() => !!token.value);
+    const estaAutenticado = computed(() => !!token.value && !!usuario.value);
 
     // Helper to decode JWT
     function parseJwt(token: string) {
@@ -61,6 +61,19 @@ export const useSesionStore = defineStore('sesion', () => {
             usuario.value = null;
             token.value = null;
             localStorage.removeItem('token');
+        }
+    }
+
+    // Initialize user from token if it exists
+    if (token.value) {
+        const claims = parseJwt(token.value);
+        if (claims) {
+            usuario.value = {
+                id: parseInt(claims.sub || claims.id || '0'),
+                nombre: claims.unique_name || claims.name || 'Usuario',
+                email: claims.email || 'usuario@moveo.com',
+                rol: claims.role || 'User'
+            };
         }
     }
 

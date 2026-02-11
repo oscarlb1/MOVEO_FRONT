@@ -274,19 +274,19 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
             Más de 500 empresas ya están optimizando sus entregas con Moveo
           </p>
           <div class="flex flex-wrap gap-6 justify-center">
-            <button
+            <router-link
+              to="/dashboard-demo"
               class="bg-white text-[#E67E50] px-10 py-5 rounded-xl hover:bg-gray-100 transition-all flex items-center gap-3 group font-bold text-xl shadow-2xl hover:scale-105 hover:-translate-y-1 active:scale-95"
-              @click="navegar('dashboard')"
             >
               Ver dashboard en vivo
               <ArrowRight class="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-            </button>
-            <button
+            </router-link>
+            <router-link
+              to="/servicios"
               class="bg-transparent bg-white/10 backdrop-blur-xl border-2 border-white text-white px-10 py-5 rounded-xl hover:bg-white/20 transition-all font-bold text-xl hover:scale-105 hover:-translate-y-1 active:scale-95"
-              @click="navegar('services')"
             >
               Explorar servicios
-            </button>
+            </router-link>
           </div>
           <div class="mt-16 flex items-center justify-center gap-8 flex-wrap">
             <div v-for="(badge, i) in ['Sin compromiso', 'Soporte 24/7', 'Demo gratuita']" :key="i" class="text-white/90 text-lg font-semibold">
