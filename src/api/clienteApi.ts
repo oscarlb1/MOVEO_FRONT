@@ -5,6 +5,7 @@ const clienteApi = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 });
 
 clienteApi.interceptors.request.use(
