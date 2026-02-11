@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { 
   MapPin, Package, Smartphone, BarChart3, Wrench, Shield, 
@@ -9,6 +9,21 @@ import {
 import ContadorAnimado from '@/componentes/comunes/ContadorAnimado.vue'
 
 const router = useRouter()
+
+// --- Lógica de Animación Progresiva ---
+const activeEventIndex = ref(0)
+let timer: any = null
+
+onMounted(() => {
+  // Esta función es la que hace que "pase" de uno a otro cada 4 segundos
+  timer = setInterval(() => {
+    activeEventIndex.value = (activeEventIndex.value + 1) % maintenanceEvents.length
+  }, 4000)
+})
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
 
 // --- Data ---
 const pricingPlans = [
@@ -102,7 +117,6 @@ const trackingFeatures = [
   { icon: Shield, title: "Geovallas", desc: "Zonas de seguridad", color: "#E67E50" }
 ]
 
-// --- Navigation Helper ---
 const navegar = (ruta: string) => {
   router.push(ruta)
 }
@@ -111,7 +125,6 @@ const navegar = (ruta: string) => {
 <template>
   <div class="bg-white min-h-screen font-sans text-slate-800">
     
-    <!-- Hero -->
     <section class="bg-gradient-to-br from-[#092C4C] to-[#374B54] text-white py-24 relative overflow-hidden">
         <div class="absolute inset-0 opacity-10">
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
@@ -141,7 +154,6 @@ const navegar = (ruta: string) => {
         </div>
     </section>
 
-    <!-- 1. Rutas Inteligentes -->
     <section class="py-24 bg-white">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -190,7 +202,6 @@ const navegar = (ruta: string) => {
               </div>
             </div>
 
-            <!-- Mini graph comparison -->
             <div class="bg-gradient-to-br from-[#EEEEEE] to-white border border-gray-200 p-8 rounded-2xl shadow-sm">
               <h4 class="font-bold text-[#092C4C] mb-6">Comparativa de eficiencia</h4>
               <div class="space-y-5">
@@ -229,7 +240,6 @@ const navegar = (ruta: string) => {
           >
             <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 bg-gray-100">
               <img src="https://images.unsplash.com/photo-1586155638764-bf045442fcc3?auto=format&fit=crop&q=80&w=1000" alt="Rutas" class="w-full h-auto object-cover min-h-[400px]" />
-              <!-- Animated route overlay -->
               <div class="absolute inset-0 bg-gradient-to-t from-[#092C4C]/90 via-[#092C4C]/30 to-transparent flex items-end p-8">
                 <div class="text-white w-full">
                   <div class="flex items-center justify-between mb-4">
@@ -250,7 +260,6 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- 2. Seguimiento Tiempo Real -->
     <section class="py-24 bg-[#EEEEEE]">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -276,21 +285,18 @@ const navegar = (ruta: string) => {
                 </div>
               </div>
               
-              <!-- Simulated map -->
               <div class="aspect-video bg-gray-100 rounded-xl relative overflow-hidden border border-gray-200">
                 <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000" alt="Mapa" class="w-full h-full object-cover opacity-30 grayscale" />
                 
-                <!-- Vehicle markers -->
                 <div class="absolute top-[30%] left-[20%] w-5 h-5">
-                   <div class="w-5 h-5 bg-[#E67E50] rounded-full shadow-lg border-2 border-white relative z-10"></div>
-                   <div class="absolute inset-0 bg-[#E67E50] rounded-full animate-ping opacity-50"></div>
+                    <div class="w-5 h-5 bg-[#E67E50] rounded-full shadow-lg border-2 border-white relative z-10"></div>
+                    <div class="absolute inset-0 bg-[#E67E50] rounded-full animate-ping opacity-50"></div>
                 </div>
                  <div class="absolute top-[60%] left-[70%] w-5 h-5">
                    <div class="w-5 h-5 bg-[#374B54] rounded-full shadow-lg border-2 border-white relative z-10"></div>
                 </div>
               </div>
 
-              <!-- Vehicle list -->
               <div class="mt-6 space-y-3">
                 <div class="flex items-center justify-between p-4 bg-[#E67E50]/5 border border-[#E67E50]/20 rounded-xl hover:bg-[#E67E50]/10 transition-colors cursor-pointer">
                   <div class="flex items-center gap-3">
@@ -341,7 +347,6 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- 3. App Móvil -->
     <section class="py-24 bg-white">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
@@ -369,9 +374,7 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- 4. Dashboards y Analítica -->
     <section class="py-24 bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] text-white relative overflow-hidden">
-      <!-- Background Pattern -->
       <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 60px 60px;"></div>
       
       <div class="max-w-7xl mx-auto px-6 relative">
@@ -410,10 +413,10 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- 5. Mantenimiento Predictivo -->
     <section class="py-24 bg-[#EEEEEE]">
       <div class="max-w-7xl mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
+          
           <div
             v-motion
             :initial="{ opacity: 0, x: -50 }"
@@ -425,31 +428,30 @@ const navegar = (ruta: string) => {
             </div>
             <h2 class="text-3xl font-bold text-[#092C4C] mb-4">Mantenimiento Predictivo</h2>
             <p class="text-[#757575] text-xl mb-8 leading-relaxed">
-              Motor de predicción basado en ML que anticipa necesidades de mantenimiento 
-              antes de que ocurran fallos costosos.
+              Motor de predicción basado en ML que anticipa necesidades de mantenimiento antes de fallos costosos.
             </p>
 
             <div class="space-y-4">
-              <div class="flex items-center gap-4 p-5 bg-white border-l-4 border-[#374B54] rounded-xl shadow-sm">
-                <div class="w-14 h-14 bg-[#374B54]/10 border border-[#374B54]/20 rounded-xl flex items-center justify-center">
-                  <CheckCircle2 class="w-7 h-7 text-[#374B54]" />
+              <div class="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center border border-emerald-100">
+                  <CheckCircle2 class="w-6 h-6" />
                 </div>
                 <div class="flex-1">
-                  <h4 class="font-bold text-[#092C4C] mb-1">Vehículo #V-023</h4>
-                  <p class="text-sm text-[#757575]">Revisión de frenos - 1,500 km restantes</p>
+                  <h4 class="font-bold text-[#092C4C] text-sm">Vehículo #V-023</h4>
+                  <p class="text-xs text-[#757575]">Estado óptimo de motor</p>
                 </div>
-                <span class="text-[#374B54] px-3 py-1 bg-[#374B54]/10 rounded-full text-xs font-bold uppercase">Normal</span>
+                <span class="text-emerald-600 px-3 py-1 bg-emerald-50 rounded-full text-[10px] font-bold uppercase tracking-wider">Saludable</span>
               </div>
 
-              <div class="flex items-center gap-4 p-5 bg-white border-l-4 border-[#E67E50] rounded-xl shadow-sm">
-                <div class="w-14 h-14 bg-[#E67E50]/10 border border-[#E67E50]/20 rounded-xl flex items-center justify-center">
-                  <Clock class="w-7 h-7 text-[#E67E50]" />
+              <div class="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-shadow border-l-4 border-l-[#E67E50]">
+                <div class="w-12 h-12 bg-orange-50 text-[#E67E50] rounded-xl flex items-center justify-center border border-orange-100">
+                  <Clock class="w-6 h-6" />
                 </div>
                 <div class="flex-1">
-                  <h4 class="font-bold text-[#092C4C] mb-1">Vehículo #V-017</h4>
-                  <p class="text-sm text-[#757575]">Cambio de aceite - 200 km restantes</p>
+                  <h4 class="font-bold text-[#092C4C] text-sm">Vehículo #V-017</h4>
+                  <p class="text-xs text-[#757575]">Cambio de aceite - 200 km</p>
                 </div>
-                <span class="text-[#E67E50] px-3 py-1 bg-[#E67E50]/10 rounded-full text-xs font-bold uppercase">Próximo</span>
+                <span class="text-[#E67E50] px-3 py-1 bg-orange-50 rounded-full text-[10px] font-bold uppercase tracking-wider">Próximo</span>
               </div>
             </div>
           </div>
@@ -459,33 +461,53 @@ const navegar = (ruta: string) => {
             :initial="{ opacity: 0, x: 50 }"
             :visible="{ opacity: 1, x: 0, transition: { duration: 800 } }"
           >
-             <div class="bg-white p-10 rounded-2xl border border-gray-200 shadow-xl">
-                <h3 class="text-[#092C4C] mb-8 text-xl font-bold">Línea de tiempo - Vehículo #V-023</h3>
-                <div class="relative">
-                  <div class="absolute left-7 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#E67E50] via-[#374B54] to-[#092C4C]"></div>
-                  
-                  <div class="space-y-8">
-                    <div v-for="(item, index) in maintenanceEvents" :key="index" class="relative flex items-start gap-6 pl-16">
-                       <div 
-                          class="absolute left-0 w-14 h-14 rounded-xl flex items-center justify-center border-2 border-white shadow-lg"
-                          :style="{ backgroundColor: `${item.color}20`, borderColor: item.color }"
-                        >
-                          <component :is="item.icon" class="w-7 h-7" :style="{ color: item.color }" />
-                        </div>
-                        <div>
-                          <p class="font-bold text-[#092C4C] mb-1">{{ item.event }}</p>
-                          <p class="text-sm text-[#757575]">{{ item.date }}</p>
-                        </div>
+            <div class="bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-xl max-w-md mx-auto">
+              <h3 class="text-[#092C4C] mb-10 text-xl font-bold flex items-center gap-3">
+                <Activity class="w-5 h-5 text-[#E67E50]" />
+                Historial de Salud
+              </h3>
+              
+              <div class="relative">
+                <div class="absolute left-6 top-2 bottom-2 w-px bg-gray-200"></div>
+                
+                <div class="space-y-10">
+                  <div v-for="(item, index) in maintenanceEvents" :key="index" class="relative flex items-start group">
+                    <div 
+                      class="relative z-10 w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-1000 ease-in-out"
+                      :class="[
+                        activeEventIndex === index 
+                          ? 'bg-orange-50 border-orange-400 text-[#E67E50] shadow-xl shadow-orange-200 scale-110' 
+                          : 'bg-gray-50 border-gray-200 text-gray-300 scale-100 opacity-40'
+                      ]"
+                    >
+                      <component :is="item.icon" class="w-5 h-5" />
+                    </div>
+
+                    <div class="ml-6 transition-all duration-700" :class="activeEventIndex === index ? 'opacity-100 translate-x-1' : 'opacity-30'">
+                      <h4 class="font-bold text-base leading-tight transition-colors duration-700"
+                          :class="activeEventIndex === index ? 'text-[#E67E50]' : 'text-[#092C4C]'">
+                        {{ item.event }}
+                      </h4>
+                      <div class="flex items-center gap-2 mt-1">
+                        <span class="text-xs font-medium text-[#757575]">{{ item.date }}</span>
+                        <span v-if="item.status === 'completed'" class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                        <span v-if="item.status === 'completed'" 
+                              class="text-[10px] font-bold uppercase tracking-tighter transition-colors duration-700"
+                              :class="activeEventIndex === index ? 'text-orange-500' : 'text-gray-400'">
+                          Finalizado
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- 6. Seguridad y Roles -->
     <section class="py-24 bg-white">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
@@ -516,7 +538,6 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- 7. Planes y Precios -->
     <section class="py-24 bg-gradient-to-br from-[#EEEEEE] to-white">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
@@ -575,7 +596,6 @@ const navegar = (ruta: string) => {
       </div>
     </section>
 
-    <!-- CTA Final -->
     <section class="py-24 bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] text-white relative overflow-hidden">
        <div class="absolute inset-0 opacity-10">
           <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
