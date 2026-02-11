@@ -196,12 +196,12 @@ const ipRules = [
             <div class="grid md:grid-cols-3 gap-4 mb-6">
               <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#E67E50] transition-colors">
                 <h4 class="font-semibold text-[#092C4C] mb-2">Starter</h4>
-                <p class="text-2xl font-bold text-[#E67E50] mb-1">€49/mes</p>
+                <p class="text-2xl font-bold text-[#E67E50] mb-1">€99/mes</p>
                 <p class="text-sm text-gray-500">Hasta 10 vehículos</p>
               </div>
               <div class="bg-gradient-to-br from-[#E67E50] to-[#d66d40] text-white rounded-lg p-4 shadow-lg transform hover:-translate-y-1 transition-all">
                 <h4 class="font-semibold mb-2">Professional</h4>
-                <p class="text-2xl font-bold mb-1">€149/mes</p>
+                <p class="text-2xl font-bold mb-1">€299/mes</p>
                 <p class="text-sm text-white/90">Hasta 50 vehículos</p>
               </div>
               <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#E67E50] transition-colors">

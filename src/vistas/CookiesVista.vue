@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue-sonner'
+import { storeToRefs } from 'pinia'
+import { useCookiesStore } from '@/tiendas/cookies'
 import { 
   Cookie, Settings, BarChart3, Shield, ArrowLeft, CheckCircle,
   Globe, Smartphone, CreditCard
@@ -14,17 +16,13 @@ const goHome = () => {
 }
 
 // State
-const cookieSettings = ref({
-  essential: true,
-  analytics: false,
-  marketing: false,
-  preferences: false
-})
+const store = useCookiesStore()
+
+// State linked to store (using storeToRefs to maintain reactivity if object is replaced)
+const { preferencias: cookieSettings } = storeToRefs(store)
 
 const handleSavePreferences = () => {
-  // In a real app, save to localStorage or backend
-  localStorage.setItem('moveo_cookie_preferences', JSON.stringify(cookieSettings.value))
-  localStorage.setItem('moveo_cookies_accepted', 'true') // Also mark as accepted
+  store.guardarPreferencias(cookieSettings.value)
   toast.success('Preferencias guardadas correctamente')
 }
 
