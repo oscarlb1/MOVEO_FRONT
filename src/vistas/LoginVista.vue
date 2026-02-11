@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] flex items-center justify-center">
     <div class="w-full max-w-7xl flex min-h-screen">
     <!-- Left Panel - Login Form -->
-    <div class="w-full lg:w-1/2 flex items-start justify-center p-6 lg:p-12 lg:pt-32">
+    <div class="w-full lg:w-1/2 flex items-start justify-center p-6 lg:p-12 lg:pt-24">
       <div
         v-motion
         :initial="{ opacity: 0, x: -30 }"
@@ -160,7 +160,7 @@
       v-motion
       :initial="{ opacity: 0, x: 30 }"
       :enter="{ opacity: 1, x: 0, transition: { duration: 600, delay: 200 } }"
-      class="hidden lg:flex lg:w-1/2 items-start justify-center p-12 lg:pt-32 relative overflow-hidden"
+      class="hidden lg:flex lg:w-1/2 items-start justify-center p-12 lg:pt-24 relative overflow-hidden"
     >
       <!-- Background decoration -->
       <div class="absolute inset-0 overflow-hidden opacity-20">

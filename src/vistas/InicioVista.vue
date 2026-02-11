@@ -153,7 +153,7 @@ function esVisible(id: string) {
 <template>
   <div>
     <!-- ══════════════ HERO ══════════════ -->
-    <section class="relative bg-gradient-to-br from-[#0B1120] via-[#0F172A] to-[#1E293B] min-h-screen flex items-center overflow-hidden">
+    <section class="relative bg-gradient-to-br from-[#0B1120] via-[#0F172A] to-[#1E293B] min-h-[calc(100vh-80px)] flex items-center overflow-hidden">
       <MapaAnimado />
       
       <!-- Decorative background glows -->
