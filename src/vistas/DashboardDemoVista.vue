@@ -92,11 +92,15 @@ const chartOptionsDonut = computed<ApexOptions>(() => ({
   dataLabels: { enabled: false },
   legend: { show: false },
   tooltip: { 
-    theme: darkMode.value ? 'dark' : 'light',
+    // Forzamos 'dark' para que el texto sea blanco por defecto
+    theme: 'dark', 
     style: {
-        fontSize: '12px',
-        color: darkMode.value ? '#fff' : '#000'
-    }
+      fontSize: '12px',
+      // Aseguramos blanco puro
+      color: '#ffffff' 
+    },
+    // Esto quita la caja blanca extra que a veces sale en el eje x
+    x: { show: false }
   }
 }))
 
