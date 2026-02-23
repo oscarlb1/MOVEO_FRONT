@@ -5,7 +5,7 @@ import DashboardDemoVista from './DashboardDemoVista.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
-  Moon, Sun, X, BarChart3, MapPin
+  X, BarChart3, MapPin
 } from 'lucide-vue-next'
 import dashboardServicio from '@/servicios/dashboardServicio'
 import type {
@@ -248,12 +248,7 @@ onMounted(() => {
                 {{ conteoNoLeidas > 9 ? '9+' : conteoNoLeidas }}
               </span>
             </div>
-            <!-- Dark mode toggle -->
-            <button @click="darkMode = !darkMode" class="p-2 rounded-lg transition-colors"
-              :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-              <Moon v-if="darkMode" class="w-5 h-5 text-[#E67E50]" />
-              <Sun v-else class="w-5 h-5 text-gray-500" />
-            </button>
+
             <!-- Refresh -->
             <button @click="cargarDatos" class="p-2 rounded-lg transition-colors"
               :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
