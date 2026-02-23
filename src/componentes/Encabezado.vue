@@ -22,15 +22,11 @@ const usuario = computed(() => sesionStore.usuario);
 const estaAutenticado = computed(() => sesionStore.estaAutenticado);
 const menuAbierto = ref(false);
 
-const enlaces = computed(() => {
-  const base = [
-    { to: '/', texto: 'Inicio', activeKey: 'home' },
-    { to: '/servicios', texto: 'Servicios', activeKey: 'services' },
-    { to: '/dashboard-demo', texto: 'Dashboard', activeKey: 'dashboard' },
-  ];
-
-  return base;
-});
+const enlaces = [
+  { to: '/', texto: 'Inicio', activeKey: 'home' },
+  { to: '/servicios', texto: 'Servicios', activeKey: 'services' },
+  { to: '/dashboard-demo', texto: 'Dashboard', activeKey: 'dashboard' },
+];
 
 const toggleMenu = () => {
   menuAbierto.value = !menuAbierto.value;

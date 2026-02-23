@@ -40,10 +40,20 @@ export const useSesionStore = defineStore('sesion', () => {
                 // Adjust claim keys based on actual backend JWT structure (usually 'sub', 'email', 'name', etc.)
                 // For now, we use the input email if claim is missing, or generic placeholders
                 usuario.value = {
-                    id: parseInt(claims.sub || claims.id || '0'),
-                    nombre: claims.unique_name || claims.name || 'Usuario',
-                    email: claims.email || credenciales.email,
-                    rol: claims.role || 'User'
+                    id: parseInt(claims.sub || claims.id || claims.nameid || '0'),
+                    nombre: claims.unique_name
+                        || claims.name
+                        || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+                        || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
+                        || claims.given_name
+                        || claims.preferred_username
+                        || 'Usuario',
+                    email: claims.email
+                        || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']
+                        || credenciales.email,
+                    rol: claims.role
+                        || claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+                        || 'User'
                 };
             }
         } catch (error) {
@@ -64,15 +74,25 @@ export const useSesionStore = defineStore('sesion', () => {
         }
     }
 
-    // Initialize user from token if it exists
+    // Initialize user from token if it exists (on page reload)
     if (token.value) {
         const claims = parseJwt(token.value);
         if (claims) {
             usuario.value = {
-                id: parseInt(claims.sub || claims.id || '0'),
-                nombre: claims.unique_name || claims.name || 'Usuario',
-                email: claims.email || 'usuario@moveo.com',
-                rol: claims.role || 'User'
+                id: parseInt(claims.sub || claims.id || claims.nameid || '0'),
+                nombre: claims.unique_name
+                    || claims.name
+                    || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']
+                    || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
+                    || claims.given_name
+                    || claims.preferred_username
+                    || 'Usuario',
+                email: claims.email
+                    || claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']
+                    || 'usuario@moveo.com',
+                rol: claims.role
+                    || claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
+                    || 'User'
             };
         }
     }
