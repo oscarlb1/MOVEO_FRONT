@@ -5,12 +5,13 @@ import DashboardDemoVista from './DashboardDemoVista.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
-  X, BarChart3, MapPin
+  X, BarChart3, MapPin, Wrench, Wifi, Send, Route
 } from 'lucide-vue-next'
 import dashboardServicio from '@/servicios/dashboardServicio'
 import type {
   EstadisticaGlobal, EntregaEstadisticasHoy, VehiculoItem,
-  EntregaItem, NotificacionItem, RankingItem, EstadisticasHoy
+  EntregaItem, NotificacionItem, RankingItem, EstadisticasHoy,
+  ResumenSesion, MantenimientoItem, RutaItem
 } from '@/modelos/Dashboard'
 
 const sesionStore = useSesionStore()
@@ -28,47 +29,72 @@ const entregasRecientes = ref<EntregaItem[]>([])
 const notificaciones = ref<NotificacionItem[]>([])
 const conteoNoLeidas = ref(0)
 const ranking = ref<RankingItem[]>([])
+const cargandoRanking = ref(false)
+const rankingSortBy = ref<'entregas' | 'puntos'>('entregas')
+const usuariosActivos = ref<ResumenSesion[]>([])
+const mantenimientos = ref<MantenimientoItem[]>([])
+const rutasActivas = ref<RutaItem[]>([])
 
-// Rol del usuario
-const esAdmin = computed(() => sesionStore.usuario?.rol === 'ADMIN')
+// Estado del panel de broadcast
+const mostrarBroadcast = ref(false)
+const broadcastTitulo = ref('')
+const broadcastMensaje = ref('')
+const enviandoBroadcast = ref(false)
+const broadcastFeedback = ref<'ok' | 'error' | null>(null)
 
 // KPIs calculados a partir de los datos reales
 const kpis = computed(() => {
   const vehiculosEnRuta = vehiculos.value.filter(v => v.estado === 'EN_RUTA').length
   const totalVehiculos = vehiculos.value.length
   const entregasHoy = estadisticasHoyEntregas.value?.totalHoy ?? 0
-  const pendientes = estadisticasHoyEntregas.value?.pendientes ?? 0
-  const totalUsuarios = estadisticasGlobales.value?.totalUsuarios ?? 0
-  const eficiencia = estadisticasHoyUsuario.value?.eficiencia ?? 0
+  const completadasHoy = estadisticasHoyEntregas.value?.completadas ?? 0
+  const eficiencia = entregasHoy > 0 ? Math.round((completadasHoy / entregasHoy) * 100) : 0
+  const totalPuntos = estadisticasGlobales.value?.totalPuntosAcumulados ?? 0
 
   return [
     {
       icon: Truck,
       label: 'Vehículos Activos',
       value: vehiculosEnRuta.toString(),
-      subtitle: `de ${totalVehiculos} totales`,
+      subtitle: `de ${totalVehiculos} en flota`,
       color: '#E67E50',
     },
     {
       icon: Package,
       label: 'Entregas Hoy',
       value: entregasHoy.toString(),
-      subtitle: `${pendientes} pendientes`,
+      subtitle: `${completadasHoy} completadas`,
       color: '#374B54',
     },
     {
       icon: Users,
-      label: 'Usuarios',
-      value: totalUsuarios.toString(),
-      subtitle: 'registrados en el sistema',
+      label: 'Total Usuarios',
+      value: (estadisticasGlobales.value?.totalUsuarios ?? 0).toString(),
+      subtitle: `${repartidoresActivos.value.filter(u => u.estaActivo).length} online ahora`,
       color: '#092C4C',
     },
     {
-      icon: Activity,
-      label: 'Eficiencia',
-      value: eficiencia > 0 ? `${eficiencia.toFixed(0)}%` : '—',
-      subtitle: 'rendimiento del día',
+      icon: Route,
+      label: 'Rutas Activas',
+      value: rutasActivas.value.length.toString(),
+      subtitle: 'en progreso ahora',
       color: '#E67E50',
+    },
+    {
+      icon: TrendingUp,
+      label: 'Puntos Acumulados',
+      value: totalPuntos > 0 ? totalPuntos.toLocaleString('es-ES') : '—',
+      subtitle: 'por toda la flota',
+      color: '#374B54',
+    },
+    {
+      icon: BarChart3,
+      label: 'Km Ahorrados',
+      value: estadisticasGlobales.value?.totalKilometrosAhorrados
+        ? `${Number(estadisticasGlobales.value.totalKilometrosAhorrados).toFixed(0)} km`
+        : '—',
+      subtitle: 'optimización de rutas',
+      color: '#092C4C',
     },
   ]
 })
@@ -81,13 +107,13 @@ const estadoFlota = computed(() => {
   const fueraServicio = vehiculos.value.filter(v => v.estado === 'FUERA_DE_SERVICIO').length
   return [
     { label: 'En ruta', val: enRuta, color: '#E67E50' },
-    { label: 'Disponibles', val: disponibles, color: '#374B54' },
-    { label: 'Mantenimiento', val: mantenimiento, color: '#092C4C' },
+    { label: 'Disponibles', val: disponibles, color: '#22c55e' },
+    { label: 'Mantenimiento', val: mantenimiento, color: '#f59e0b' },
     { label: 'Fuera de servicio', val: fueraServicio, color: '#BDBDBD' },
   ]
 })
 
-// Entrega recientes filtradas por búsqueda
+// Entregas recientes filtradas por búsqueda
 const entregasFiltradas = computed(() => {
   const q = busquedaEntregas.value.toLowerCase()
   if (!q) return entregasRecientes.value.slice(0, 10)
@@ -101,11 +127,26 @@ const entregasFiltradas = computed(() => {
     .slice(0, 10)
 })
 
-// Notificaciones recientes (últimas 4)
+// Notificaciones recientes — deduplicadas por título+mensaje (broadcast crea 1 fila por usuario)
 const notificacionesRecientes = computed(() =>
   [...notificaciones.value]
     .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+    .filter((n, i, arr) =>
+      arr.findIndex(x => x.titulo === n.titulo && x.mensaje === n.mensaje) === i
+    )
     .slice(0, 4)
+)
+
+// Últimos 4 mantenimientos ordenados por fecha descendente
+const mantenimientosRecientes = computed(() =>
+  [...mantenimientos.value]
+    .sort((a, b) => new Date(b.fechaServicio).getTime() - new Date(a.fechaServicio).getTime())
+    .slice(0, 4)
+)
+
+// Solo repartidores (el backend ya filtra por rol=REPARTIDOR, pero doble seguro)
+const repartidoresActivos = computed(() =>
+  usuariosActivos.value.filter(u => u.rol === 'REPARTIDOR')
 )
 
 // Helpers de estado
@@ -142,9 +183,13 @@ function iconoNotificacion(titulo: string) {
   return Zap
 }
 
-function tiempoRelativo(fecha: string) {
-  const diff = Date.now() - new Date(fecha).getTime()
+function tiempoRelativo(fecha: string | null | undefined) {
+  if (!fecha) return 'Sin conexión'
+  const ts = new Date(fecha).getTime()
+  if (isNaN(ts)) return 'Sin conexión'
+  const diff = Date.now() - ts
   const min = Math.floor(diff / 60000)
+  if (min < 1) return 'Ahora mismo'
   if (min < 60) return `Hace ${min} min`
   const h = Math.floor(min / 60)
   if (h < 24) return `Hace ${h} hora${h > 1 ? 's' : ''}`
@@ -154,6 +199,10 @@ function tiempoRelativo(fecha: string) {
 function horaEntrega(iso: string | null) {
   if (!iso) return '—'
   return new Date(iso).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+}
+
+function fechaMantenimiento(iso: string) {
+  return new Date(iso).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
 // Colores de posición del ranking
@@ -174,6 +223,51 @@ async function marcarLeida(id: number) {
   } catch {}
 }
 
+// Marcar todas las notificaciones como leídas
+async function marcarTodasLeidas() {
+  try {
+    await dashboardServicio.marcarTodasLeidas()
+    notificaciones.value.forEach(n => n.leido = true)
+    conteoNoLeidas.value = 0
+  } catch {}
+}
+
+// Cambiar criterio del ranking y recargar
+async function cambiarSortRanking(nuevoSort: 'entregas' | 'puntos') {
+  if (rankingSortBy.value === nuevoSort) return
+  rankingSortBy.value = nuevoSort
+  cargandoRanking.value = true
+  try {
+    ranking.value = await dashboardServicio.obtenerRanking(5, nuevoSort)
+  } catch {}
+  finally {
+    cargandoRanking.value = false
+  }
+}
+
+// Enviar notificacion broadcast
+async function enviarBroadcast() {
+  if (!broadcastTitulo.value.trim() || !broadcastMensaje.value.trim()) return
+  enviandoBroadcast.value = true
+  broadcastFeedback.value = null
+  try {
+    await dashboardServicio.enviarBroadcast(broadcastTitulo.value.trim(), broadcastMensaje.value.trim())
+    broadcastFeedback.value = 'ok'
+    broadcastTitulo.value = ''
+    broadcastMensaje.value = ''
+    // Refrescar notificaciones
+    dashboardServicio.obtenerTodasNotificacionesAdmin().then(d => { notificaciones.value = d }).catch(() => {})
+    setTimeout(() => {
+      broadcastFeedback.value = null
+      mostrarBroadcast.value = false
+    }, 2000)
+  } catch {
+    broadcastFeedback.value = 'error'
+  } finally {
+    enviandoBroadcast.value = false
+  }
+}
+
 // Cargar todos los datos en paralelo
 async function cargarDatos() {
   cargando.value = true
@@ -183,16 +277,14 @@ async function cargarDatos() {
       dashboardServicio.obtenerMisEstadisticasHoy().then(d => { estadisticasHoyUsuario.value = d }).catch(() => {}),
       dashboardServicio.obtenerVehiculos().then(d => { vehiculos.value = d }).catch(() => {}),
       dashboardServicio.obtenerEntregasRecientes().then(d => { entregasRecientes.value = d }).catch(() => {}),
-      dashboardServicio.obtenerNotificaciones().then(d => { notificaciones.value = d }).catch(() => {}),
+      dashboardServicio.obtenerTodasNotificacionesAdmin().then(d => { notificaciones.value = d }).catch(() => {}),
       dashboardServicio.obtenerConteoNoLeidas().then(d => { conteoNoLeidas.value = d }).catch(() => {}),
-      dashboardServicio.obtenerRanking(4).then(d => { ranking.value = d }).catch(() => {}),
+      dashboardServicio.obtenerRanking(5, rankingSortBy.value).then(d => { ranking.value = d }).catch(() => {}),
+      dashboardServicio.obtenerEstadisticasGlobales().then(d => { estadisticasGlobales.value = d }).catch(() => {}),
+      dashboardServicio.obtenerUsuariosActivos('REPARTIDOR').then(d => { usuariosActivos.value = d }).catch(() => {}),
+      dashboardServicio.obtenerMantenimientos().then(d => { mantenimientos.value = d }).catch(() => {}),
+      dashboardServicio.obtenerRutasActivas().then(d => { rutasActivas.value = d }).catch(() => {}),
     ]
-    // Solo ADMIN puede pedir estadísticas globales
-    if (esAdmin.value) {
-      promesas.push(
-        dashboardServicio.obtenerEstadisticasGlobales().then(d => { estadisticasGlobales.value = d }).catch(() => {})
-      )
-    }
     await Promise.all(promesas)
   } finally {
     cargando.value = false
@@ -209,7 +301,7 @@ onMounted(() => {
     <!-- Si NO está autenticado, muestra el Demo -->
     <DashboardDemoVista v-if="!sesionStore.estaAutenticado" />
 
-    <!-- Dashboard Real -->
+    <!-- Dashboard Real (Admin) -->
     <div v-else :class="['min-h-screen transition-colors duration-300', darkMode ? 'bg-[#0a0f1a] text-white' : 'bg-[#F4F6F8] text-[#424242]']">
 
       <!-- Toolbar con tabs -->
@@ -262,21 +354,30 @@ onMounted(() => {
       <div class="max-w-[1600px] mx-auto px-6 py-6 space-y-6">
 
         <!-- Saludo -->
-        <div>
-          <h1 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
-            Hola, {{ sesionStore.usuario?.nombre || 'Usuario' }} 👋
-          </h1>
-          <p class="text-sm mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">
-            Aquí tienes el resumen de operaciones de hoy
-          </p>
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+              Hola, {{ sesionStore.usuario?.nombre || 'Administrador' }} 👋
+            </h1>
+            <p class="text-sm mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">
+              Resumen de operaciones — {{ new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) }}
+            </p>
+          </div>
+          <!-- Repartidores online pill -->
+          <div v-if="!cargando && usuariosActivos.length > 0"
+            class="flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium"
+            :class="darkMode ? 'bg-green-900/30 border-green-700 text-green-400' : 'bg-green-50 border-green-200 text-green-700'">
+            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+            {{ repartidoresActivos.filter(u => u.estaActivo).length }} repartidores online
+          </div>
         </div>
 
         <!-- ── KPIs ── -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
           <!-- Skeleton cargando -->
           <template v-if="cargando">
-            <div v-for="i in 4" :key="i"
-              class="p-6 rounded-2xl border animate-pulse"
+            <div v-for="i in 6" :key="i"
+              class="p-5 rounded-2xl border animate-pulse"
               :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
               <div class="h-4 rounded w-24 mb-4" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
               <div class="h-8 rounded w-16 mb-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
@@ -287,15 +388,15 @@ onMounted(() => {
           <!-- KPI cards reales -->
           <template v-else>
             <div v-for="(kpi, i) in kpis" :key="i"
-              class="p-6 rounded-2xl border transition-all hover:shadow-md"
+              class="p-5 rounded-2xl border transition-all hover:shadow-md"
               :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
-              <div class="flex items-start justify-between mb-4">
-                <div class="p-3 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
-                  <component :is="kpi.icon" class="w-6 h-6" :style="{ color: kpi.color }" />
+              <div class="flex items-start justify-between mb-3">
+                <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
+                  <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
                 </div>
               </div>
-              <p class="text-sm font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
-              <div class="text-3xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
+              <p class="text-xs font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
+              <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
               <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
             </div>
           </template>
@@ -390,11 +491,69 @@ onMounted(() => {
           <div class="rounded-2xl border shadow-sm"
             :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
             <div class="flex items-center justify-between p-6 pb-4">
-              <h2 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Alertas e Incidencias</h2>
-              <span v-if="conteoNoLeidas > 0"
-                class="w-7 h-7 bg-[#E67E50] text-white rounded-full flex items-center justify-center text-xs font-bold">
-                {{ conteoNoLeidas }}
-              </span>
+              <h2 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Alertas y Notificaciones</h2>
+              <div class="flex items-center gap-2">
+                <template v-if="conteoNoLeidas > 0">
+                  <span class="w-2 h-2 rounded-full bg-[#E67E50] animate-pulse"
+                    :title="`${conteoNoLeidas} sin leer`"></span>
+                  <button @click="marcarTodasLeidas"
+                    class="text-xs font-medium transition-colors"
+                    :class="darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-[#424242]'">
+                    Marcar todo
+                  </button>
+                </template>
+                <!-- Botón nueva notificación -->
+                <button @click="mostrarBroadcast = !mostrarBroadcast"
+                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
+                  :class="mostrarBroadcast
+                    ? 'bg-[#E67E50] text-white'
+                    : (darkMode ? 'bg-gray-700 text-gray-300 hover:bg-[#E67E50] hover:text-white' : 'bg-gray-100 text-gray-600 hover:bg-[#E67E50] hover:text-white')">
+                  <Send class="w-3.5 h-3.5" />
+                  Nueva
+                </button>
+              </div>
+            </div>
+
+            <!-- Panel de broadcast inline -->
+            <div v-if="mostrarBroadcast" class="mx-6 mb-4 p-4 rounded-xl border"
+              :class="darkMode ? 'bg-gray-800 border-gray-700' : 'bg-orange-50 border-orange-100'">
+              <p class="text-xs font-bold mb-3 flex items-center gap-1.5"
+                :class="darkMode ? 'text-orange-400' : 'text-[#E67E50]'">
+                <Send class="w-3.5 h-3.5" />
+                Notificación Global (todos los usuarios)
+              </p>
+              <input
+                v-model="broadcastTitulo"
+                type="text"
+                placeholder="Título..."
+                maxlength="100"
+                class="w-full px-3 py-2 text-sm border rounded-lg mb-2 focus:outline-none focus:border-[#E67E50] bg-transparent transition-colors"
+                :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-orange-200 text-[#424242]'"
+              />
+              <textarea
+                v-model="broadcastMensaje"
+                rows="2"
+                placeholder="Mensaje para todos los repartidores..."
+                maxlength="500"
+                class="w-full px-3 py-2 text-sm border rounded-lg mb-3 focus:outline-none focus:border-[#E67E50] bg-transparent resize-none transition-colors"
+                :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-orange-200 text-[#424242]'"
+              />
+              <!-- Feedback -->
+              <p v-if="broadcastFeedback === 'ok'" class="text-xs text-green-500 font-semibold mb-2">✅ Notificación enviada correctamente</p>
+              <p v-if="broadcastFeedback === 'error'" class="text-xs text-red-500 font-semibold mb-2">❌ Error al enviar. Inténtalo de nuevo.</p>
+              <div class="flex gap-2">
+                <button @click="enviarBroadcast"
+                  :disabled="enviandoBroadcast || !broadcastTitulo.trim() || !broadcastMensaje.trim()"
+                  class="flex-1 py-2 rounded-lg text-xs font-bold transition-all disabled:opacity-50"
+                  :class="darkMode ? 'bg-[#E67E50] text-white hover:bg-[#d4703f]' : 'bg-[#E67E50] text-white hover:bg-[#d4703f]'">
+                  {{ enviandoBroadcast ? 'Enviando...' : 'Enviar a todos' }}
+                </button>
+                <button @click="mostrarBroadcast = false"
+                  class="px-4 py-2 rounded-lg text-xs font-semibold transition-colors"
+                  :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'">
+                  Cancelar
+                </button>
+              </div>
             </div>
 
             <!-- Skeleton notificaciones -->
@@ -443,7 +602,7 @@ onMounted(() => {
           <!-- Estado de Flota -->
           <div class="rounded-2xl border shadow-sm p-6"
             :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-            <h2 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Estado de Flota</h2>
+            <h2 class="font-bold text-lg mb-5" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Estado de Flota</h2>
 
             <div v-if="cargando" class="space-y-4">
               <div v-for="i in 4" :key="i"
@@ -457,14 +616,14 @@ onMounted(() => {
               </div>
               <div v-else>
                 <!-- Barra de distribución visual -->
-                <div class="flex rounded-full overflow-hidden h-3 mb-6">
+                <div class="flex rounded-full overflow-hidden h-3 mb-5">
                   <div v-for="item in estadoFlota" :key="item.label"
                     class="transition-all duration-700"
                     :style="{ width: vehiculos.length > 0 ? `${(item.val / vehiculos.length) * 100}%` : '0%', backgroundColor: item.color }">
                   </div>
                 </div>
                 <!-- Lista -->
-                <div class="space-y-3">
+                <div class="space-y-3 mb-6">
                   <div v-for="item in estadoFlota" :key="item.label"
                     class="flex items-center justify-between py-2 border-b last:border-0"
                     :class="darkMode ? 'border-gray-700' : 'border-gray-50'">
@@ -482,6 +641,36 @@ onMounted(() => {
                     </div>
                   </div>
                 </div>
+
+                <!-- Mantenimientos recientes -->
+                <div class="pt-4 border-t" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
+                  <h3 class="text-sm font-semibold mb-3 flex items-center gap-2"
+                    :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
+                    <Wrench class="w-4 h-4 text-amber-500" />
+                    Mantenimientos Recientes
+                  </h3>
+                  <div v-if="mantenimientosRecientes.length === 0"
+                    class="text-xs py-3 text-center" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">
+                    Sin mantenimientos registrados
+                  </div>
+                  <div v-else class="space-y-2">
+                    <div v-for="m in mantenimientosRecientes" :key="m.id"
+                      class="flex items-center justify-between p-3 rounded-lg"
+                      :class="darkMode ? 'bg-gray-800/60' : 'bg-gray-50'">
+                      <div class="min-w-0">
+                        <p class="text-xs font-semibold truncate" :class="darkMode ? 'text-white' : 'text-[#424242]'">
+                          {{ m.tipoMantenimiento }}
+                        </p>
+                        <p class="text-[10px] mt-0.5" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+                          Vehículo #{{ m.vehiculoId }} · {{ fechaMantenimiento(m.fechaServicio) }}
+                        </p>
+                      </div>
+                      <span class="text-xs font-bold ml-3 flex-shrink-0" :class="darkMode ? 'text-amber-400' : 'text-amber-600'">
+                        {{ m.coste.toFixed(0) }}€
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -489,10 +678,38 @@ onMounted(() => {
           <!-- Ranking de Repartidores -->
           <div class="rounded-2xl border shadow-sm p-6"
             :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-            <h2 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Mejores Repartidores</h2>
 
-            <div v-if="cargando" class="space-y-4">
-              <div v-for="i in 4" :key="i"
+            <!-- Header con selector -->
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+                Top Repartidores
+              </h2>
+              <!-- Selector Entregas / Puntos -->
+              <div class="flex items-center gap-1 p-1 rounded-lg"
+                :class="darkMode ? 'bg-gray-800' : 'bg-gray-100'">
+                <button
+                  @click="cambiarSortRanking('entregas')"
+                  class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all"
+                  :class="rankingSortBy === 'entregas'
+                    ? 'bg-[#E67E50] text-white shadow-sm'
+                    : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-[#424242]')"
+                >
+                  Entregas
+                </button>
+                <button
+                  @click="cambiarSortRanking('puntos')"
+                  class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all"
+                  :class="rankingSortBy === 'puntos'
+                    ? 'bg-[#E67E50] text-white shadow-sm'
+                    : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-[#424242]')"
+                >
+                  Puntos
+                </button>
+              </div>
+            </div>
+
+            <div v-if="cargando || cargandoRanking" class="space-y-4">
+              <div v-for="i in 5" :key="i"
                 class="h-16 rounded-xl animate-pulse" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
             </div>
 
@@ -511,7 +728,7 @@ onMounted(() => {
                     #{{ r.posicion }}
                   </div>
                   <!-- Avatar inicial -->
-                  <div class="w-9 h-9 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                  <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                     {{ r.nombreUsuario.substring(0, 1).toUpperCase() }}
                   </div>
                   <!-- Info -->
@@ -520,14 +737,82 @@ onMounted(() => {
                       {{ r.nombreUsuario }}
                     </p>
                     <p class="text-xs" :class="darkMode ? 'text-gray-400' : 'text-[#9e9e9e]'">
-                      {{ r.entregasTotales }} entregas
+                      <template v-if="rankingSortBy === 'puntos'">
+                        {{ r.entregasTotales }} entregas
+                      </template>
+                      <template v-else>
+                        {{ r.puntos }} puntos acumulados
+                      </template>
                     </p>
                   </div>
-                  <!-- Puntos -->
+                  <!-- Valor principal según ordenación -->
                   <div class="text-right flex-shrink-0">
-                    <p class="font-bold text-sm text-[#E67E50]">{{ r.puntos }}</p>
-                    <p class="text-[10px]" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">puntos</p>
+                    <p class="font-bold text-sm text-[#E67E50]">
+                      {{ rankingSortBy === 'puntos' ? r.puntos.toLocaleString('es-ES') : r.entregasTotales }}
+                    </p>
+                    <p class="text-[10px]" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">
+                      {{ rankingSortBy === 'puntos' ? 'puntos' : 'entregas' }}
+                    </p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Fila 4: Repartidores Online (solo ADMIN) ── -->
+        <div class="rounded-2xl border shadow-sm p-6"
+          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="font-bold text-lg flex items-center gap-2" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+              <Wifi class="w-5 h-5 text-green-500" />
+              Repartidores Online
+            </h2>
+            <span class="text-sm font-medium px-3 py-1 rounded-full"
+              :class="darkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-50 text-green-700'">
+              {{ repartidoresActivos.length }} en total · {{ repartidoresActivos.filter(u => u.estaActivo).length }} online
+            </span>
+          </div>
+
+          <!-- Skeleton -->
+          <div v-if="cargando" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <div v-for="i in 4" :key="i" class="h-20 rounded-xl animate-pulse"
+              :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+          </div>
+
+          <div v-else>
+            <p v-if="repartidoresActivos.length === 0"
+              class="text-sm py-6 text-center" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">
+              No hay datos de sesiones activas
+            </p>
+            <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+              <div v-for="u in repartidoresActivos" :key="u.usuarioId"
+                class="flex items-center gap-3 p-4 rounded-xl border transition-all"
+                :class="[
+                  darkMode ? 'border-gray-700 bg-gray-800/40' : 'border-gray-100 bg-gray-50',
+                  u.estaActivo ? '' : 'opacity-50'
+                ]">
+                <!-- Avatar -->
+                <div class="relative flex-shrink-0">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                    :style="{ background: u.estaActivo ? 'linear-gradient(135deg, #E67E50, #d4603a)' : '#9ca3af' }">
+                    {{ u.nombreUsuario.substring(0, 1).toUpperCase() }}
+                  </div>
+                  <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
+                    :class="[
+                      u.estaActivo ? 'bg-green-500' : 'bg-gray-400',
+                      darkMode ? 'border-[#1a2332]' : 'border-gray-50'
+                    ]">
+                  </span>
+                </div>
+                <!-- Info -->
+                <div class="min-w-0 flex-1">
+                  <p class="text-sm font-semibold truncate" :class="darkMode ? 'text-white' : 'text-[#424242]'">
+                    {{ u.nombreUsuario }}
+                  </p>
+                  <p class="text-xs truncate" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+                    {{ u.estaActivo ? 'En línea' : tiempoRelativo(u.ultimaConexion) }}
+                  </p>
                 </div>
               </div>
             </div>

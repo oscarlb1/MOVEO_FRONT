@@ -79,3 +79,31 @@ export interface RutaEstadisticas {
     completadas: number
     canceladas: number
 }
+
+// Mapea ResumenSesionDto del backend (GET /EstadoSesion/activos)
+export interface ResumenSesion {
+    usuarioId: number
+    nombreUsuario: string
+    rol: string
+    ultimaConexion: string | null
+    estaActivo: boolean
+}
+
+// Mapea MantenimientoDto del backend (GET /Mantenimientos)
+export interface MantenimientoItem {
+    id: number
+    vehiculoId: number
+    fechaServicio: string
+    tipoMantenimiento: string
+    kilometrajeServicio: number
+    coste: number
+}
+
+// Mapea RutaDto del backend (GET /Rutas)
+export interface RutaItem {
+    id: number
+    nombre: string
+    estado: 'PLANIFICADA' | 'EN_PROGRESO' | 'COMPLETADA' | 'CANCELADA' | string
+    conductorNombre: string | null
+    vehiculoMatricula: string | null
+}
