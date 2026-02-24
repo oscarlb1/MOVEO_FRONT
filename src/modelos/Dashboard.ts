@@ -1,3 +1,24 @@
+// Mapea UsuarioDto del backend
+export interface UsuarioItem {
+    id: number
+    nombre: string
+    email: string
+    rol: 'ADMIN' | 'REPARTIDOR' | string
+    imagenUrl: string | null
+    telefono: string | null
+    fechaRegistro: string
+    ultimaConexion: string | null
+}
+
+// Mapea EstadisticaUsuarioDto del backend
+export interface EstadisticaUsuario {
+    usuarioId: number
+    nombreUsuario: string
+    puntosAcumulados: number
+    kilometrosAhorrados: number
+    entregasTotales: number
+}
+
 // Mapea EstadisticaGlobalDto del backend
 export interface EstadisticaGlobal {
     totalUsuarios: number
@@ -27,7 +48,7 @@ export interface VehiculoItem {
     id: number
     matricula: string
     marcaModelo: string
-    estado: 'EN_RUTA' | 'DISPONIBLE' | 'MANTENIMIENTO' | 'FUERA_DE_SERVICIO' | string
+    estado: 'EN_RUTA' | 'DISPONIBLE' | 'EN_MANTENIMIENTO' | 'FUERA_DE_SERVICIO' | string
     capacidadCarga: number
     consumoMedio: number
     kilometrajeActual: number
