@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useSesionStore } from '@/tiendas/sesion'
 import DashboardDemoVista from './DashboardDemoVista.vue'
 import PantallaCarga from '@/componentes/PantallaCarga.vue'
+import RutasVista from './RutasVista.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
@@ -1134,6 +1135,14 @@ function tiempoRelativo(iso: string | null): string {
 
         </div>
         <!-- FIN SECCIÓN GENERAL -->
+
+        <!-- ══════════════════════════════════════════════════════════
+             SECCIÓN RUTAS
+        ══════════════════════════════════════════════════════════ -->
+        <div v-show="seccionActiva === 'rutas'">
+          <RutasVista :darkMode="darkMode" />
+        </div>
+        <!-- FIN SECCIÓN RUTAS -->
 
         <!-- ══════════════════════════════════════════════════════════
              SECCIÓN VEHÍCULOS
