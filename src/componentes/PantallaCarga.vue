@@ -95,8 +95,8 @@
   width: 0%;
   background-color: #E67E50;
   border-radius: 9999px;
-  /* Animación lineal de 0 a 100 en el tiempo fijado (2.5s sincronizado con el timeout) */
-  animation: cargar 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  /* Animación lineal de 0 a 100 en el tiempo fijado (1.5s sincronizado con el timeout manual) */
+  animation: cargar 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cargar {

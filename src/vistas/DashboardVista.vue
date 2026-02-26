@@ -310,7 +310,7 @@ async function cargarDatos() {
   cargando.value = true
   try {
     const promesas: Promise<any>[] = [
-      new Promise(resolve => setTimeout(resolve, 2500)), // Tiempo min. de carga para que la barra se llene
+      new Promise(resolve => setTimeout(resolve, 1500)), // Tiempo min. de carga para que la barra se llene
       dashboardServicio.obtenerEntregasEstadisticasHoy().then(d => { estadisticasHoyEntregas.value = d }).catch(() => {}),
       dashboardServicio.obtenerMisEstadisticasHoy().then(d => { estadisticasHoyUsuario.value = d }).catch(() => {}),
       dashboardServicio.obtenerVehiculos().then(d => { vehiculos.value = d }).catch(() => {}),
