@@ -368,6 +368,17 @@ const handleLogin = async () => {
   try {
     await sesionStore.iniciarSesion({ email: email.value, password: password.value });
     
+    const rol = sesionStore.usuario?.rol?.toLowerCase() || '';
+    if (rol !== 'administrador' && rol !== 'admin') {
+      await sesionStore.cerrarSesion();
+      isError.value = true;
+      toast.error('Acceso denegado', {
+        description: 'Los repartidores deben acceder a través de la aplicación móvil.',
+        duration: 5000
+      });
+      return;
+    }
+
     // Handle Remember Me
     if (rememberMe.value) {
       localStorage.setItem('savedEmail', email.value);
@@ -380,7 +391,7 @@ const handleLogin = async () => {
     console.error("Error al iniciar sesión:", error);
     isError.value = true;
     toast.error('Error de acceso', {
-      description: 'Usuario o contraseña incorrectos',
+      description: 'Credenciales inválidas. Por favor, inténtalo de nuevo.',
       duration: 4000
     });
   } finally {
