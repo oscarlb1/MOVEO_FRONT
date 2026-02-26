@@ -42,6 +42,14 @@ export default {
         return data
     },
 
+    /** Actualiza el perfil del usuario autenticado (Permite subir imagen via FormData) */
+    async actualizarMiPerfil(formData: FormData): Promise<UsuarioItem> {
+        const { data } = await clienteApi.put<UsuarioItem>('/Usuarios/me', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        return data
+    },
+
     /** Elimina un usuario (ADMIN) */
     async eliminar(id: number): Promise<void> {
         await clienteApi.delete(`/Usuarios/${id}`)

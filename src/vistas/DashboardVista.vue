@@ -665,9 +665,6 @@ function tiempoRelativo(iso: string | null): string {
         <!-- Saludo -->
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
-              Hola, {{ sesionStore.usuario?.nombre || 'Administrador' }} 👋
-            </h1>
             <p class="text-sm mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">
               Resumen de operaciones — {{ new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) }}
             </p>
@@ -1037,8 +1034,9 @@ function tiempoRelativo(iso: string | null): string {
                     #{{ r.posicion }}
                   </div>
                   <!-- Avatar inicial -->
-                  <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                    {{ r.nombreUsuario.substring(0, 1).toUpperCase() }}
+                  <div class="w-9 h-9 rounded-full bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold flex-shrink-0 overflow-hidden">
+                    <img v-if="r.imagenUrl" :src="r.imagenUrl" class="w-full h-full object-cover" />
+                    <span v-else>{{ r.nombreUsuario.substring(0, 1).toUpperCase() }}</span>
                   </div>
                   <!-- Info -->
                   <div class="flex-1 min-w-0">
@@ -1103,9 +1101,10 @@ function tiempoRelativo(iso: string | null): string {
                 ]">
                 <!-- Avatar -->
                 <div class="relative flex-shrink-0">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold overflow-hidden"
                     :style="{ background: u.estaActivo ? 'linear-gradient(135deg, #E67E50, #d4603a)' : '#9ca3af' }">
-                    {{ u.nombreUsuario.substring(0, 1).toUpperCase() }}
+                    <img v-if="u.imagenUrl" :src="u.imagenUrl" class="w-full h-full object-cover" />
+                    <span v-else>{{ u.nombreUsuario.substring(0, 1).toUpperCase() }}</span>
                   </div>
                   <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2"
                     :class="[
@@ -1431,9 +1430,10 @@ function tiempoRelativo(iso: string | null): string {
                       <td class="py-4 px-6">
                         <div class="flex items-center gap-3">
                           <div class="relative flex-shrink-0">
-                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br"
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br overflow-hidden"
                               :class="colorAvatar(u.rol)">
-                              {{ avatarIniciales(u.nombre) }}
+                              <img v-if="u.imagenUrl" :src="u.imagenUrl" class="w-full h-full object-cover" />
+                              <span v-else>{{ avatarIniciales(u.nombre) }}</span>
                             </div>
                             <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 flex-shrink-0"
                               :class="[
@@ -1536,9 +1536,10 @@ function tiempoRelativo(iso: string | null): string {
                 <div class="p-5 border-b flex items-center justify-between"
                   :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
                   <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br flex-shrink-0"
+                    <div class="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br flex-shrink-0 overflow-hidden"
                       :class="colorAvatar(usuarioViendoStats.rol)">
-                      {{ avatarIniciales(usuarioViendoStats.nombre) }}
+                      <img v-if="usuarioViendoStats.imagenUrl" :src="usuarioViendoStats.imagenUrl" class="w-full h-full object-cover" />
+                      <span v-else>{{ avatarIniciales(usuarioViendoStats.nombre) }}</span>
                     </div>
                     <div class="min-w-0">
                       <p class="font-bold text-sm truncate" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">

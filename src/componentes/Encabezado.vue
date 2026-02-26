@@ -22,11 +22,11 @@ const usuario = computed(() => sesionStore.usuario);
 const estaAutenticado = computed(() => sesionStore.estaAutenticado);
 const menuAbierto = ref(false);
 
-const enlaces = [
+const enlaces = computed(() => [
   { to: '/', texto: 'Inicio', activeKey: 'home' },
   { to: '/servicios', texto: 'Servicios', activeKey: 'services' },
-  { to: '/dashboard-demo', texto: 'Dashboard', activeKey: 'dashboard' },
-];
+  { to: estaAutenticado.value ? '/dashboard' : '/dashboard-demo', texto: 'Dashboard', activeKey: 'dashboard' },
+]);
 
 const toggleMenu = () => {
   menuAbierto.value = !menuAbierto.value;
@@ -77,8 +77,9 @@ const cerrarSesion = async () => {
         <div class="flex items-center gap-4">
           <div v-if="estaAutenticado && usuario" class="relative flex items-center gap-4 pl-6 border-l border-gray-200">
              <!-- Avatar -->
-             <div class="w-11 h-11 bg-[#E67E50] rounded-full flex items-center justify-center text-white font-semibold shadow-sm text-base">
-               {{ usuario.nombre.substring(0, 2).toUpperCase() }}
+             <div class="w-11 h-11 bg-[#E67E50] rounded-full flex items-center justify-center text-white font-semibold shadow-sm text-base overflow-hidden">
+               <img v-if="usuario.imagenUrl" :src="usuario.imagenUrl" alt="Foto de perfil" class="w-full h-full object-cover" />
+               <span v-else>{{ usuario.nombre.substring(0, 2).toUpperCase() }}</span>
              </div>
              <!-- User Info -->
              <div class="flex flex-col">

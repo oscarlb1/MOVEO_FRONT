@@ -53,7 +53,10 @@ export const useSesionStore = defineStore('sesion', () => {
                         || credenciales.email,
                     rol: claims.role
                         || claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-                        || 'User'
+                        || 'User',
+                    imagenUrl: claims.imagen_url
+                        || claims.imagenUrl
+                        || null
                 };
             }
         } catch (error) {
@@ -92,7 +95,10 @@ export const useSesionStore = defineStore('sesion', () => {
                     || 'usuario@moveo.com',
                 rol: claims.role
                     || claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']
-                    || 'User'
+                    || 'User',
+                imagenUrl: claims.imagen_url
+                    || claims.imagenUrl
+                    || null
             };
         }
     }

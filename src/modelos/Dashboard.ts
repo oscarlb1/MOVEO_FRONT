@@ -17,6 +17,7 @@ export interface EstadisticaUsuario {
     puntosAcumulados: number
     kilometrosAhorrados: number
     entregasTotales: number
+    imagenUrl?: string | null
 }
 
 // Mapea EstadisticaGlobalDto del backend
@@ -90,6 +91,7 @@ export interface RankingItem {
     nombreUsuario: string
     puntos: number
     entregasTotales: number
+    imagenUrl?: string | null
 }
 
 // Mapea RutaEstadisticasDto del backend
@@ -108,6 +110,7 @@ export interface ResumenSesion {
     rol: string
     ultimaConexion: string | null
     estaActivo: boolean
+    imagenUrl?: string | null
 }
 
 // Mapea MantenimientoDto del backend (GET /Mantenimientos)

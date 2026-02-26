@@ -7,6 +7,7 @@ import {
 } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion'
 import { useTemaStore } from '@/tiendas/tema'
+import usuarioServicio from '@/servicios/usuarioServicio'
 
 const sesionStore = useSesionStore()
 const temaStore = useTemaStore()
@@ -42,6 +43,56 @@ const guardarCambios = () => {
     mensajeExito.value = true
     setTimeout(() => mensajeExito.value = false, 3000)
   }, 1000)
+}
+
+const fileInput = ref<HTMLInputElement | null>(null)
+const subiendoImagen = ref(false)
+const errorImagen = ref<string | null>(null)
+
+const abrirSelectorImagen = () => {
+  if (fileInput.value) {
+    fileInput.value.click()
+  }
+}
+
+const onArchivoSeleccionado = async (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (!target.files || target.files.length === 0) return
+
+  const file = target.files[0]
+  if (!file) return
+
+  if (file.size > 2 * 1024 * 1024) {
+    errorImagen.value = 'El archivo es demasiado grande. Máximo 2MB.'
+    return
+  }
+
+  errorImagen.value = null
+  subiendoImagen.value = true
+
+  try {
+    const formData = new FormData()
+    formData.append('Imagen', file)
+    formData.append('Nombre', formularioPerfil.value.nombre) // Enviamos el nombre actual porque el DTO lo pide
+    formData.append('Telefono', formularioPerfil.value.telefono)
+
+    const usuarioActualizado = await usuarioServicio.actualizarMiPerfil(formData)
+    
+    // Actualizar el estado global con la nueva foto para que todo el panel se entere
+    if (sesionStore.usuario) {
+      sesionStore.usuario.imagenUrl = usuarioActualizado.imagenUrl || undefined
+    }
+    
+    mensajeExito.value = true
+    setTimeout(() => mensajeExito.value = false, 3000)
+  } catch (error) {
+    console.error('Error al subir la imagen:', error)
+    errorImagen.value = 'Ocurrió un error al subir la imagen. Inténtalo de nuevo.'
+  } finally {
+    subiendoImagen.value = false
+    // Reset input
+    if (fileInput.value) fileInput.value.value = ''
+  }
 }
 </script>
 
@@ -95,20 +146,37 @@ const guardarCambios = () => {
             <!-- Avatar Upload -->
             <div class="flex items-center gap-8 mb-10 pb-8 border-b border-gray-50">
               <div class="relative group">
-                <div class="w-24 h-24 bg-gradient-to-br from-[#E67E50] to-[#374B54] rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">
-                  {{ usuario?.nombre.substring(0, 2).toUpperCase() }}
+                <div class="w-24 h-24 bg-gradient-to-br from-[#E67E50] to-[#374B54] rounded-2xl flex items-center justify-center text-white text-3xl font-bold shadow-xl overflow-hidden relative">
+                  <img v-if="usuario?.imagenUrl && !subiendoImagen" :src="usuario.imagenUrl" alt="Foto de perfil" class="w-full h-full object-cover" />
+                  <span v-else-if="!subiendoImagen">{{ usuario?.nombre.substring(0, 2).toUpperCase() }}</span>
+                  
+                  <div v-if="subiendoImagen" class="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm">
+                    <div class="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  </div>
                 </div>
-                <button class="absolute -bottom-2 -right-2 p-2 bg-white rounded-lg shadow-md border border-gray-100 text-gray-500 hover:text-[#E67E50] transition-colors">
+                <button 
+                  @click="abrirSelectorImagen"
+                  :disabled="subiendoImagen"
+                  class="absolute -bottom-2 -right-2 p-2 bg-white rounded-lg shadow-md border border-gray-100 text-gray-500 hover:text-[#E67E50] transition-colors disabled:opacity-50">
                   <Camera class="w-4 h-4" />
                 </button>
               </div>
               <div>
                 <h4 class="font-bold text-[#092C4C] mb-1">Tu Foto de Perfil</h4>
-                <p class="text-sm text-gray-500 mb-3">Recomendado 400x400px. Máximo 2MB.</p>
+                <p class="text-sm text-gray-500 mb-2">Recomendado 400x400px. Máximo 2MB.</p>
+                <p v-if="errorImagen" class="text-xs text-red-500 font-bold mb-2">{{ errorImagen }}</p>
                 <div class="flex gap-3">
-                  <button class="text-sm font-bold text-[#E67E50] hover:underline">Subir nueva</button>
-                  <button class="text-sm font-bold text-red-400 hover:underline">Eliminar</button>
+                  <button @click="abrirSelectorImagen" :disabled="subiendoImagen" class="text-sm font-bold text-[#E67E50] hover:underline disabled:opacity-50 disabled:no-underline">Subir nueva</button>
+                  <button :disabled="subiendoImagen" class="text-sm font-bold text-red-400 hover:underline disabled:opacity-50 disabled:no-underline">Eliminar</button>
                 </div>
+                <!-- Hidden file input -->
+                <input 
+                  type="file" 
+                  ref="fileInput" 
+                  accept="image/jpeg, image/png, image/webp" 
+                  class="hidden" 
+                  @change="onArchivoSeleccionado" 
+                />
               </div>
             </div>
 
