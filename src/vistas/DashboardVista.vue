@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useSesionStore } from '@/tiendas/sesion'
 import DashboardDemoVista from './DashboardDemoVista.vue'
+import PantallaCarga from '@/componentes/PantallaCarga.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
@@ -309,6 +310,7 @@ async function cargarDatos() {
   cargando.value = true
   try {
     const promesas: Promise<any>[] = [
+      new Promise(resolve => setTimeout(resolve, 2500)), // Tiempo min. de carga para que la barra se llene
       dashboardServicio.obtenerEntregasEstadisticasHoy().then(d => { estadisticasHoyEntregas.value = d }).catch(() => {}),
       dashboardServicio.obtenerMisEstadisticasHoy().then(d => { estadisticasHoyUsuario.value = d }).catch(() => {}),
       dashboardServicio.obtenerVehiculos().then(d => { vehiculos.value = d }).catch(() => {}),
@@ -604,6 +606,9 @@ function tiempoRelativo(iso: string | null): string {
 
 <template>
   <div class="animate-in fade-in duration-300">
+    <!-- Pantalla de carga superpuesta -->
+    <PantallaCarga v-if="cargando" />
+
     <!-- Si NO está autenticado, muestra el Demo -->
     <DashboardDemoVista v-if="!sesionStore.estaAutenticado" />
 
