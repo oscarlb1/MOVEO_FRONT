@@ -6,7 +6,7 @@ import {
   Map, Route, Truck, Package, Clock, Calendar, CheckCircle2,
   AlertCircle, Search, Eye, Filter, Loader2, Play, Square,
   MapPin, Check, ChevronRight, Share2, Printer, Plus, Trash2, Edit, X,
-  RefreshCw, Navigation
+  RefreshCw, Navigation, FileText, FileSpreadsheet
 } from 'lucide-vue-next';
 import rutasServicio from '@/servicios/rutasServicio';
 import vehiculosServicio from '@/servicios/vehiculosServicio';
@@ -14,6 +14,7 @@ import usuarioServicio from '@/servicios/usuarioServicio';
 import clientesServicio from '@/servicios/clientesServicio';
 import entregasServicio from '@/servicios/entregasServicio';
 import ubicacionServicio from '@/servicios/ubicacionServicio';
+import exportadorServicio from '@/servicios/exportadorServicio';
 import type { RutaDto, RutaDetalleDto, RutaEstadisticasDto, EntregaDto, CrearRutaDto, CrearEntregaDto } from '@/modelos/Ruta';
 import type { VehiculoItem } from '@/modelos/Dashboard';
 import type { UsuarioItem } from '@/modelos/Dashboard';
@@ -552,6 +553,30 @@ onMounted(() => {
   cargarDatosGenerales();
 });
 
+// --- EXPORTACIÓN ---
+function exportarListaPDF() {
+  const columnas = ['ID', 'Estado', 'Vehiculo', 'Conductor', 'Fecha'];
+  const data = rutasFiltradas.value.map(r => [
+    `#RT-${r.id}`,
+    r.estado,
+    r.matriculaVehiculo || '-',
+    r.nombreConductor || 'Sin Asignar',
+    new Date(r.fecha).toLocaleDateString()
+  ]);
+  exportadorServicio.exportarPDF('Reporte de Rutas', columnas, data, 'Rutas_Reporte');
+}
+
+function exportarListaExcel() {
+  const data = rutasFiltradas.value.map(r => ({
+    ID: `#RT-${r.id}`,
+    Estado: r.estado,
+    Vehiculo: r.matriculaVehiculo || '-',
+    Conductor: r.nombreConductor || 'Sin Asignar',
+    Fecha: new Date(r.fecha).toLocaleDateString()
+  }));
+  exportadorServicio.exportarExcel('Rutas', data, 'Rutas_Reporte');
+}
+
 // Respetar Dark Mode del dashboard
 watch(() => props.darkMode, (isDark) => {
   if (map) {
@@ -610,6 +635,12 @@ watch(() => props.darkMode, (isDark) => {
                      class="w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors"
                      :class="darkMode ? 'bg-transparent border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border-gray-200 text-[#424242]'"/>
             </div>
+            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar PDF">
+              <FileText class="w-4 h-4 text-red-500"/>
+            </button>
+            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Excel">
+              <FileSpreadsheet class="w-4 h-4 text-green-600"/>
+            </button>
             <button @click="abrirModalNuevaRuta" class="bg-[#E67E50] text-white px-3 py-2 rounded-lg hover:bg-[#d46b3f] transition-colors flex items-center gap-1 shrink-0" title="Nueva Ruta">
               <Plus class="w-5 h-5"/>
             </button>

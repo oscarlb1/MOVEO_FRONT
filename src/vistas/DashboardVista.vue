@@ -4,16 +4,18 @@ import { useSesionStore } from '@/tiendas/sesion'
 import DashboardDemoVista from './DashboardDemoVista.vue'
 import PantallaCarga from '@/componentes/PantallaCarga.vue'
 import RutasVista from './RutasVista.vue'
+import EntregasVista from './EntregasVista.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
   X, BarChart3, MapPin, Wrench, Wifi, Send, Route,
   Plus, Pencil, Trash2, Gauge, Fuel, Navigation, UserCheck, Shield,
-  BarChart2, Phone, Mail, Calendar, ChevronRight
+  BarChart2, Phone, Mail, Calendar, ChevronRight, FileText, FileSpreadsheet
 } from 'lucide-vue-next'
 import vehiculosServicio from '@/servicios/vehiculosServicio'
 import type { CreateVehiculoDto, UpdateVehiculoDto } from '@/servicios/vehiculosServicio'
 import usuarioServicio from '@/servicios/usuarioServicio'
+import exportadorServicio from '@/servicios/exportadorServicio'
 import type { CrearUsuarioDto, ActualizarUsuarioDto } from '@/servicios/usuarioServicio'
 import dashboardServicio from '@/servicios/dashboardServicio'
 import type {
@@ -603,6 +605,61 @@ function tiempoRelativo(iso: string | null): string {
   const d = Math.floor(h / 24)
   return `Hace ${d}d`
 }
+
+// ──────────────────────────────────────────────────────────
+// Exportación
+// ──────────────────────────────────────────────────────────
+function exportarVehiculosPDF() {
+  const columnas = ['Matrícula', 'Marca/Modelo', 'Estado', 'Capacidad', 'Consumo (L/100km)', 'Kilometraje', 'Última Revisión'];
+  const data = vehiculosFiltrados.value.map(v => [
+    v.matricula,
+    v.marcaModelo,
+    v.estado,
+    v.capacidadCarga,
+    v.consumoMedio,
+    v.kilometrajeActual,
+    v.fechaUltimaRevision ? new Date(v.fechaUltimaRevision).toLocaleDateString() : '-'
+  ]);
+  exportadorServicio.exportarPDF('Reporte de Vehículos', columnas, data, 'Vehiculos_Reporte');
+}
+
+function exportarVehiculosExcel() {
+  const data = vehiculosFiltrados.value.map(v => ({
+    Matricula: v.matricula,
+    MarcaModelo: v.marcaModelo,
+    Estado: v.estado,
+    Capacidad: v.capacidadCarga,
+    Consumo: v.consumoMedio,
+    Kilometraje: v.kilometrajeActual,
+    UltimaRevision: v.fechaUltimaRevision ? new Date(v.fechaUltimaRevision).toLocaleDateString() : '-'
+  }));
+  exportadorServicio.exportarExcel('Vehiculos', data, 'Vehiculos_Reporte');
+}
+
+function exportarUsuariosPDF() {
+  const columnas = ['Nombre', 'Email', 'Rol', 'Teléfono', 'Última Conexión', 'Fecha Registro'];
+  const data = usuariosFiltrados.value.map(u => [
+    u.nombre,
+    u.email,
+    u.rol,
+    u.telefono || '-',
+    u.ultimaConexion ? new Date(u.ultimaConexion).toLocaleDateString() : '-',
+    new Date(u.fechaRegistro).toLocaleDateString()
+  ]);
+  exportadorServicio.exportarPDF('Reporte de Usuarios', columnas, data, 'Usuarios_Reporte');
+}
+
+function exportarUsuariosExcel() {
+  const data = usuariosFiltrados.value.map(u => ({
+    Nombre: u.nombre,
+    Email: u.email,
+    Rol: u.rol,
+    Telefono: u.telefono || '-',
+    UltimaConexion: u.ultimaConexion ? new Date(u.ultimaConexion).toLocaleDateString() : '-',
+    FechaRegistro: new Date(u.fechaRegistro).toLocaleDateString()
+  }));
+  exportadorServicio.exportarExcel('Usuarios', data, 'Usuarios_Reporte');
+}
 </script>
 
 <template>
@@ -620,7 +677,7 @@ function tiempoRelativo(iso: string | null): string {
       <div class="max-w-[1600px] mx-auto px-6 pt-6 pb-2">
         <div class="flex items-center justify-start p-4 rounded-2xl border transition-all"
           :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200 shadow-sm'">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3 bg-gray-100 p-1.5 rounded-lg overflow-x-auto no-scrollbar" :class="darkMode ? 'bg-gray-800' : ''">
             <button
               v-for="tab in [
                 { key: 'general', label: 'Vista General' },
@@ -631,10 +688,10 @@ function tiempoRelativo(iso: string | null): string {
               ]"
               :key="tab.key"
               @click="seccionActiva = tab.key"
-              class="px-5 py-2.5 rounded-lg text-base font-medium transition-colors"
+              class="px-5 py-2.5 rounded-lg text-base font-medium transition-colors whitespace-nowrap"
               :class="seccionActiva === tab.key
-                ? 'bg-[#E67E50] text-white'
-                : (darkMode ? 'text-gray-400 hover:bg-gray-700 hover:text-[#E67E50]' : 'text-[#757575] hover:bg-orange-50 hover:text-[#E67E50]')"
+                ? 'bg-white text-gray-900 shadow-sm border border-gray-200' + (darkMode ? ' bg-gray-700 border-gray-600 text-white' : '')
+                : (darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700')"
             >
               {{ tab.label }}
             </button>
@@ -1202,6 +1259,12 @@ function tiempoRelativo(iso: string | null): string {
               <option value="FUERA_DE_SERVICIO">Fuera de servicio</option>
             </select>
             <!-- Botón nuevo (solo ADMIN) -->
+            <button @click="exportarVehiculosPDF" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Vehículos PDF">
+              <FileText class="w-4 h-4 text-red-500" /> <span class="hidden sm:inline">PDF</span>
+            </button>
+            <button @click="exportarVehiculosExcel" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Vehículos Excel">
+              <FileSpreadsheet class="w-4 h-4 text-green-600" /> <span class="hidden sm:inline">Excel</span>
+            </button>
             <button
               v-if="esAdmin"
               @click="abrirModalCrear"
@@ -1388,6 +1451,12 @@ function tiempoRelativo(iso: string | null): string {
               <option value="ADMIN">Admin</option>
               <option value="REPARTIDOR">Repartidor</option>
             </select>
+            <button @click="exportarUsuariosPDF" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Usuarios PDF">
+              <FileText class="w-4 h-4 text-red-500" /> <span class="hidden sm:inline">PDF</span>
+            </button>
+            <button @click="exportarUsuariosExcel" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Usuarios Excel">
+              <FileSpreadsheet class="w-4 h-4 text-green-600" /> <span class="hidden sm:inline">Excel</span>
+            </button>
             <button
               v-if="esAdmin"
               @click="abrirModalCrearUsuario"
@@ -1639,6 +1708,13 @@ function tiempoRelativo(iso: string | null): string {
 
         </div>
         <!-- FIN SECCIÓN USUARIOS -->
+
+        <!-- ══════════════════════════════════════════════════════════
+             SECCIÓN ENTREGAS
+        ══════════════════════════════════════════════════════════ -->
+        <div v-show="seccionActiva === 'entregas'" class="animate-in fade-in">
+           <EntregasVista :darkMode="darkMode" />
+        </div>
 
       </div>
     </div>
