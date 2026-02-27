@@ -5,17 +5,20 @@ import 'leaflet/dist/leaflet.css';
 import {
   Map, Route, Truck, Package, Clock, Calendar, CheckCircle2,
   AlertCircle, Search, Eye, Filter, Loader2, Play, Square,
-  MapPin, Check, ChevronRight, Share2, Printer, Plus, Trash2, Edit, X
+  MapPin, Check, ChevronRight, Share2, Printer, Plus, Trash2, Edit, X,
+  RefreshCw, Navigation
 } from 'lucide-vue-next';
 import rutasServicio from '@/servicios/rutasServicio';
 import vehiculosServicio from '@/servicios/vehiculosServicio';
 import usuarioServicio from '@/servicios/usuarioServicio';
 import clientesServicio from '@/servicios/clientesServicio';
 import entregasServicio from '@/servicios/entregasServicio';
+import ubicacionServicio from '@/servicios/ubicacionServicio';
 import type { RutaDto, RutaDetalleDto, RutaEstadisticasDto, EntregaDto, CrearRutaDto, CrearEntregaDto } from '@/modelos/Ruta';
 import type { VehiculoItem } from '@/modelos/Dashboard';
 import type { UsuarioItem } from '@/modelos/Dashboard';
 import type { ClienteDto } from '@/modelos/Ruta';
+import type { UbicacionDto } from '@/servicios/ubicacionServicio';
 import { toast } from 'vue-sonner';
 
 const props = defineProps<{
@@ -27,8 +30,22 @@ const cargando = ref(true);
 const cargandoDetalle = ref(false);
 const rutas = ref<RutaDto[]>([]);
 const rutaSeleccionada = ref<RutaDetalleDto | null>(null);
+
+// Función auxiliar para obtener la fecha de la ubicación (maneja diferentes nombres de propiedad del backend)
+function obtenerFechaUbicacion(ub: UbicacionDto | null): Date | null {
+  if (!ub) return null;
+  const fechaStr = ub.timestamp || ub.fecha || ub.fechaHora;
+  if (!fechaStr) return null;
+  const date = new Date(fechaStr);
+  return isNaN(date.getTime()) ? null : date;
+}
 const estadisticas = ref<RutaEstadisticasDto | null>(null);
 const rutaMetrics = ref<{distanciaKm: number; duracionMin: number} | null>(null);
+
+// Ubicacion state
+const historialUbicaciones = ref<UbicacionDto[]>([]);
+const ultimaUbicacion = ref<UbicacionDto | null>(null);
+const recargandoUbicacion = ref(false);
 
 // Filtros
 const filtroEstado = ref('');
@@ -275,7 +292,44 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
       rutaMetrics.value = null;
   }
 
-  if (puntosValidos.length > 0) {
+  // === DIBUJAR RUTA REAL (HISTORIAL UBICACIONES) ===
+  if (historialUbicaciones.value.length > 1) {
+    const realCoords: [number, number][] = historialUbicaciones.value.map(u => [u.latitud, u.longitud]);
+    L.polyline(realCoords, {
+      color: '#3b82f6', // Azul para ruta real
+      weight: 5,
+      opacity: 0.7,
+      lineCap: 'round',
+      lineJoin: 'round'
+    }).addTo(map);
+    realCoords.forEach(c => bounds.extend(c));
+  }
+
+  // === DIBUJAR ÚLTIMA UBICACIÓN ===
+  if (ultimaUbicacion.value) {
+    const truckIcon = L.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style="background-color: #3b82f6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 2000;">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+             </div>`,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18]
+    });
+    
+    const fechaObj = obtenerFechaUbicacion(ultimaUbicacion.value);
+    const fechaFormat = fechaObj ? fechaObj.toLocaleTimeString() : 'Desconocida';
+    
+    L.marker([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud], { icon: truckIcon, zIndexOffset: 1000 }).addTo(map!)
+      .bindPopup(`
+        <div style="font-family: inherit; min-width: 150px;">
+          <strong style="font-size: 14px; display: block; margin-bottom: 4px; color: #3b82f6;">Última Ubicación</strong>
+          <p style="margin: 0; font-size: 12px; color: #666;">Registrada: ${fechaFormat}</p>
+        </div>
+      `);
+    bounds.extend([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud]);
+  }
+
+  if (puntosValidos.length > 0 || historialUbicaciones.value.length > 0) {
     map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
   }
 }
@@ -283,9 +337,18 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
 // Seleccionar ruta
 async function seleccionarRuta(id: number) {
   cargandoDetalle.value = true;
+  historialUbicaciones.value = [];
+  ultimaUbicacion.value = null;
   try {
-    const detalle = await rutasServicio.obtenerPorId(id);
+    const [detalle, historial, ultima] = await Promise.all([
+      rutasServicio.obtenerPorId(id),
+      ubicacionServicio.obtenerHistorialPorRuta(id).catch(() => []),
+      ubicacionServicio.obtenerUltimaConocida(id).catch(() => null)
+    ]);
     rutaSeleccionada.value = detalle;
+    historialUbicaciones.value = historial || [];
+    ultimaUbicacion.value = ultima;
+    console.log("ULTIMA UBICACIÓN:", ultima);
   } catch (error) {
     toast.error('Error al cargar detalle de ruta');
   } finally {
@@ -323,6 +386,30 @@ function badgeEstado(estado: string) {
   if (estado === 'EN_CURSO') return { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' };
   if (estado === 'PENDIENTE') return { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' };
   return { bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-200' };
+}
+
+// Recargar Ubicacion Especifica
+async function recargarUbicacion() {
+  if (!rutaSeleccionada.value) return;
+  recargandoUbicacion.value = true;
+  try {
+    const [historial, ultima] = await Promise.all([
+      ubicacionServicio.obtenerHistorialPorRuta(rutaSeleccionada.value.id).catch(() => []),
+      ubicacionServicio.obtenerUltimaConocida(rutaSeleccionada.value.id).catch(() => null)
+    ]);
+    historialUbicaciones.value = historial || [];
+    ultimaUbicacion.value = ultima;
+    
+    // Redibujar mapa si es posible
+    if (map && rutaSeleccionada.value) {
+      dibujarRutaMapa(rutaSeleccionada.value.entregas);
+    }
+    toast.success('Ubicación actualizada');
+  } catch (error) {
+    toast.error('Error al actualizar ubicación');
+  } finally {
+    recargandoUbicacion.value = false;
+  }
 }
 
 // --- OPERACIONES CRUD ---
@@ -642,12 +729,21 @@ watch(() => props.darkMode, (isDark) => {
 
             <div class="flex flex-col gap-2 mt-2 sm:mt-0 items-end">
               <div class="flex gap-2">
+                 <button @click="recargarUbicacion" :disabled="recargandoUbicacion" class="p-2 border rounded-md hover:bg-green-50 hover:text-green-600 transition-colors disabled:opacity-50" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-green-600' : 'border-gray-200 text-gray-500'" title="Actualizar Ubicación">
+                   <RefreshCw class="w-4 h-4" :class="{'animate-spin': recargandoUbicacion}"/>
+                 </button>
                  <button @click="abrirModalEditarRuta(rutaSeleccionada!)" class="p-2 border rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-blue-600' : 'border-gray-200 text-gray-500'" title="Editar Ruta">
                    <Edit class="w-4 h-4"/>
                  </button>
                  <button @click="confirmarEliminarRuta(rutaSeleccionada!.id)" class="p-2 border rounded-md hover:bg-red-50 hover:text-red-600 transition-colors" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-red-600' : 'border-gray-200 text-gray-500'" title="Eliminar Ruta">
                    <Trash2 class="w-4 h-4"/>
                  </button>
+              </div>
+              
+              <!-- Ultima actualizacion texto -->
+              <div v-if="ultimaUbicacion && obtenerFechaUbicacion(ultimaUbicacion)" class="text-xs flex items-center gap-1.5 mt-1" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+                <Navigation class="w-3 h-3 text-blue-500" />
+                <span>Última pos: {{ obtenerFechaUbicacion(ultimaUbicacion)!.toLocaleTimeString() }}</span>
               </div>
             </div>
           </div>
