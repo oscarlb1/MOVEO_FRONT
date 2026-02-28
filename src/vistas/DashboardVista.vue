@@ -11,7 +11,8 @@ import {
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
   X, BarChart3, MapPin, Wrench, Wifi, Send, Route,
   Plus, Pencil, Trash2, Gauge, Fuel, Navigation, UserCheck, Shield,
-  BarChart2, Phone, Mail, Calendar, ChevronRight, FileText, FileSpreadsheet
+  BarChart2, Phone, Mail, Calendar, ChevronRight, FileText, FileSpreadsheet,
+  ChevronDown, Settings, LogOut
 } from 'lucide-vue-next'
 import vehiculosServicio from '@/servicios/vehiculosServicio'
 import type { CreateVehiculoDto, UpdateVehiculoDto } from '@/servicios/vehiculosServicio'
@@ -25,9 +26,31 @@ import type {
   ResumenSesion, MantenimientoItem, RutaItem, UsuarioItem, EstadisticaUsuario
 } from '@/modelos/Dashboard'
 
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 const sesionStore = useSesionStore()
 const darkMode = ref(false)
 const seccionActiva = ref('general')
+
+// Header profile menu
+const menuPerfilHeader = ref(false)
+const usuario = computed(() => sesionStore.usuario)
+
+function toggleMenuPerfil() {
+  menuPerfilHeader.value = !menuPerfilHeader.value
+}
+
+function irAConfiguracion() {
+  menuPerfilHeader.value = false
+  router.push('/configuracion')
+}
+
+async function cerrarSesion() {
+  menuPerfilHeader.value = false
+  await sesionStore.cerrarSesion()
+  router.push('/login')
+}
 const busquedaEntregas = ref('')
 
 // Estado de datos
@@ -674,52 +697,108 @@ function exportarUsuariosExcel() {
     <!-- Dashboard Real (Admin) -->
     <div v-else :class="['min-h-screen transition-colors duration-300', darkMode ? 'bg-[#0a0f1a] text-white' : 'bg-[#F4F6F8] text-[#424242]']">
 
-      <!-- Toolbar con tabs -->
-      <div class="max-w-[1600px] mx-auto px-6 pt-6 pb-2">
-        <div class="flex items-center justify-start p-4 rounded-2xl border transition-all"
-          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200 shadow-sm'">
-          <div class="flex items-center gap-3 bg-gray-100 p-1.5 rounded-lg overflow-x-auto no-scrollbar" :class="darkMode ? 'bg-gray-800' : ''">
-            <button
-              v-for="tab in [
-                { key: 'general', label: 'Vista General' },
-                { key: 'rutas', label: 'Rutas' },
-                { key: 'vehiculos', label: 'Vehículos' },
-                { key: 'usuarios', label: 'Usuarios' },
-                { key: 'entregas', label: 'Entregas' },
-                { key: 'clientes', label: 'Clientes' }
-              ]"
-              :key="tab.key"
-              @click="seccionActiva = tab.key"
-              class="px-5 py-2.5 rounded-lg text-base font-medium transition-colors whitespace-nowrap"
-              :class="seccionActiva === tab.key
-                ? 'bg-white text-gray-900 shadow-sm border border-gray-200' + (darkMode ? ' bg-gray-700 border-gray-600 text-white' : '')
-                : (darkMode ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700')"
-            >
-              {{ tab.label }}
-            </button>
-          </div>
+      <!-- ══════════ HEADER UNIFICADO DEL DASHBOARD ══════════ -->
+      <nav class="bg-white border-b border-[#EEEEEE] sticky top-0 z-50 shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 py-4">
+          <div class="flex items-center justify-between gap-8">
 
-          <!-- Controles derecha -->
-          <div class="ml-auto flex items-center gap-3">
-            <!-- Notificaciones badge -->
-            <div class="relative">
-              <button class="p-2 rounded-lg transition-colors" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-                <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
+            <!-- Logo -->
+            <router-link to="/" class="flex items-center gap-3 cursor-pointer group shrink-0">
+              <div class="w-12 h-12 bg-[#E67E50] rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <Truck class="w-7 h-7 text-white" />
+              </div>
+              <span class="text-2xl font-bold text-[#E67E50]">Moveo</span>
+            </router-link>
+
+            <!-- Center: Tabs -->
+            <div class="flex items-center gap-1 bg-gray-100 p-1.5 rounded-xl overflow-x-auto no-scrollbar">
+              <button
+                v-for="tab in [
+                  { key: 'general', label: 'Vista General' },
+                  { key: 'rutas', label: 'Rutas' },
+                  { key: 'vehiculos', label: 'Vehículos' },
+                  { key: 'usuarios', label: 'Usuarios' },
+                  { key: 'entregas', label: 'Entregas' },
+                  { key: 'clientes', label: 'Clientes' },
+                ]"
+                :key="tab.key"
+                @click="seccionActiva = tab.key"
+                class="px-5 py-2.5 rounded-lg text-[15px] font-medium transition-colors whitespace-nowrap"
+                :class="seccionActiva === tab.key
+                  ? 'bg-white text-[#092C4C] shadow-sm border border-gray-200'
+                  : 'text-[#757575] hover:text-[#424242]'"
+              >
+                {{ tab.label }}
               </button>
-              <span v-if="conteoNoLeidas > 0"
-                class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                {{ conteoNoLeidas > 9 ? '9+' : conteoNoLeidas }}
-              </span>
             </div>
 
-            <!-- Refresh -->
-            <button @click="cargarDatos" class="p-2 rounded-lg transition-colors"
-              :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-              <RefreshCw class="w-5 h-5 text-gray-500" :class="{ 'animate-spin': cargando }" />
-            </button>
+            <!-- Right: Controls + Profile + Contacto -->
+            <div class="flex items-center gap-4 shrink-0">
+              <!-- Notificaciones badge -->
+              <div class="relative">
+                <button class="p-2.5 rounded-xl transition-colors hover:bg-gray-100">
+                  <Bell class="w-[22px] h-[22px] text-[#424242]" />
+                </button>
+                <span v-if="conteoNoLeidas > 0"
+                  class="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#E67E50] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  {{ conteoNoLeidas > 9 ? '9+' : conteoNoLeidas }}
+                </span>
+              </div>
+
+              <!-- Refresh -->
+              <button @click="cargarDatos" class="p-2.5 rounded-xl transition-colors hover:bg-gray-100">
+                <RefreshCw class="w-[22px] h-[22px] text-gray-500" :class="{ 'animate-spin': cargando }" />
+              </button>
+
+              <!-- Profile -->
+              <div v-if="usuario" class="relative flex items-center gap-4 pl-5 border-l border-gray-200">
+                <div class="w-11 h-11 bg-[#E67E50] rounded-full flex items-center justify-center text-white font-semibold text-base overflow-hidden shadow-sm">
+                  <img v-if="usuario.imagenUrl" :src="usuario.imagenUrl" alt="Foto de perfil" class="w-full h-full object-cover" />
+                  <span v-else>{{ usuario.nombre.substring(0, 2).toUpperCase() }}</span>
+                </div>
+                <div class="hidden xl:flex flex-col">
+                  <span class="text-[15px] font-semibold text-[#424242] leading-none">{{ usuario.nombre }}</span>
+                  <span class="text-xs text-gray-500 mt-1">{{ usuario.email }}</span>
+                </div>
+                <button @click="toggleMenuPerfil" class="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
+                  <ChevronDown class="w-5 h-5 text-gray-400 transition-transform duration-300" :class="{ 'rotate-180': menuPerfilHeader }" />
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div
+                  v-if="menuPerfilHeader"
+                  class="absolute top-full right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-1.5 overflow-hidden z-50"
+                >
+                  <button
+                    @click="irAConfiguracion"
+                    class="w-full text-left px-4 py-3 text-[15px] text-gray-600 hover:bg-gray-50 hover:text-[#E67E50] transition-colors flex items-center gap-3"
+                  >
+                    <Settings class="w-5 h-5" />
+                    Configuración
+                  </button>
+                  <div class="h-px bg-gray-100 my-1"></div>
+                  <button
+                    @click="cerrarSesion"
+                    class="w-full text-left px-4 py-3 text-[15px] text-red-500 hover:bg-red-50 transition-colors flex items-center gap-3"
+                  >
+                    <LogOut class="w-5 h-5" />
+                    Cerrar sesión
+                  </button>
+                </div>
+              </div>
+
+              <!-- Contacto Button -->
+              <router-link
+                to="/contacto"
+                class="bg-[#E67E50] text-white px-7 py-2.5 rounded-xl hover:bg-[#d66d40] transition-colors shadow-md hover:shadow-lg font-semibold text-[16px]"
+              >
+                Contacto
+              </router-link>
+            </div>
+
           </div>
         </div>
-      </div>
+      </nav>
 
       <!-- Contenido principal -->
       <div class="max-w-[1600px] mx-auto px-6 py-6 space-y-6">

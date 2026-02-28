@@ -30,7 +30,10 @@ const paginaActiva = computed(() => {
 })
 
 const mostrarLayout = computed(() => {
-  return route.name !== 'login'
+  const name = route.name as string
+  if (name === 'login') return false
+  if (name === 'dashboard') return false
+  return true
 })
 
 const navegar = (pagina: 'home' | 'services' | 'dashboard' | 'login' | 'contacto' | 'configuracion') => {
