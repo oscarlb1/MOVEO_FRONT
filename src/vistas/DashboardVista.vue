@@ -5,6 +5,7 @@ import DashboardDemoVista from './DashboardDemoVista.vue'
 import PantallaCarga from '@/componentes/PantallaCarga.vue'
 import RutasVista from './RutasVista.vue'
 import EntregasVista from './EntregasVista.vue'
+import ClientesVista from './ClientesVista.vue'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Bell, Search, Eye, RefreshCw, TrendingUp,
@@ -685,6 +686,7 @@ function exportarUsuariosExcel() {
                 { key: 'vehiculos', label: 'Vehículos' },
                 { key: 'usuarios', label: 'Usuarios' },
                 { key: 'entregas', label: 'Entregas' },
+                { key: 'clientes', label: 'Clientes' }
               ]"
               :key="tab.key"
               @click="seccionActiva = tab.key"
@@ -1714,6 +1716,13 @@ function exportarUsuariosExcel() {
         ══════════════════════════════════════════════════════════ -->
         <div v-show="seccionActiva === 'entregas'" class="animate-in fade-in">
            <EntregasVista :darkMode="darkMode" />
+        </div>
+
+        <!-- ══════════════════════════════════════════════════════════
+             SECCIÓN CLIENTES
+        ══════════════════════════════════════════════════════════ -->
+        <div v-show="seccionActiva === 'clientes'" class="animate-in fade-in">
+           <ClientesVista :darkMode="darkMode" />
         </div>
 
       </div>

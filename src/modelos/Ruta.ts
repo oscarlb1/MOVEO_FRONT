@@ -26,6 +26,17 @@ export interface ClienteDto {
     longitud: number | null;
 }
 
+export interface CrearClienteDto {
+    nombreEmpresa: string;
+    direccion: string;
+    telefono: string;
+    latitud?: number | null;
+    longitud?: number | null;
+}
+
+export type ActualizarClienteDto = CrearClienteDto;
+
+
 export interface EntregaDto {
     id: number;
     rutaId: number;
