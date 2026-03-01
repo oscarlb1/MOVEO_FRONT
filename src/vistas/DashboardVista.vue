@@ -227,8 +227,8 @@ onUnmounted(() => {
       </header>
 
       <!-- Contenedor Principal (Vistas dinámicas) -->
-      <div class="flex-1 overflow-auto p-4 sm:p-8">
-        <div class="max-w-7xl mx-auto">
+      <div class="flex-1 overflow-auto p-4 sm:px-5 sm:py-6">
+        <div class="w-full">
           
           <GeneralVista v-if="seccionActiva === 'general'" :darkMode="darkMode" @actualizar-no-leidas="handleActualizarNoLeidas" />
           <RutasVista v-else-if="seccionActiva === 'rutas'" :darkMode="darkMode" />
