@@ -6,7 +6,7 @@ import {
   Map, Route, Truck, Package, Clock, Calendar, CheckCircle2,
   AlertCircle, Search, Eye, Filter, Loader2, Play, Square,
   MapPin, Check, ChevronRight, Share2, Printer, Plus, Trash2, Edit, X,
-  RefreshCw, Navigation, FileText, FileSpreadsheet
+  RefreshCw, Navigation, FileText, FileSpreadsheet, Sparkles
 } from 'lucide-vue-next';
 import rutasServicio from '@/servicios/rutasServicio';
 import vehiculosServicio from '@/servicios/vehiculosServicio';
@@ -31,6 +31,7 @@ const cargando = ref(true);
 const cargandoDetalle = ref(false);
 const rutas = ref<RutaDto[]>([]);
 const rutaSeleccionada = ref<RutaDetalleDto | null>(null);
+const optimizandoIa = ref(false);
 
 // Función auxiliar para obtener la fecha de la ubicación (maneja diferentes nombres de propiedad del backend)
 function obtenerFechaUbicacion(ub: UbicacionDto | null): Date | null {
@@ -114,6 +115,38 @@ const kpis = computed(() => {
     { label: 'Completadas', value: estadisticas.value.completadas, icon: CheckCircle2, color: '#22c55e' },
     { label: 'Planificadas', value: estadisticas.value.planificadas, icon: Calendar, color: '#f59e0b' },
   ];
+});
+
+const chartOptions = computed(() => ({
+  chart: { type: 'bar', background: 'transparent', fontFamily: 'inherit', toolbar: { show: false } },
+  theme: { mode: props.darkMode ? 'dark' : 'light' },
+  labels: ['En Progreso', 'Completadas', 'Planificadas', 'Canceladas'],
+  colors: ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444'],
+  plotOptions: { 
+    bar: { horizontal: false, columnWidth: '35%', borderRadius: 4, distributed: true } 
+  },
+  dataLabels: { enabled: false },
+  stroke: { show: false },
+  legend: { show: false },
+  xaxis: {
+    categories: ['En Progreso', 'Completadas', 'Planificadas', 'Canceladas'],
+    labels: { style: { colors: props.darkMode ? '#9ca3af' : '#6b7280', fontSize: '13px', fontWeight: 600 } }
+  },
+  yaxis: { show: false },
+  grid: { show: false }
+}));
+
+const chartSeries = computed(() => {
+  if (!estadisticas.value) return [{ name: 'Rutas', data: [0, 0, 0, 0] }];
+  return [{
+    name: 'Rutas',
+    data: [
+      estadisticas.value.enProgreso,
+      estadisticas.value.completadas,
+      estadisticas.value.planificadas,
+      estadisticas.value.canceladas
+    ]
+  }];
 });
 
 // Inicialización de Leaflet
@@ -502,6 +535,24 @@ async function cambiarEstadoRuta(id: number, nuevoEstado: string) {
   }
 }
 
+async function optimizarIA() {
+  if (!rutaSeleccionada.value) return;
+  optimizandoIa.value = true;
+  try {
+    const res = await rutasServicio.optimizarRutaIa(rutaSeleccionada.value.id);
+    if (res.exito) {
+      toast.success(res.optimizacion.justificacion, { duration: 6000 });
+      await seleccionarRuta(rutaSeleccionada.value.id);
+    } else {
+      toast.error('La IA no pudo optimizar la ruta');
+    }
+  } catch (error) {
+    toast.error('Error al optimizar con IA');
+  } finally {
+    optimizandoIa.value = false;
+  }
+}
+
 function abrirModalNuevaEntrega() {
   if (!rutaSeleccionada.value) return;
   const sigOrden = (rutaSeleccionada.value.entregas?.length || 0) + 1;
@@ -620,6 +671,13 @@ watch(() => props.darkMode, (isDark) => {
       </template>
     </div>
 
+    <!-- Prominent Bar Chart -->
+    <div class="border rounded-2xl p-5 shadow-sm transition-colors"
+         :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+      <h3 class="font-bold text-lg mb-2" :class="darkMode ? 'text-gray-300' : 'text-[#092C4C]'">Estado General de Rutas</h3>
+      <apexchart v-if="estadisticas" type="bar" height="250" width="100%" :options="chartOptions" :series="chartSeries"></apexchart>
+    </div>
+
     <!-- Main Content Grid -->
     <div class="grid lg:grid-cols-3 gap-6">
       
@@ -628,17 +686,17 @@ watch(() => props.darkMode, (isDark) => {
            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
         <!-- Search & Filter -->
         <div class="p-4 border-b space-y-3" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
-          <div class="flex gap-2">
+          <div class="flex gap-3">
             <div class="relative flex-1">
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input v-model="busqueda" type="text" placeholder="Buscar por ID, Vehículo o Conductor"
                      class="w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors"
                      :class="darkMode ? 'bg-transparent border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border-gray-200 text-[#424242]'"/>
             </div>
-            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar PDF">
+            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Rutas PDF">
               <FileText class="w-4 h-4 text-red-500"/>
             </button>
-            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Excel">
+            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Rutas Excel">
               <FileSpreadsheet class="w-4 h-4 text-green-600"/>
             </button>
             <button @click="abrirModalNuevaRuta" class="bg-[#E67E50] text-white px-3 py-2 rounded-lg hover:bg-[#d46b3f] transition-colors flex items-center gap-1 shrink-0" title="Nueva Ruta">
@@ -758,8 +816,13 @@ watch(() => props.darkMode, (isDark) => {
               </div>
             </div>
 
-            <div class="flex flex-col gap-2 mt-2 sm:mt-0 items-end">
-              <div class="flex gap-2">
+            <div class="flex flex-col gap-3 mt-2 sm:mt-0 items-end">
+              <div class="flex gap-3">
+                 <button @click="optimizarIA" :disabled="optimizandoIa" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:from-purple-600 hover:to-indigo-600 transition-colors disabled:opacity-50" title="Optimizar IA">
+                   <Loader2 v-if="optimizandoIa" class="w-4 h-4 animate-spin"/>
+                   <Sparkles v-else class="w-4 h-4"/>
+                   <span class="text-sm">Optimizar IA</span>
+                 </button>
                  <button @click="recargarUbicacion" :disabled="recargandoUbicacion" class="p-2 border rounded-md hover:bg-green-50 hover:text-green-600 transition-colors disabled:opacity-50" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-green-600' : 'border-gray-200 text-gray-500'" title="Actualizar Ubicación">
                    <RefreshCw class="w-4 h-4" :class="{'animate-spin': recargandoUbicacion}"/>
                  </button>

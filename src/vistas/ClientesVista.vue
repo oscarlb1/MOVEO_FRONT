@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import {
   Users, Search, Plus, Pencil, Trash2, Building2, MapPin, Phone,
-  CheckCircle2, AlertCircle, RefreshCw
+  CheckCircle2, AlertCircle, RefreshCw, FileText, FileSpreadsheet
 } from 'lucide-vue-next'
 import clientesServicio from '@/servicios/clientesServicio'
 import type { ClienteDto, CrearClienteDto, ActualizarClienteDto } from '@/modelos/Ruta'
@@ -61,9 +61,77 @@ const clientesFiltrados = computed(() => {
 
 const kpis = computed(() => {
   const total = clientes.value.length
+  const conTelefono = clientes.value.filter(c => c.telefono).length
+  const geolocalizados = clientes.value.filter(c => c.latitud !== null && c.longitud !== null).length
   return [
-    { icon: Building2, label: 'Total Clientes', value: total.toString(), subtitle: 'empresas registradas', color: '#092C4C' }
+    { icon: Building2, label: 'Total Clientes', value: total.toString(), subtitle: 'empresas registradas', color: '#092C4C' },
+    { icon: Phone, label: 'Con Teléfono', value: conTelefono.toString(), subtitle: 'contacto directo', color: '#10b981' },
+    { icon: MapPin, label: 'Geolocalizados', value: geolocalizados.toString(), subtitle: 'listos para entrega', color: '#3b82f6' }
   ]
+})
+
+function inferirComunidad(dir: string): string {
+  const d = dir.toLowerCase()
+  if (d.includes('madrid')) return 'Com. de Madrid'
+  if (d.includes('barcelona') || d.includes('girona') || d.includes('lleida') || d.includes('tarragona') || d.includes('cataluña') || d.includes('catalunya')) return 'Cataluña'
+  if (d.includes('valencia') || d.includes('alicante') || d.includes('castellón') || d.includes('castellon')) return 'Com. Valenciana'
+  if (d.includes('sevilla') || d.includes('málaga') || d.includes('malaga') || d.includes('granada') || d.includes('córdoba') || d.includes('cordoba') || d.includes('andalucía') || d.includes('andalucia') || d.includes('cadiz') || d.includes('huelva') || d.includes('almería') || d.includes('almeria') || d.includes('jaen')) return 'Andalucía'
+  if (d.includes('zaragoza') || d.includes('huesca') || d.includes('teruel') || d.includes('aragón')) return 'Aragón'
+  if (d.includes('murcia')) return 'Región de Murcia'
+  if (d.includes('galicia') || d.includes('coruña') || d.includes('lugo') || d.includes('ourense') || d.includes('pontevedra')) return 'Galicia'
+  if (d.includes('país vasco') || d.includes('pais vasco') || d.includes('bilbao') || d.includes('vizcaya') || d.includes('alava') || d.includes('guipuzcoa') || d.includes('vitoria') || d.includes('san sebastian')) return 'País Vasco'
+  return 'Otras'
+}
+
+const chartSeries = computed(() => {
+  const counts: Record<string, number> = {}
+  clientes.value.forEach(c => {
+    const com = inferirComunidad(c.direccion)
+    counts[com] = (counts[com] || 0) + 1
+  })
+  
+  const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1])
+  
+  return [{
+    name: 'Clientes',
+    data: sorted.map(i => i[1])
+  }]
+})
+
+const chartOptions = computed(() => {
+  const counts: Record<string, number> = {}
+  clientes.value.forEach(c => {
+    const com = inferirComunidad(c.direccion)
+    counts[com] = (counts[com] || 0) + 1
+  })
+  const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1])
+
+  return {
+    chart: { type: 'bar', background: 'transparent', fontFamily: 'inherit', toolbar: { show: false } },
+    theme: { mode: props.darkMode ? 'dark' : 'light' },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        borderRadius: 4,
+        distributed: true,
+        dataLabels: { position: 'bottom' }
+      }
+    },
+    xaxis: {
+      categories: sorted.map(i => i[0]),
+      labels: { style: { colors: props.darkMode ? '#9ca3af' : '#6b7280' } }
+    },
+    yaxis: {
+      labels: { style: { colors: props.darkMode ? '#9ca3af' : '#6b7280', fontWeight: 600 } }
+    },
+    colors: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#eab308', '#64748b'],
+    dataLabels: { 
+      enabled: true,
+      style: { colors: ['#fff'] }
+    },
+    grid: { show: false },
+    legend: { show: false }
+  }
 })
 
 // Acciones
@@ -162,19 +230,16 @@ function exportarExcel() {
       </div>
       <div class="flex items-center gap-3">
         <!-- Exportar -->
-        <div class="relative group">
-          <button class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-white hover:bg-gray-800' : 'bg-white border-gray-200 text-[#424242] hover:bg-gray-50'">
-             Exportar
-          </button>
-          <div class="absolute right-0 top-full mt-2 w-48 rounded-xl shadow-lg border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20"
-               :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-            <button @click="exportarPDF" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar PDF</button>
-            <button @click="exportarExcel" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar Excel</button>
-          </div>
-        </div>
+        <button @click="exportarPDF" class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
+          :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-white hover:bg-gray-800' : 'bg-white border-gray-200 text-[#424242] hover:bg-gray-50'"
+          title="Exportar Clientes PDF">
+           <FileText class="w-4 h-4 text-red-500" /> PDF
+        </button>
+        <button @click="exportarExcel" class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
+          :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-white hover:bg-gray-800' : 'bg-white border-gray-200 text-[#424242] hover:bg-gray-50'"
+          title="Exportar Clientes Excel">
+           <FileSpreadsheet class="w-4 h-4 text-green-600" /> Excel
+        </button>
         <button @click="abrirModalCrear" class="px-4 py-2 bg-[#E67E50] hover:bg-[#d4603a] text-white rounded-xl font-medium text-sm transition-colors shadow-sm flex items-center gap-2">
           <Plus class="w-4 h-4" /> Nuevo Cliente
         </button>
@@ -182,7 +247,7 @@ function exportarExcel() {
     </div>
 
     <!-- KPIs -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid sm:grid-cols-3 gap-4">
       <div v-for="(kpi, i) in kpis" :key="i"
         class="p-5 rounded-2xl border transition-all hover:shadow-md"
         :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
@@ -197,8 +262,17 @@ function exportarExcel() {
       </div>
     </div>
 
-    <!-- Tabla de Clientes -->
-    <div class="rounded-2xl border shadow-sm" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+    <div class="space-y-6">
+      <!-- Gráfico Horizontal ancho completo -->
+      <div class="border rounded-2xl p-5 shadow-sm transition-colors"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <h3 class="font-bold text-sm mb-4 w-full" :class="darkMode ? 'text-gray-300' : 'text-[#092C4C]'">Distribución por Comunidad Autónoma</h3>
+        <apexchart v-if="clientes.length > 0" type="bar" height="280" width="100%" :options="chartOptions" :series="chartSeries"></apexchart>
+        <p v-if="clientes.length === 0" class="text-sm text-gray-500 text-center py-10">Sin datos</p>
+      </div>
+
+      <!-- Tabla de Clientes -->
+      <div class="rounded-2xl border shadow-sm overflow-hidden" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
       <!-- Toolbar tabla -->
       <div class="p-4 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
         <div class="flex items-center gap-2">
@@ -276,6 +350,7 @@ function exportarExcel() {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   </div>
 

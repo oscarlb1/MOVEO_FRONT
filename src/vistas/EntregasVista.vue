@@ -95,6 +95,35 @@ const kpis = computed(() => {
   ];
 });
 
+const chartOptions = computed(() => ({
+  chart: { type: 'bar', background: 'transparent', fontFamily: 'inherit', toolbar: { show: false } },
+  theme: { mode: props.darkMode ? 'dark' : 'light' },
+  plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4, distributed: true } },
+  dataLabels: { enabled: false },
+  stroke: { show: true, width: 2, colors: ['transparent'] },
+  xaxis: { 
+    categories: ['Pendientes', 'En Camino', 'Entregadas', 'Fallidas'],
+    labels: { style: { colors: props.darkMode ? '#9ca3af' : '#6b7280', fontSize: '11px' } }
+  },
+  yaxis: {
+    labels: { style: { colors: props.darkMode ? '#9ca3af' : '#6b7280' } }
+  },
+  colors: ['#f59e0b', '#3b82f6', '#22c55e', '#ef4444'],
+  legend: { show: false },
+  grid: { borderColor: props.darkMode ? '#374151' : '#f3f4f6', strokeDashArray: 4 }
+}));
+
+const chartSeries = computed(() => {
+  const pendientes = entregas.value.filter(e => e.estado === 'PENDIENTE').length;
+  const enCamino = entregas.value.filter(e => e.estado === 'EN_CAMINO').length;
+  const entregadas = entregas.value.filter(e => e.estado === 'ENTREGADO').length;
+  const fallidas = entregas.value.filter(e => e.estado === 'FALLIDO').length;
+  return [{
+    name: 'Entregas',
+    data: [pendientes, enCamino, entregadas, fallidas]
+  }];
+});
+
 // Helpers
 function badgeEstado(estado: string) {
   switch (estado) {
@@ -267,7 +296,19 @@ onMounted(() => {
     </div>
 
     <!-- Main Content Grid -->
-    <div class="border rounded-2xl flex flex-col overflow-hidden" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+    <div class="grid lg:grid-cols-4 gap-6 items-start">
+      <!-- Status Chart Column -->
+      <div class="lg:col-span-1 lg:order-last border rounded-2xl p-5 shadow-sm min-h-[350px] flex flex-col transition-colors"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <h3 class="font-bold text-sm mb-4 border-b pb-3" :class="darkMode ? 'text-gray-300 border-gray-700' : 'text-[#092C4C] border-gray-100'">Estado Global</h3>
+        <div class="flex-1 flex flex-col justify-center">
+          <apexchart v-if="entregas.length > 0" type="bar" height="300" width="100%" :options="chartOptions" :series="chartSeries"></apexchart>
+          <p v-if="entregas.length === 0" class="text-sm text-gray-500 m-auto">Sin datos</p>
+        </div>
+      </div>
+
+      <!-- Table Container -->
+      <div class="lg:col-span-3 border rounded-2xl flex flex-col overflow-hidden shadow-sm transition-colors" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
       
       <!-- Toolbox / Filtros -->
       <div class="p-5 border-b space-y-4" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
@@ -276,10 +317,10 @@ onMounted(() => {
             <Package class="w-5 h-5 text-[#E67E50]"/> Gestión de Entregas
           </h2>
           <div class="flex items-center gap-2">
-            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm font-semibold shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar PDF">
+            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm font-semibold shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Entregas PDF">
                <FileText class="w-4 h-4 text-red-500"/> <span class="hidden sm:inline">PDF</span>
             </button>
-            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm font-semibold shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Excel">
+            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2.5 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2 text-sm font-semibold shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Entregas Excel">
                <FileSpreadsheet class="w-4 h-4 text-green-600"/> <span class="hidden sm:inline">Excel</span>
             </button>
             <button @click="abrirModalNuevaEntrega" class="bg-[#E67E50] text-white px-4 py-2.5 rounded-lg hover:bg-[#d46b3f] transition-colors flex items-center gap-2 text-sm font-semibold shrink-0 ml-2">
@@ -373,7 +414,7 @@ onMounted(() => {
                 <span v-else class="text-gray-300">-</span>
               </td>
               <td class="px-6 py-4 text-right">
-                <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div class="flex justify-end gap-2">
                    <button @click="abrirModalEstado(entrega)" class="p-1.5 rounded-md hover:bg-orange-50 hover:text-orange-600 text-gray-400 transition-colors" :class="darkMode ? 'hover:bg-gray-700' : ''" title="Cambiar Estado">
                       <Activity class="w-4 h-4"/>
                    </button>
@@ -392,6 +433,7 @@ onMounted(() => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   </div>
 

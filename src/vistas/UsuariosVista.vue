@@ -64,6 +64,44 @@ const kpisUsuarios = computed(() => {
   ]
 })
 
+const chartColors = computed(() => {
+  const otros = usuarios.value.length - usuarios.value.filter(u => u.rol === 'ADMIN' || u.rol === 'REPARTIDOR').length;
+  return otros > 0 ? ['#374B54', '#E67E50', '#94a3b8'] : ['#374B54', '#E67E50'];
+});
+
+const chartLabels = computed(() => {
+  const otros = usuarios.value.length - usuarios.value.filter(u => u.rol === 'ADMIN' || u.rol === 'REPARTIDOR').length;
+  return otros > 0 ? ['Administradores', 'Repartidores', 'Otros'] : ['Administradores', 'Repartidores'];
+});
+
+const chartOptions = computed(() => ({
+  chart: { type: 'radialBar', background: 'transparent', fontFamily: 'inherit', toolbar: { show: false } },
+  theme: { mode: props.darkMode ? 'dark' : 'light' },
+  labels: chartLabels.value,
+  colors: chartColors.value,
+  plotOptions: { 
+    radialBar: { 
+      hollow: { size: '40%' },
+      track: { background: props.darkMode ? '#334155' : '#e2e8f0' },
+      dataLabels: {
+        name: { fontSize: '13px' },
+        value: { fontSize: '18px', fontWeight: 'bold' },
+        total: { show: true, label: 'Total', formatter: () => usuarios.value.length.toString() }
+      }
+    } 
+  },
+  stroke: { lineCap: 'round' }
+}));
+
+const chartSeries = computed(() => {
+  const admins = usuarios.value.filter(u => u.rol === 'ADMIN').length;
+  const repartidores = usuarios.value.filter(u => u.rol === 'REPARTIDOR').length;
+  const otros = usuarios.value.length - admins - repartidores;
+  const total = usuarios.value.length || 1;
+  const vals = otros > 0 ? [admins, repartidores, otros] : [admins, repartidores];
+  return vals.map(v => Math.round((v / total) * 100));
+});
+
 function colorAvatar(rol: string) { return rol === 'ADMIN' ? 'from-purple-500 to-indigo-600' : 'from-[#E67E50] to-[#d4603a]' }
 function avatarIniciales(nombre: string) { return nombre.substring(0, 1).toUpperCase() }
 function badgeRol(rol: string) {
@@ -202,32 +240,45 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <!-- KPIs Usuarios -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <template v-if="cargando">
-        <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-          <div class="h-4 rounded w-24 mb-4" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
-          <div class="h-8 rounded w-16 mb-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
-          <div class="h-3 rounded w-32" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
-        </div>
-      </template>
-      <template v-else>
-        <div v-for="(kpi, i) in kpisUsuarios" :key="i" class="p-5 rounded-2xl border transition-all hover:shadow-md" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
-          <div class="flex items-start justify-between mb-3">
-            <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
-              <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
-            </div>
+    <!-- Top Grid: KPIs + Chart -->
+    <div class="grid lg:grid-cols-4 gap-6 items-stretch">
+      <!-- KPIs Usuarios (2x2 grid) -->
+      <div class="lg:col-span-3 grid sm:grid-cols-2 gap-4">
+        <template v-if="cargando">
+          <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse h-full flex flex-col justify-center" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+            <div class="h-4 rounded w-24 mb-4" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+            <div class="h-8 rounded w-16 mb-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+            <div class="h-3 rounded w-32" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
           </div>
-          <p class="text-xs font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
-          <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
-          <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
-        </div>
-      </template>
+        </template>
+        <template v-else>
+          <div v-for="(kpi, i) in kpisUsuarios" :key="i" class="p-5 rounded-2xl border transition-all hover:shadow-md flex flex-col h-full" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+            <div class="flex items-start justify-between mb-3">
+              <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
+                <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
+              </div>
+            </div>
+            <p class="text-xs font-medium mb-1 mt-auto" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
+            <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
+            <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
+          </div>
+        </template>
+      </div>
+
+      <!-- Gráfico de Roles Radial -->
+      <div class="lg:col-span-1 rounded-2xl border p-5 shadow-sm flex flex-col items-center justify-center transition-colors h-full"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <h3 class="font-bold text-sm mb-2 w-full text-center" :class="darkMode ? 'text-gray-300' : 'text-[#092C4C]'">Roles del Sistema</h3>
+        <apexchart v-if="usuarios.length > 0" type="radialBar" height="240" width="100%" :options="chartOptions" :series="chartSeries"></apexchart>
+        <p v-if="usuarios.length === 0" class="text-sm text-gray-500 py-10">Sin datos</p>
+      </div>
     </div>
 
-    <!-- Toolbar -->
-    <div class="flex flex-wrap items-center gap-3">
-      <div class="relative flex-1 min-w-[200px]">
+    <!-- Tabla y Funcionalidades (ancho completo) -->
+    <div class="space-y-4">
+      <!-- Toolbar -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="relative flex-1 min-w-[200px]">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input v-model="busquedaUsuarios" type="text" placeholder="Buscar por nombre o email..." class="w-full pl-9 pr-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
       </div>
@@ -351,6 +402,7 @@ onMounted(async () => {
           </div>
         </div>
       </Transition>
+    </div>
     </div>
   </div>
 

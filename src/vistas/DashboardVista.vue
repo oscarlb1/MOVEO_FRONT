@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useSesionStore } from '@/tiendas/sesion'
 import dashboardServicio from '@/servicios/dashboardServicio'
 import {
-  LogOut, Settings, Bell, Search, Menu, User,
+  LogOut, Settings, Bell, Menu, User,
   LayoutDashboard, Truck, Users, Map, Package, Activity,
   Moon, Sun, X, ChevronRight, Briefcase
 } from 'lucide-vue-next'
@@ -123,11 +123,11 @@ onUnmounted(() => {
       </div>
 
       <!-- Menú Navegación -->
-      <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 scrollbar-thin">
+      <nav class="flex-1 overflow-y-auto py-8 px-4 flex flex-col justify-evenly scrollbar-thin min-h-[500px]">
         <button
           v-for="item in itemsMenu" :key="item.id"
           @click="irASeccion(item.id)"
-          class="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-200 group relative"
+          class="w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-200 group relative"
           :class="[
             seccionActiva === item.id
               ? (darkMode ? 'bg-[#E67E50]/15 text-[#E67E50]' : 'bg-[#E67E50]/10 text-[#E67E50]')
@@ -135,12 +135,12 @@ onUnmounted(() => {
           ]">
           <!-- Indicador activo -->
           <div v-if="seccionActiva === item.id"
-            class="absolute left-0 w-1.5 h-8 bg-[#E67E50] rounded-r-full shadow-[0_0_10px_rgba(230,126,80,0.4)]">
+            class="absolute left-0 w-1.5 h-10 bg-[#E67E50] rounded-r-full shadow-[0_0_10px_rgba(230,126,80,0.4)]">
           </div>
           
           <component :is="item.icon" class="w-5 h-5 transition-transform duration-200 group-hover:scale-110"
             :class="seccionActiva === item.id ? 'stroke-[2.5px]' : ''" />
-          <span class="font-semibold text-sm">{{ item.label }}</span>
+          <span class="font-semibold text-[15px]">{{ item.label }}</span>
         </button>
       </nav>
 
@@ -150,8 +150,9 @@ onUnmounted(() => {
           :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm'"
           @click="perfilAbierto = !perfilAbierto">
           <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md">
-              {{ inicialUsuario }}
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden shrink-0">
+              <img v-if="sesionStore.usuario?.imagenUrl" :src="sesionStore.usuario.imagenUrl" class="w-full h-full object-cover object-center" />
+              <span v-else>{{ inicialUsuario }}</span>
             </div>
             <div class="min-w-0">
               <p class="text-sm font-bold truncate leading-tight" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ nombreUsuario }}</p>
@@ -162,6 +163,9 @@ onUnmounted(() => {
         </div>
 
         <div v-show="perfilAbierto" class="mt-2 pl-3 border-l-2 ml-7 space-y-1" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
+          <button @click="router.push('/configuracion')" class="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-gray-500 hover:bg-gray-50 transition-colors" :class="darkMode ? 'text-gray-400 hover:bg-gray-800/50' : ''">
+            <Settings class="w-4 h-4" /> Configuración
+          </button>
           <button @click="cerrarSesion" class="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-red-500 hover:bg-red-50 transition-colors" :class="darkMode ? 'hover:bg-red-500/10' : ''">
             <LogOut class="w-4 h-4" /> Desconectarse
           </button>
@@ -191,33 +195,6 @@ onUnmounted(() => {
         </div>
 
         <div class="flex items-center gap-3">
-          <!-- Buscador Global -->
-          <div class="hidden sm:flex relative group">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors"
-              :class="darkMode ? 'text-gray-500 group-focus-within:text-[#E67E50]' : 'text-gray-400 group-focus-within:text-[#E67E50]'" />
-            <input type="text" placeholder="Buscar en Moveo..."
-              class="w-64 pl-10 pr-4 py-2.5 text-sm rounded-xl transition-all outline-none border-2 focus:border-[#E67E50]"
-              :class="darkMode ? 'bg-gray-800/50 border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border-transparent text-[#424242] focus:bg-white'" />
-          </div>
-
-          <!-- Tema -->
-          <button @click="alternarTema"
-            class="p-2.5 rounded-xl transition-colors relative"
-            :class="darkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'">
-            <Sun v-if="darkMode" class="w-5 h-5" />
-            <Moon v-else class="w-5 h-5" />
-          </button>
-
-          <!-- Notificaciones -->
-          <button class="p-2.5 rounded-xl transition-colors relative"
-            :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-50 text-[#424242] hover:bg-gray-100'"
-            @click="esAdmin ? irASeccion('general') : null">
-            <Bell class="w-5 h-5" />
-            <span v-if="conteoNoLeidas > 0"
-              class="absolute 2 top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2"
-              :class="darkMode ? 'border-[#1a2332]' : 'border-white'"></span>
-          </button>
-
           <!-- Avatar Móvil -->
           <div class="lg:hidden w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer"
             @click="irASeccion('general')">
@@ -228,7 +205,7 @@ onUnmounted(() => {
 
       <!-- Contenedor Principal (Vistas dinámicas) -->
       <div class="flex-1 overflow-auto p-4 sm:p-8">
-        <div class="max-w-7xl mx-auto">
+        <div class="w-full h-full">
           
           <GeneralVista v-if="seccionActiva === 'general'" :darkMode="darkMode" @actualizar-no-leidas="handleActualizarNoLeidas" />
           <RutasVista v-else-if="seccionActiva === 'rutas'" :darkMode="darkMode" />

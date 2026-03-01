@@ -70,6 +70,33 @@ const kpisVehiculos = computed(() => {
   ]
 })
 
+const chartOptions = computed(() => ({
+  chart: { type: 'donut', background: 'transparent', fontFamily: 'inherit', toolbar: { show: false } },
+  theme: { mode: props.darkMode ? 'dark' : 'light' },
+  labels: ['Disponibles', 'En Ruta', 'Mantenimiento', 'Inactivos'],
+  colors: ['#22c55e', '#E67E50', '#f59e0b', '#94a3b8'],
+  plotOptions: { 
+    pie: { 
+      startAngle: -90, 
+      endAngle: 90, 
+      offsetY: 20,
+      donut: { size: '75%', labels: { show: true, name: { show: true, fontSize: '12px' }, value: { show: true, fontSize: '18px', fontWeight: 'bold' } } } 
+    } 
+  },
+  grid: { padding: { bottom: -60 } },
+  dataLabels: { enabled: false },
+  stroke: { show: false },
+  legend: { position: 'bottom' }
+}))
+
+const chartSeries = computed(() => {
+  const disponibles = vehiculos.value.filter(v => v.estado === 'DISPONIBLE').length
+  const enRuta = vehiculos.value.filter(v => v.estado === 'EN_RUTA').length
+  const enMantenimiento = vehiculos.value.filter(v => v.estado === 'EN_MANTENIMIENTO').length
+  const fueraServicio = vehiculos.value.filter(v => v.estado === 'FUERA_DE_SERVICIO').length
+  return [disponibles, enRuta, enMantenimiento, fueraServicio]
+})
+
 function badgeVehiculo(estado: string) {
   if (estado === 'DISPONIBLE') return { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200', dot: 'bg-green-500' }
   if (estado === 'EN_RUTA') return { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200', dot: 'bg-orange-500' }
@@ -227,31 +254,46 @@ onMounted(async () => {
 
 <template>
   <div class="space-y-6">
-    <!-- KPIs Flota -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <template v-if="cargando">
-        <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-          <div class="h-4 rounded w-24 mb-4" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
-          <div class="h-8 rounded w-16 mb-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
-          <div class="h-3 rounded w-32" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+    <!-- Top Section: Gauge Chart + KPIs -->
+    <div class="grid lg:grid-cols-4 gap-6 items-stretch">
+      <!-- Gráfico del Estado de la Flota (Gauge) -->
+      <div class="lg:col-span-2 border rounded-2xl p-5 shadow-sm flex flex-col transition-colors min-h-[250px]"
+        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <h3 class="font-bold text-sm mb-2" :class="darkMode ? 'text-gray-300' : 'text-[#092C4C]'">Estado de la Flota</h3>
+        <div class="flex-1 flex justify-center items-center">
+          <apexchart v-if="vehiculos.length > 0" type="donut" height="280" width="100%" :options="chartOptions" :series="chartSeries" class="-mt-4"></apexchart>
+          <p v-if="vehiculos.length === 0" class="text-sm text-gray-500 py-10">Sin datos</p>
         </div>
-      </template>
-      <template v-else>
-        <div v-for="(kpi, i) in kpisVehiculos" :key="i" class="p-5 rounded-2xl border transition-all hover:shadow-md" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
-          <div class="flex items-start justify-between mb-3">
-            <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
-              <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
-            </div>
+      </div>
+
+      <!-- KPIs Flota -->
+      <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+        <template v-if="cargando">
+          <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse h-full flex flex-col justify-center" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+            <div class="h-4 rounded w-24 mb-4" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+            <div class="h-8 rounded w-16 mb-2" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
+            <div class="h-3 rounded w-32" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'"></div>
           </div>
-          <p class="text-xs font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
-          <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
-          <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
-        </div>
-      </template>
+        </template>
+        <template v-else>
+          <div v-for="(kpi, i) in kpisVehiculos" :key="i" class="p-5 rounded-2xl border transition-all hover:shadow-md flex flex-col h-full" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+            <div class="flex items-start justify-between mb-3">
+              <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
+                <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
+              </div>
+            </div>
+            <p class="text-xs font-medium mb-1 mt-auto" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
+            <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
+            <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
+          </div>
+        </template>
+      </div>
     </div>
 
-    <!-- Barra de herramientas -->
-    <div class="flex flex-wrap items-center gap-3">
+    <!-- Tabla y Herramientas (Ancho completo) -->
+    <div class="space-y-4">
+        <!-- Barra de herramientas -->
+        <div class="flex flex-wrap items-center gap-3">
       <div class="relative flex-1 min-w-[200px]">
         <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input v-model="busquedaVehiculos" type="text" placeholder="Buscar por matrícula o modelo..." class="w-full pl-9 pr-4 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
@@ -315,6 +357,7 @@ onMounted(async () => {
         Mostrando {{ vehiculosFiltrados.length }} de {{ vehiculos.length }} vehículos
       </div>
     </div>
+  </div>
   </div>
 
   <!-- Modales Vehículo -->
