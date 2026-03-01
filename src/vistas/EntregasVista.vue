@@ -2,7 +2,8 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import {
   Package, CheckCircle2, AlertCircle, Clock,
-  Search, Filter, Loader2, Edit, Trash2, ShieldAlert, Check, Plus, X, Eye, Truck, User, Download, FileText, FileSpreadsheet
+  Search, Filter, Loader2, Edit, Trash2, ShieldAlert, Check, Plus, X, Eye, Truck, User, Download, FileText, FileSpreadsheet,
+  Activity
 } from 'lucide-vue-next';
 import entregasServicio from '@/servicios/entregasServicio';
 import rutasServicio from '@/servicios/rutasServicio';
@@ -38,6 +39,7 @@ const mostrarModalEstado = ref(false);
 const mostrarModalDetalle = ref(false);
 
 const entregaSeleccionada = ref<EntregaDto | null>(null);
+const entregaEditando = ref<EntregaDto | null>(null);
 
 const nuevaEntregaFormData = ref<CrearEntregaDto>({
   rutaId: 0,
@@ -127,6 +129,7 @@ async function cargarDatos() {
 
 // Acciones Entregas
 function abrirModalNuevaEntrega() {
+  entregaEditando.value = null;
   nuevaEntregaFormData.value = {
     rutaId: 0,
     clienteId: 0,
@@ -136,18 +139,34 @@ function abrirModalNuevaEntrega() {
   mostrarModalNuevo.value = true;
 }
 
-async function guardarNuevaEntrega() {
+function abrirModalEditarEntrega(entrega: EntregaDto) {
+  entregaEditando.value = entrega;
+  nuevaEntregaFormData.value = {
+    rutaId: entrega.rutaId,
+    clienteId: entrega.clienteId,
+    ordenParada: entrega.ordenParada,
+    notas: entrega.notas || ''
+  };
+  mostrarModalNuevo.value = true;
+}
+
+async function guardarEntrega() {
   if (!nuevaEntregaFormData.value.rutaId || !nuevaEntregaFormData.value.clienteId) {
     toast.error('Selecciona una ruta y un cliente');
     return;
   }
   try {
-    await entregasServicio.crear(nuevaEntregaFormData.value);
-    toast.success('Entrega creada con éxito');
+    if (entregaEditando.value) {
+      await entregasServicio.actualizar(entregaEditando.value.id, nuevaEntregaFormData.value);
+      toast.success('Entrega actualizada con éxito');
+    } else {
+      await entregasServicio.crear(nuevaEntregaFormData.value);
+      toast.success('Entrega creada con éxito');
+    }
     mostrarModalNuevo.value = false;
     cargarDatos();
   } catch (err) {
-    toast.error('Error al crear la entrega');
+    toast.error(entregaEditando.value ? 'Error al actualizar la entrega' : 'Error al crear la entrega');
   }
 }
 
@@ -356,6 +375,9 @@ onMounted(() => {
               <td class="px-6 py-4 text-right">
                 <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                    <button @click="abrirModalEstado(entrega)" class="p-1.5 rounded-md hover:bg-orange-50 hover:text-orange-600 text-gray-400 transition-colors" :class="darkMode ? 'hover:bg-gray-700' : ''" title="Cambiar Estado">
+                      <Activity class="w-4 h-4"/>
+                   </button>
+                   <button @click="abrirModalEditarEntrega(entrega)" class="p-1.5 rounded-md hover:bg-blue-50 hover:text-blue-600 text-gray-400 transition-colors" :class="darkMode ? 'hover:bg-gray-700' : ''" title="Editar Detalles">
                       <Edit class="w-4 h-4"/>
                    </button>
                    <button @click="abrirModalDetalle(entrega)" class="p-1.5 rounded-md hover:bg-blue-50 hover:text-blue-600 text-gray-400 transition-colors" :class="darkMode ? 'hover:bg-gray-700' : ''" title="Ver Detalles">
@@ -400,7 +422,7 @@ onMounted(() => {
   <div v-if="mostrarModalNuevo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
     <div class="rounded-2xl max-w-lg w-full shadow-xl" :class="darkMode ? 'bg-[#1a2332]' : 'bg-white'">
       <div class="p-6 border-b flex justify-between items-center" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
-        <h3 class="text-xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Registrar Nueva Entrega</h3>
+        <h3 class="text-xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ entregaEditando ? 'Editar Entrega #' + entregaEditando.id : 'Registrar Nueva Entrega' }}</h3>
         <button @click="mostrarModalNuevo = false" class="text-gray-400 hover:text-gray-600"><X class="w-5 h-5"/></button>
       </div>
       <div class="p-6 space-y-4">
@@ -429,7 +451,7 @@ onMounted(() => {
       </div>
       <div class="p-6 border-t flex justify-end gap-3 bg-gray-50 rounded-b-2xl" :class="darkMode ? 'bg-[#1e293b] border-gray-700' : 'border-gray-100'">
         <button @click="mostrarModalNuevo = false" class="px-4 py-2 border rounded-lg font-medium transition-colors" :class="darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-gray-600 hover:bg-gray-100'">Cancelar</button>
-        <button @click="guardarNuevaEntrega" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">Guardar Entrega</button>
+        <button @click="guardarEntrega" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">{{ entregaEditando ? 'Guardar Cambios' : 'Crear Entrega' }}</button>
       </div>
     </div>
   </div>

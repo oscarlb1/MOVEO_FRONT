@@ -123,6 +123,21 @@ export interface MantenimientoItem {
     coste: number
 }
 
+export interface CrearMantenimientoDto {
+    vehiculoId: number
+    fechaServicio: string
+    tipoMantenimiento: string
+    kilometrajeServicio: number
+    coste: number
+}
+
+export interface ActualizarMantenimientoDto {
+    fechaServicio: string
+    tipoMantenimiento: string
+    kilometrajeServicio: number
+    coste: number
+}
+
 // Mapea RutaDto del backend (GET /Rutas)
 export interface RutaItem {
     id: number

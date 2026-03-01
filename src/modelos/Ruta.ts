@@ -78,3 +78,11 @@ export interface CrearEntregaDto {
     notas?: string | null;
     codigoQr?: string | null;
 }
+
+export interface ActualizarEntregaDto {
+    rutaId: number;
+    clienteId: number;
+    ordenParada: number;
+    notas?: string | null;
+    codigoQr?: string | null;
+}

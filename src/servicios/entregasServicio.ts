@@ -1,5 +1,5 @@
 import clienteApi from '@/api/clienteApi';
-import type { EntregaDto, CrearEntregaDto } from '@/modelos/Ruta';
+import type { EntregaDto, CrearEntregaDto, ActualizarEntregaDto } from '@/modelos/Ruta';
 
 export interface EntregasEstadisticasDto {
     totalHoy: number;
@@ -35,8 +35,13 @@ export const entregasServicio = {
         return data;
     },
 
+    actualizar: async (id: number, entrega: ActualizarEntregaDto): Promise<EntregaDto> => {
+        const { data } = await clienteApi.put<EntregaDto>(`/Entregas/${id}`, entrega);
+        return data;
+    },
+
     actualizarEstado: async (id: number, nuevoEstado: string): Promise<void> => {
-        await clienteApi.put(`/Entregas/${id}/estado`, { nuevoEstado });
+        await clienteApi.put(`/Entregas/${id}/estado`, { estado: nuevoEstado });
     },
 
     eliminar: async (id: number): Promise<void> => {
