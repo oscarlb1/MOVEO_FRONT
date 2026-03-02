@@ -29,6 +29,7 @@ const nombreUsuario = computed(() => sesionStore.usuario?.nombre || 'Usuario')
 const correoUsuario = computed(() => sesionStore.usuario?.email || '')
 const rolUsuario = computed(() => sesionStore.usuario?.rol || '')
 const inicialUsuario = computed(() => nombreUsuario.value.substring(0, 1).toUpperCase())
+const imagenUsuario = computed(() => sesionStore.usuario?.imagenUrl || null)
 
 const conteoNoLeidas = ref(0)
 let intervaloActualizacion: ReturnType<typeof setInterval>
@@ -150,8 +151,9 @@ onUnmounted(() => {
           :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm'"
           @click="router.push('/configuracion')">
           <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md">
-              {{ inicialUsuario }}
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden flex-shrink-0">
+              <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
+              <span v-else>{{ inicialUsuario }}</span>
             </div>
             <div class="min-w-0">
               <p class="text-sm font-bold truncate leading-tight" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ nombreUsuario }}</p>
@@ -189,37 +191,12 @@ onUnmounted(() => {
         </div>
 
         <div class="flex items-center gap-3">
-          <!-- Buscador Global -->
-          <div class="hidden sm:flex relative group">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors"
-              :class="darkMode ? 'text-gray-500 group-focus-within:text-[#E67E50]' : 'text-gray-400 group-focus-within:text-[#E67E50]'" />
-            <input type="text" placeholder="Buscar en Moveo..."
-              class="w-64 pl-10 pr-4 py-2.5 text-sm rounded-xl transition-all outline-none border-2 focus:border-[#E67E50]"
-              :class="darkMode ? 'bg-gray-800/50 border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border-transparent text-[#424242] focus:bg-white'" />
-          </div>
-
-          <!-- Tema -->
-          <button @click="alternarTema"
-            class="p-2.5 rounded-xl transition-colors relative"
-            :class="darkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'">
-            <Sun v-if="darkMode" class="w-5 h-5" />
-            <Moon v-else class="w-5 h-5" />
-          </button>
-
-          <!-- Notificaciones -->
-          <button class="p-2.5 rounded-xl transition-colors relative"
-            :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-gray-50 text-[#424242] hover:bg-gray-100'"
-            @click="esAdmin ? irASeccion('general') : null">
-            <Bell class="w-5 h-5" />
-            <span v-if="conteoNoLeidas > 0"
-              class="absolute 2 top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2"
-              :class="darkMode ? 'border-[#1a2332]' : 'border-white'"></span>
-          </button>
-
+          
           <!-- Avatar Móvil -->
-          <div class="lg:hidden w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer"
+          <div class="lg:hidden w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer overflow-hidden flex-shrink-0"
             @click="irASeccion('general')">
-            {{ inicialUsuario }}
+            <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
+            <span v-else>{{ inicialUsuario }}</span>
           </div>
         </div>
       </header>

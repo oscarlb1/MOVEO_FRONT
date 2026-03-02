@@ -6,6 +6,8 @@ export interface CrearUsuarioDto {
     email: string
     password: string
     rol: string
+    telefono?: string | null
+    imagen?: File
 }
 
 export interface ActualizarUsuarioDto {
@@ -15,6 +17,7 @@ export interface ActualizarUsuarioDto {
     rol: string
     telefono?: string | null
     imagenUrl?: string | null
+    imagen?: File
 }
 
 export default {
@@ -32,21 +35,44 @@ export default {
 
     /** Crea un nuevo usuario (ADMIN) */
     async crear(dto: CrearUsuarioDto): Promise<UsuarioItem> {
-        const { data } = await clienteApi.post<UsuarioItem>('/Usuarios', dto)
+        const formData = new FormData()
+        formData.append('nombre', dto.nombre)
+        formData.append('email', dto.email)
+        formData.append('password', dto.password)
+        formData.append('rol', dto.rol)
+        if (dto.telefono) formData.append('telefono', dto.telefono)
+        if (dto.imagen) {
+            formData.append('imagen', dto.imagen)
+        }
+
+        const { data } = await clienteApi.post<UsuarioItem>('/Usuarios', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
         return data
     },
 
     /** Actualiza un usuario (ADMIN) */
     async actualizar(id: number, dto: ActualizarUsuarioDto): Promise<UsuarioItem> {
-        const { data } = await clienteApi.put<UsuarioItem>(`/Usuarios/${id}`, dto)
+        const formData = new FormData()
+        formData.append('nombre', dto.nombre)
+        formData.append('email', dto.email)
+        formData.append('rol', dto.rol)
+        if (dto.password) formData.append('password', dto.password)
+        if (dto.telefono) formData.append('telefono', dto.telefono)
+        if (dto.imagenUrl) formData.append('imagenUrl', dto.imagenUrl)
+        if (dto.imagen) {
+            formData.append('imagen', dto.imagen)
+        }
+
+        const { data } = await clienteApi.put<UsuarioItem>(`/Usuarios/${id}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
         return data
     },
 
     /** Actualiza el perfil del usuario autenticado (Permite subir imagen via FormData) */
     async actualizarMiPerfil(formData: FormData): Promise<UsuarioItem> {
-        const { data } = await clienteApi.put<UsuarioItem>('/Usuarios/me', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        const { data } = await clienteApi.put<UsuarioItem>('/Usuarios/me', formData)
         return data
     },
 

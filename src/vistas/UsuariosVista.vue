@@ -94,16 +94,25 @@ function estaOnline(userId: number) {
 
 function abrirModalCrearUsuario() {
   usuarioEditando.value = null
-  formularioUsuario.value = { nombre: '', email: '', password: '', rol: 'REPARTIDOR' }
+  formularioUsuario.value = { nombre: '', email: '', password: '', rol: 'REPARTIDOR', telefono: '', imagen: undefined }
   feedbackUsuario.value = null
   usuarioModalAbierto.value = true
 }
 
 function abrirModalEditarUsuario(u: UsuarioItem) {
   usuarioEditando.value = u
-  formularioUsuario.value = { nombre: u.nombre, email: u.email, password: '', rol: u.rol }
+  formularioUsuario.value = { nombre: u.nombre, email: u.email, password: '', rol: u.rol, telefono: u.telefono || '', imagen: undefined }
   feedbackUsuario.value = null
   usuarioModalAbierto.value = true
+}
+
+function manejarArchivo(event: Event) {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    formularioUsuario.value.imagen = target.files[0]
+  } else {
+    formularioUsuario.value.imagen = undefined
+  }
 }
 
 async function guardarUsuario() {
@@ -117,6 +126,12 @@ async function guardarUsuario() {
       }
       if (formularioUsuario.value.password) {
         actualizarDto.password = formularioUsuario.value.password
+      }
+      if (formularioUsuario.value.telefono) {
+        actualizarDto.telefono = formularioUsuario.value.telefono
+      }
+      if (formularioUsuario.value.imagen) {
+        actualizarDto.imagen = formularioUsuario.value.imagen
       }
       const actualizado = await usuarioServicio.actualizar(usuarioEditando.value.id, actualizarDto)
       const idx = usuarios.value.findIndex(u => u.id === usuarioEditando.value!.id)
@@ -375,6 +390,10 @@ onMounted(async () => {
               <input v-model="formularioUsuario.email" type="email" placeholder="usuario@moveo.com" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
             </div>
             <div>
+              <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Teléfono</label>
+              <input v-model="formularioUsuario.telefono" type="tel" placeholder="+34 600 000 000" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
+            </div>
+            <div>
               <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Contraseña {{ usuarioEditando ? '(dejar en blanco para no cambiar)' : '*' }}</label>
               <input v-model="formularioUsuario.password" type="password" placeholder="••••••••" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
             </div>
@@ -384,6 +403,10 @@ onMounted(async () => {
                 <option value="REPARTIDOR">Repartidor</option>
                 <option value="ADMIN">Administrador</option>
               </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Imagen de Perfil</label>
+              <input type="file" accept="image/*" @change="manejarArchivo" class="w-full text-sm file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#E67E50]/10 file:text-[#E67E50] hover:file:bg-[#E67E50]/20 transition-colors" :class="darkMode ? 'text-gray-400' : 'text-[#424242]'" />
             </div>
             <div v-if="feedbackUsuario" class="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium" :class="feedbackUsuario === 'ok' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'">
               <CheckCircle2 v-if="feedbackUsuario === 'ok'" class="w-4 h-4" /><AlertCircle v-else class="w-4 h-4" />{{ feedbackMensajeUsuario }}
