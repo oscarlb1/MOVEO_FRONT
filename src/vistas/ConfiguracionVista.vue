@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { 
   User, Settings, Shield, Bell, CreditCard, 
   ChevronRight, Save, Camera, Mail, Phone, MapPin,
-  Moon, Sun, Monitor
+  Moon, Sun, Monitor, ArrowLeft
 } from 'lucide-vue-next'
 import { useSesionStore } from '@/tiendas/sesion'
 import { useTemaStore } from '@/tiendas/tema'
 import usuarioServicio from '@/servicios/usuarioServicio'
+
+const router = useRouter()
 
 const sesionStore = useSesionStore()
 const temaStore = useTemaStore()
@@ -100,8 +103,15 @@ const onArchivoSeleccionado = async (event: Event) => {
   <div class="min-h-screen bg-gray-50/50 pb-20">
     <div class="max-w-7xl mx-auto px-6 pt-10">
       <div class="mb-10">
-        <h1 class="text-3xl font-bold text-[#092C4C] mb-2">Configuración</h1>
-        <p class="text-gray-500">Gestiona tu información personal y preferencias de la plataforma.</p>
+        <div class="flex items-center gap-4 mb-2">
+          <button @click="router.back()" class="p-2 rounded-xl hover:bg-gray-100 transition-colors text-gray-400 hover:text-[#092C4C]">
+            <ArrowLeft class="w-6 h-6" />
+          </button>
+          <div>
+            <h1 class="text-3xl font-bold text-[#092C4C]">Configuración</h1>
+            <p class="text-gray-500">Gestiona tu información personal y preferencias de la plataforma.</p>
+          </div>
+        </div>
       </div>
 
       <div class="grid lg:grid-cols-[280px_1fr] gap-8">

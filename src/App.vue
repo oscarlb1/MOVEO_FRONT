@@ -33,6 +33,7 @@ const mostrarLayout = computed(() => {
   const name = route.name as string
   if (name === 'login') return false
   if (name === 'dashboard') return false
+  if (name === 'configuracion' && sesionStore.estaAutenticado) return false
   return true
 })
 

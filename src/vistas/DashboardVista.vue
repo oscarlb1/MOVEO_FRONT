@@ -146,9 +146,9 @@ onUnmounted(() => {
 
       <!-- Footer Sidebar -->
       <div class="p-4 border-t" :class="darkMode ? 'border-gray-700 bg-[#161d2b]' : 'border-gray-100 bg-gray-50/50'">
-        <div class="flex items-center justify-between p-3 rounded-xl transition-colors cursor-pointer relative"
+        <div class="flex items-center p-3 rounded-xl transition-colors cursor-pointer"
           :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm'"
-          @click="perfilAbierto = !perfilAbierto">
+          @click="router.push('/configuracion')">
           <div class="flex items-center gap-3 min-w-0">
             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md">
               {{ inicialUsuario }}
@@ -158,14 +158,12 @@ onUnmounted(() => {
               <p class="text-[11px] font-medium" :class="darkMode ? 'text-[#E67E50]' : 'text-[#E67E50]'">{{ rolUsuario }}</p>
             </div>
           </div>
-          <ChevronRight class="w-4 h-4 transition-transform text-gray-400" :class="perfilAbierto ? 'rotate-90' : ''" />
         </div>
-
-        <div v-show="perfilAbierto" class="mt-2 pl-3 border-l-2 ml-7 space-y-1" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-          <button @click="cerrarSesion" class="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-red-500 hover:bg-red-50 transition-colors" :class="darkMode ? 'hover:bg-red-500/10' : ''">
-            <LogOut class="w-4 h-4" /> Desconectarse
-          </button>
-        </div>
+        <button @click="cerrarSesion"
+          class="w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors"
+          :class="darkMode ? 'hover:bg-red-500/10' : 'hover:bg-red-50'">
+          <LogOut class="w-4 h-4" /> Cerrar sesión
+        </button>
       </div>
     </aside>
 
