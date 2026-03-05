@@ -34,6 +34,10 @@ const rutasServicio = {
     },
     eliminar: async (id: number): Promise<void> => {
         await clienteApi.delete(`/Ruta/${id}`);
+    },
+    optimizarRutaIa: async (id: number): Promise<{ rutaId: number, exito: boolean, optimizacion: { ordenParadas: number[], justificacion: string } }> => {
+        const { data } = await clienteApi.post(`/Ruta/${id}/optimizar-ia`);
+        return data;
     }
 };
 

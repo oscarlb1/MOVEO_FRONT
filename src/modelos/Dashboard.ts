@@ -141,8 +141,17 @@ export interface ActualizarMantenimientoDto {
 // Mapea RutaDto del backend (GET /Rutas)
 export interface RutaItem {
     id: number
-    nombre: string
+    nombre?: string
     estado: 'PLANIFICADA' | 'EN_PROGRESO' | 'COMPLETADA' | 'CANCELADA' | string
-    conductorNombre: string | null
-    vehiculoMatricula: string | null
+    nombreConductor: string | null
+    matriculaVehiculo: string | null
+}
+
+// Mapea UbicacionDto del backend
+export interface UbicacionItem {
+    id: number
+    rutaId: number
+    latitud: number
+    longitud: number
+    fechaHora: string
 }

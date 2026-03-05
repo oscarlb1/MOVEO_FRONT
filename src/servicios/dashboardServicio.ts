@@ -10,6 +10,7 @@ import type {
     RutaEstadisticas,
     ResumenSesion,
     MantenimientoItem,
+    UbicacionItem,
 } from '@/modelos/Dashboard'
 
 export default {
@@ -115,6 +116,26 @@ export default {
             params: { estado: 'EN_PROGRESO' },
         })
         return data
+    },
+
+    /** Obtener última ubicación de una ruta */
+    async obtenerUltimaUbicacionRuta(rutaId: number): Promise<UbicacionItem | null> {
+        try {
+            const { data } = await clienteApi.get<UbicacionItem>(`/Ubicacion/ultimo/ruta/${rutaId}`)
+            return data
+        } catch {
+            return null
+        }
+    },
+
+    /** Obtener el historial completo de ubicaciones de una ruta */
+    async obtenerHistorialUbicacionesRuta(rutaId: number): Promise<UbicacionItem[]> {
+        try {
+            const { data } = await clienteApi.get<UbicacionItem[]>(`/Ubicacion/ruta/${rutaId}`)
+            return data
+        } catch {
+            return []
+        }
     },
 }
 

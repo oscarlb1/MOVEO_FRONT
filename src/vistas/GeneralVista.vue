@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import type { ApexOptions } from 'apexcharts'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 import {
   Truck, Package, Users, Activity, CheckCircle2, Clock,
   AlertCircle, Zap, Search, RefreshCw, TrendingUp, X, BarChart3, Wrench, Send, Route, Navigation, Wifi, Download
@@ -12,6 +12,8 @@ import type {
   EntregaItem, NotificacionItem, RankingItem, EstadisticasHoy,
   ResumenSesion, MantenimientoItem, RutaItem
 } from '@/modelos/Dashboard'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
 const props = defineProps<{
   darkMode: boolean
@@ -104,8 +106,8 @@ const entregasPorDia = computed(() => {
   entregasRecientes.value.forEach(e => {
     const d = new Date(e.createdAt)
     const dia = (d.getDay() + 6) % 7 // Lun=0 ... Dom=6
-    totales[dia]++
-    if (e.estado === 'ENTREGADO') completadas[dia]++
+    totales[dia] = (totales[dia] ?? 0) + 1
+    if (e.estado === 'ENTREGADO') completadas[dia] = (completadas[dia] ?? 0) + 1
   })
   return { totales, completadas }
 })
@@ -283,41 +285,162 @@ async function enviarBroadcast() {
   }
 }
 
-// ── Mapa en Tiempo Real ──
-const selectedFilter = ref('Todos')
+// ── Mapa en Tiempo Real (Leaflet) ──
+const mapContainer = ref<HTMLElement | null>(null)
+let map: L.Map | null = null
+const marcadoresVehiculos = new Map<number, L.Marker>()
+const lineasRutas = new Map<number, L.Polyline>()
 
-// Seed vehicle dots from real vehicle data
-const vehiculosMapa = ref<{ id: number; x: number; y: number; status: string; vx: number; vy: number }[]>([])
+async function inicializarMapaVehiculos() {
+  if (!mapContainer.value) return
+  
+  map = L.map(mapContainer.value).setView([40.4168, -3.7038], 11) // Coordenada base
+  
+  const tileUrl = props.darkMode 
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 
-function seedVehiclesMapa() {
-  vehiculosMapa.value = vehiculos.value.map((v, i) => ({
-    id: v.id,
-    x: 10 + Math.random() * 80,
-    y: 10 + Math.random() * 80,
-    status: v.estado === 'EN_RUTA' ? 'moving' : 'stopped',
-    vx: v.estado === 'EN_RUTA' ? (Math.random() - 0.5) * 0.8 : 0,
-    vy: v.estado === 'EN_RUTA' ? (Math.random() - 0.5) * 0.8 : 0,
-  }))
+  L.tileLayer(tileUrl, {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map)
+
+  await actualizarUbicaciones()
 }
 
-const vehiculosMapaFiltrados = computed(() => {
-  if (selectedFilter.value === 'En ruta') return vehiculosMapa.value.filter(v => v.status === 'moving')
-  if (selectedFilter.value === 'Parados') return vehiculosMapa.value.filter(v => v.status === 'stopped')
-  return vehiculosMapa.value
-})
+async function actualizarUbicaciones() {
+  if (!map) return
+  
+  try {
+    const rutasEnProgreso = rutasActivas.value
+    let bounds = L.latLngBounds([])
 
-let animationFrameId: number
-function animateVehicles() {
-  vehiculosMapa.value.forEach(v => {
-    if (v.status === 'moving') {
-      v.x += v.vx
-      v.y += v.vy
-      if (v.x <= 2 || v.x >= 98) v.vx *= -1
-      if (v.y <= 2 || v.y >= 98) v.vy *= -1
+    for (const ruta of rutasEnProgreso) {
+      const ubicacion = await dashboardServicio.obtenerUltimaUbicacionRuta(ruta.id)
+      const historial = await dashboardServicio.obtenerHistorialUbicacionesRuta(ruta.id)
+      
+      let latLngs: L.LatLng[] = []
+      
+      if (historial && historial.length > 0) {
+        const puntosOrdenados = [...historial].sort((a, b) => new Date(a.fechaHora).getTime() - new Date(b.fechaHora).getTime())
+        latLngs = puntosOrdenados.map(p => L.latLng(p.latitud, p.longitud))
+      }
+      
+      if (ubicacion) {
+        const latLng = L.latLng(ubicacion.latitud, ubicacion.longitud)
+        
+        if (latLngs.length === 0 || latLngs[latLngs.length - 1]?.lat !== latLng.lat || latLngs[latLngs.length - 1]?.lng !== latLng.lng) {
+          latLngs.push(latLng)
+        }
+        
+        // Dibujar polilínea (rastro)
+        if (latLngs.length > 1) {
+          if (lineasRutas.has(ruta.id)) {
+            lineasRutas.get(ruta.id)!.setLatLngs(latLngs)
+          } else {
+            const polyline = L.polyline(latLngs, {
+              color: '#E67E50',
+              weight: 5,
+              opacity: 0.7,
+              dashArray: '15, 10',
+              lineCap: 'round',
+              lineJoin: 'round',
+              className: 'ruta-animada'
+            }).addTo(map)
+            lineasRutas.set(ruta.id, polyline)
+          }
+        }
+        
+        if (marcadoresVehiculos.has(ruta.id)) {
+          marcadoresVehiculos.get(ruta.id)!.setLatLng(latLng)
+        } else {
+          const icon = L.divIcon({
+            className: 'custom-vehicle-marker bg-transparent border-0',
+            html: `<div class="w-4 h-4 rounded-full shadow-lg border-2 ${props.darkMode ? 'border-[#1a2332]' : 'border-white'}" style="background-color: #E67E50;">
+                     <div class="absolute inset-0 rounded-full animate-ping opacity-50" style="background-color: #E67E50;"></div>
+                   </div>`,
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+          })
+          
+          const marker = L.marker(latLng, { icon }).addTo(map)
+          
+          const estadoColor = ruta.estado === 'EN_PROGRESO' ? '#10b981' : 
+                              ruta.estado === 'PLANIFICADA' ? '#3b82f6' : 
+                              ruta.estado === 'COMPLETADA' ? '#6366f1' : 
+                              ruta.estado === 'CANCELADA' ? '#ef4444' : '#E67E50';
+
+          const tooltipContent = `
+            <div style="font-family: inherit; min-width: 170px; padding: 2px;">
+              <!-- Cabecera -->
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; border-bottom: 1px solid rgba(156, 163, 175, 0.2); padding-bottom: 8px;">
+                <div style="width: 100%;">
+                  <div style="font-weight: 800; font-size: 14px; color: #E67E50; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${ruta.nombre || 'Ruta #'+ruta.id}
+                  </div>
+                  <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: ${estadoColor};"></span>
+                    ${ruta.estado ? ruta.estado.replace('_', ' ') : 'DESCONOCIDO'}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Detalles -->
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Conductor -->
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; flex-shrink: 0;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0.9;">
+                    ${ruta.nombreConductor || '<span style="opacity: 0.5; font-style: italic;">Sin asignar</span>'}
+                  </span>
+                </div>
+                
+                <!-- Vehículo -->
+                <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5; flex-shrink: 0;"><path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11"/><path d="M14 9h4l4 4v4c0 .6-.4 1-1 1h-2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+                  <strong style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${ruta.matriculaVehiculo || '<span style="opacity: 0.5; font-weight: normal; font-style: italic;">Sin asignar</span>'}
+                  </strong>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          marker.bindTooltip(tooltipContent, {
+            direction: 'top',
+            offset: [0, -14],
+            className: props.darkMode ? 'custom-dark-tooltip' : 'custom-light-tooltip',
+            opacity: 1
+          })
+          marcadoresVehiculos.set(ruta.id, marker)
+        }
+        
+        bounds.extend(latLng)
+      }
     }
-  })
-  animationFrameId = requestAnimationFrame(animateVehicles)
+
+    if (bounds.isValid() && marcadoresVehiculos.size > 0) {
+      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
+    }
+  } catch (error) {
+    console.error("Error al actualizar ubicaciones", error)
+  }
 }
+
+watch(() => props.darkMode, (isDark) => {
+  if (map) {
+    map.eachLayer((layer) => {
+      if (layer instanceof L.TileLayer) {
+        map?.removeLayer(layer)
+      }
+    })
+    const tileUrl = isDark 
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    L.tileLayer(tileUrl, {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+    }).addTo(map)
+  }
+})
 
 // ── Actividad por Zona (computada desde entregas reales) ──
 const actividadZonas = computed(() => {
@@ -326,12 +449,13 @@ const actividadZonas = computed(() => {
   const zonas = ['Centro', 'Norte', 'Sur', 'Este', 'Oeste']
   const conteos = [0, 0, 0, 0, 0]
   entregasRecientes.value.forEach(e => {
-    conteos[e.clienteId % 5]++
-  })
+    const i = e.clienteId % 5;
+    conteos[i] = (conteos[i] ?? 0) + 1;
+  });
   const maxConteo = Math.max(...conteos, 1)
   return zonas.map((zone, i) => ({
     zone,
-    actividad: Math.round((conteos[i] / maxConteo) * 100) || Math.round(Math.random() * 30 + 50),
+    actividad: Math.round(((conteos[i] ?? 0) / maxConteo) * 100) || Math.round(Math.random() * 30 + 50),
   })).sort((a, b) => b.actividad - a.actividad)
 })
 
@@ -339,13 +463,16 @@ const zonaMasActiva = computed(() => actividadZonas.value[0])
 
 onMounted(() => {
   cargarDatos().then(() => {
-    seedVehiclesMapa()
-    animateVehicles()
+    inicializarMapaVehiculos()
   })
 })
 
 onUnmounted(() => {
-  cancelAnimationFrame(animationFrameId)
+  if (map) {
+    map.remove()
+  }
+  marcadoresVehiculos.clear()
+  lineasRutas.clear()
 })
 </script>
 
@@ -441,32 +568,11 @@ onUnmounted(() => {
             <h2 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Mapa en Tiempo Real</h2>
             <div class="flex items-center gap-2 text-sm">
               <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ vehiculosMapa.filter(v => v.status === 'moving').length }} vehículos activos</span>
+              <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ rutasActivas.length }} rutas activas</span>
             </div>
           </div>
-          <div class="flex gap-2">
-            <button v-for="filter in ['Todos', 'En ruta', 'Parados']" :key="filter"
-              @click="selectedFilter = filter"
-              class="px-3 py-1 text-xs rounded-lg transition-colors border"
-              :class="selectedFilter === filter
-                ? 'bg-[#E67E50] text-white border-[#E67E50]'
-                : (darkMode ? 'bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700' : 'bg-gray-100 text-[#757575] border-gray-200 hover:bg-gray-200')">
-              {{ filter }}
-            </button>
-          </div>
         </div>
-        <div class="aspect-video rounded-xl relative overflow-hidden border" :class="darkMode ? 'bg-gray-900 border-gray-700' : 'bg-gray-100 border-gray-200'">
-          <!-- Grid pattern -->
-          <div class="absolute inset-0 opacity-10"
-            :style="{ backgroundImage: `linear-gradient(${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px)`, backgroundSize: '40px 40px' }">
-          </div>
-          <!-- Vehicle dots -->
-          <div v-for="v in vehiculosMapaFiltrados" :key="v.id"
-            class="absolute w-4 h-4 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125 cursor-pointer"
-            :style="{ left: `${v.x}%`, top: `${v.y}%`, backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }">
-            <div class="absolute inset-0 rounded-full animate-ping opacity-50"
-              :style="{ backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }"></div>
-          </div>
+        <div ref="mapContainer" class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border" :class="darkMode ? 'bg-gray-900 border-gray-700 shadow-inner' : 'bg-gray-100 border-gray-200 shadow-inner'">
         </div>
       </div>
 
@@ -702,3 +808,51 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+
+<style>
+/* Estilos personalizados para los Tooltips de Leaflet en Tiempo Real */
+.leaflet-tooltip.custom-light-tooltip {
+  background-color: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  color: #1f2937;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all 0.2s ease-out;
+}
+.leaflet-tooltip.custom-light-tooltip::before {
+  border-top-color: rgba(255, 255, 255, 0.98);
+}
+
+.leaflet-tooltip.custom-dark-tooltip {
+  background-color: rgba(17, 24, 39, 0.95);
+  border: 1px solid rgba(55, 65, 81, 0.8);
+  color: #f3f4f6;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  transition: all 0.2s ease-out;
+}
+.leaflet-tooltip.custom-dark-tooltip::before {
+  border-top-color: rgba(17, 24, 39, 0.95);
+}
+
+/* Animación para el rastro de la ruta */
+.ruta-animada {
+  stroke-dashoffset: 100;
+  animation: dash 5s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Ajustes globales Leaflet */
+.leaflet-container {
+  font-family: inherit;
+}
+</style>

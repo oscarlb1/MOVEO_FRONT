@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ApexOptions } from 'apexcharts'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 import { 
   Truck, Package, Users, TrendingUp, TrendingDown,
   AlertCircle, CheckCircle2, Clock, MapPin, Activity,
@@ -137,32 +139,79 @@ const incidents = [
   { id: 4, type: 'info', title: 'Actualización disponible', description: 'Nuevas funciones disponibles en la app móvil', time: 'Hace 3 horas', icon: Zap },
 ]
 
-// Animated Vehicles Logic
-const vehicles = ref([
-  { id: 1, x: 20, y: 30, status: 'moving', vx: 0.5, vy: 0.2 },
-  { id: 2, x: 60, y: 50, status: 'moving', vx: -0.3, vy: 0.4 },
-  { id: 3, x: 40, y: 70, status: 'stopped', vx: 0, vy: 0 },
-  { id: 4, x: 80, y: 40, status: 'moving', vx: 0.2, vy: -0.5 },
-  { id: 5, x: 15, y: 60, status: 'moving', vx: 0.4, vy: 0.3 },
-])
+// Map Logic
+const mapContainer = ref<HTMLElement | null>(null)
+let map: L.Map | null = null
 
-// Basic animation loop for vehicles
-let animationFrameId: number
-const animateVehicles = () => {
-  vehicles.value.forEach(v => {
-    if (v.status === 'moving') {
-      v.x += v.vx
-      v.y += v.vy
-      // Bounce off walls (0-100)
-      if (v.x <= 0 || v.x >= 100) v.vx *= -1
-      if (v.y <= 0 || v.y >= 100) v.vy *= -1
-    }
+async function inicializarMapa() {
+  if (!mapContainer.value) return
+  
+  map = L.map(mapContainer.value).setView([40.4168, -3.7038], 12)
+  
+  const tileUrl = darkMode.value 
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+
+  L.tileLayer(tileUrl, {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map)
+
+  const latLngs = [
+    L.latLng(40.4168, -3.7038),
+    L.latLng(40.4250, -3.7000),
+    L.latLng(40.4350, -3.6900),
+    L.latLng(40.4450, -3.6800),
+    L.latLng(40.4500, -3.6950),
+  ]
+
+  L.polyline(latLngs, {
+    color: '#E67E50',
+    weight: 5,
+    opacity: 0.7,
+    dashArray: '15, 10',
+    lineCap: 'round',
+    lineJoin: 'round',
+    className: 'ruta-animada'
+  }).addTo(map)
+
+  const icon = L.divIcon({
+    className: 'custom-vehicle-marker bg-transparent border-0',
+    html: `<div class="w-4 h-4 rounded-full shadow-lg border-2 ${darkMode.value ? 'border-[#1a2332]' : 'border-white'}" style="background-color: #E67E50;">
+             <div class="absolute inset-0 rounded-full animate-ping opacity-50" style="background-color: #E67E50;"></div>
+           </div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
   })
-  animationFrameId = requestAnimationFrame(animateVehicles)
+  const lastPoint = latLngs[latLngs.length - 1]
+  if (lastPoint) {
+    L.marker(lastPoint, { icon }).addTo(map)
+  }
 }
 
+watch(() => darkMode.value, (isDark) => {
+  if (map) {
+    map.eachLayer((layer) => {
+      if (layer instanceof L.TileLayer) {
+        map?.removeLayer(layer)
+      }
+    })
+    const tileUrl = isDark 
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    L.tileLayer(tileUrl, {
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+    }).addTo(map)
+  }
+})
+
 onMounted(() => {
-  animateVehicles()
+  inicializarMapa()
+})
+
+onUnmounted(() => {
+  if (map) {
+    map.remove()
+  }
 })
 
 </script>
@@ -299,34 +348,10 @@ onMounted(() => {
                   <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">35 vehículos activos</span>
                 </div>
               </div>
-              <div class="flex gap-2">
-                 <button v-for="filter in ['Todos', 'En ruta', 'Parados']" :key="filter"
-                   @click="selectedFilter = filter"
-                   class="px-3 py-1 text-xs rounded-lg transition-colors border"
-                   :class="selectedFilter === filter 
-                    ? 'bg-[#E67E50] text-white border-[#E67E50]' 
-                    : (darkMode ? 'bg-gray-800 text-gray-400 border-gray-700 hover:bg-gray-700' : 'bg-gray-100 text-[#757575] border-gray-200 hover:bg-gray-200')"
-                 >
-                   {{ filter }}
-                 </button>
-              </div>
             </div>
 
-            <!-- Map mock -->
-            <div class="aspect-video rounded-xl relative overflow-hidden bg-gray-100 dark:bg-gray-900 border" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
-               <!-- Grid pattern -->
-               <div class="absolute inset-0 opacity-10" 
-                 :style="{ backgroundImage: `linear-gradient(${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px)`, backgroundSize: '40px 40px' }">
-               </div>
-
-               <!-- Vehicles -->
-               <div v-for="v in vehicles" :key="v.id"
-                 class="absolute w-4 h-4 rounded-full shadow-lg transform -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-125 cursor-pointer"
-                 :style="{ left: `${v.x}%`, top: `${v.y}%`, backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }"
-               >
-                 <div class="absolute inset-0 rounded-full animate-ping opacity-50" 
-                   :style="{ backgroundColor: v.status === 'moving' ? '#E67E50' : '#EAB308' }"></div>
-               </div>
+            <!-- Mapa Real -->
+            <div ref="mapContainer" class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border" :class="darkMode ? 'bg-gray-900 border-gray-700 shadow-inner' : 'bg-gray-100 border-gray-200 shadow-inner'">
             </div>
           </div>
 

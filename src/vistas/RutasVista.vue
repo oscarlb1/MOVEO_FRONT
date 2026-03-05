@@ -6,7 +6,7 @@ import {
   Map, Route, Truck, Package, Clock, Calendar, CheckCircle2,
   AlertCircle, Search, Eye, Filter, Loader2, Play, Square,
   MapPin, Check, ChevronRight, Share2, Printer, Plus, Trash2, Edit, X,
-  RefreshCw, Navigation, FileText, FileSpreadsheet
+  RefreshCw, Navigation, FileText, FileSpreadsheet, Sparkles
 } from 'lucide-vue-next';
 import rutasServicio from '@/servicios/rutasServicio';
 import vehiculosServicio from '@/servicios/vehiculosServicio';
@@ -31,6 +31,7 @@ const cargando = ref(true);
 const cargandoDetalle = ref(false);
 const rutas = ref<RutaDto[]>([]);
 const rutaSeleccionada = ref<RutaDetalleDto | null>(null);
+const optimizandoIa = ref(false);
 
 // Función auxiliar para obtener la fecha de la ubicación (maneja diferentes nombres de propiedad del backend)
 function obtenerFechaUbicacion(ub: UbicacionDto | null): Date | null {
@@ -502,6 +503,24 @@ async function cambiarEstadoRuta(id: number, nuevoEstado: string) {
   }
 }
 
+async function optimizarIA() {
+  if (!rutaSeleccionada.value) return;
+  optimizandoIa.value = true;
+  try {
+    const res = await rutasServicio.optimizarRutaIa(rutaSeleccionada.value.id);
+    if (res.exito) {
+      toast.success(res.optimizacion.justificacion, { duration: 6000 });
+      await seleccionarRuta(rutaSeleccionada.value.id);
+    } else {
+      toast.error('La IA no pudo optimizar la ruta');
+    }
+  } catch (error) {
+    toast.error('Error al optimizar con IA');
+  } finally {
+    optimizandoIa.value = false;
+  }
+}
+
 function abrirModalNuevaEntrega() {
   if (!rutaSeleccionada.value) return;
   const sigOrden = (rutaSeleccionada.value.entregas?.length || 0) + 1;
@@ -758,8 +777,13 @@ watch(() => props.darkMode, (isDark) => {
               </div>
             </div>
 
-            <div class="flex flex-col gap-2 mt-2 sm:mt-0 items-end">
-              <div class="flex gap-2">
+            <div class="flex flex-col gap-3 mt-2 sm:mt-0 items-end">
+              <div class="flex gap-3">
+                 <button @click="optimizarIA" :disabled="optimizandoIa" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:from-purple-600 hover:to-indigo-600 transition-colors disabled:opacity-50" title="Optimizar IA">
+                   <Loader2 v-if="optimizandoIa" class="w-4 h-4 animate-spin"/>
+                   <Sparkles v-else class="w-4 h-4"/>
+                   <span class="text-sm">Optimizar Ruta con IA</span>
+                 </button>
                  <button @click="recargarUbicacion" :disabled="recargandoUbicacion" class="p-2 border rounded-md hover:bg-green-50 hover:text-green-600 transition-colors disabled:opacity-50" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-green-600' : 'border-gray-200 text-gray-500'" title="Actualizar Ubicación">
                    <RefreshCw class="w-4 h-4" :class="{'animate-spin': recargandoUbicacion}"/>
                  </button>
