@@ -1,0 +1,2575 @@
+﻿{
+  "config": {
+    "configFile": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\playwright.config.ts",
+    "rootDir": "C:/Users/HOME/Documents/GitHub/MOVEO_FRONT/tests/e2e/specs",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/HOME/Documents/GitHub/MOVEO_FRONT/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/HOME/Documents/GitHub/MOVEO_FRONT/tests/e2e/specs",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "auth.spec.ts",
+      "file": "auth.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 1 ÔÇö Autenticaci├│n y Sesi├│n",
+          "file": "auth.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "1.1 Login con credenciales admin v├ílidas ÔåÆ redirige a /dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3140,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:00.369Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-26fca0662e6a23a6dc90",
+              "file": "auth.spec.ts",
+              "line": 10,
+              "column": 5
+            },
+            {
+              "title": "1.7 Logout desde sidebar del dashboard ÔåÆ token eliminado, redirige a /login",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13121,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('Cerrar sesi├│n').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('Cerrar sesi├│n').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at DashboardPage.logout (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\DashboardPage.ts:52:33)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\auth.spec.ts:30:25",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\DashboardPage.ts",
+                          "column": 33,
+                          "line": 52
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\pages\\DashboardPage.ts:52\n\n\u001b[0m \u001b[90m 50 |\u001b[39m\n \u001b[90m 51 |\u001b[39m     \u001b[36masync\u001b[39m logout() {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 52 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlogoutButton\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 53 |\u001b[39m     }\n \u001b[90m 54 |\u001b[39m\n \u001b[90m 55 |\u001b[39m     \u001b[90m/** Wait for data to finish loading (skeleton placeholders disappear) */\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\DashboardPage.ts",
+                            "column": 33,
+                            "line": 52
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('Cerrar sesi├│n').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n   at ..\\pages\\DashboardPage.ts:52\n\n  50 |\n  51 |     async logout() {\n> 52 |         await this.logoutButton.click()\n     |                                 ^\n  53 |     }\n  54 |\n  55 |     /** Wait for data to finish loading (skeleton placeholders disappear) */\n    at DashboardPage.logout (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\DashboardPage.ts:52:33)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\auth.spec.ts:30:25"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:03.602Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\auth-M├│dulo-1-ÔÇö-Autenticac-e182d--eliminado-redirige-a-login-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\auth-M├│dulo-1-ÔÇö-Autenticac-e182d--eliminado-redirige-a-login-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\auth-M├│dulo-1-ÔÇö-Autenticac-e182d--eliminado-redirige-a-login-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\DashboardPage.ts",
+                        "column": 33,
+                        "line": 52
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-48db71c987faa1f3faac",
+              "file": "auth.spec.ts",
+              "line": 22,
+              "column": 5
+            },
+            {
+              "title": "1.2 Login con credenciales inv├ílidas ÔåÆ toast de error",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2664,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:18.080Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-394e545c48776599b5bd",
+              "file": "auth.spec.ts",
+              "line": 43,
+              "column": 5
+            },
+            {
+              "title": "1.3 Login con campos vac├¡os ÔåÆ formulario no se env├¡a (validaci├│n HTML)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2240,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:20.845Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-15315cdbf0574931a9b9",
+              "file": "auth.spec.ts",
+              "line": 54,
+              "column": 5
+            },
+            {
+              "title": "1.4 Login con usuario REPARTIDOR ÔåÆ toast \"Acceso denegado\"",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4054,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:23.098Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-8dc61e58bc7730a49587",
+              "file": "auth.spec.ts",
+              "line": 66,
+              "column": 5
+            },
+            {
+              "title": "1.5 Usuario autenticado visita /login ÔåÆ redirige a /dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3294,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:27.162Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-387989d4de0d82ee4b5a",
+              "file": "auth.spec.ts",
+              "line": 80,
+              "column": 5
+            },
+            {
+              "title": "1.6 Usuario no autenticado visita /configuracion ÔåÆ redirige a /login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 724,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:30.466Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-1133cc1a78c56c5a4e34",
+              "file": "auth.spec.ts",
+              "line": 94,
+              "column": 5
+            },
+            {
+              "title": "1.8 Click en logo Moveo desde login ÔåÆ navega a /",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1689,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:31.202Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-747cbd4f365ab1fb4c1c",
+              "file": "auth.spec.ts",
+              "line": 105,
+              "column": 5
+            },
+            {
+              "title": "1.9 Sesi├│n persiste tras recargar p├ígina (token en localStorage)",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10273,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:32.903Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d748ac400d08b85935ef-21633bdee8d722091ead",
+              "file": "auth.spec.ts",
+              "line": 116,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "clientes.spec.ts",
+      "file": "clientes.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 8 ÔÇö Clientes CRUD",
+          "file": "clientes.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "8.1 Tabla de clientes carga con t├¡tulo y datos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4598,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:43.199Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "abaf0b6772ccc8b9cb05-f5ba8d4c86e032da9ee5",
+              "file": "clientes.spec.ts",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "8.2 B├║squeda de clientes por empresa/tel├®fono",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5168,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:47.807Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "abaf0b6772ccc8b9cb05-6432deb8078809839f80",
+              "file": "clientes.spec.ts",
+              "line": 23,
+              "column": 5
+            },
+            {
+              "title": "8.3 Crear cliente: abrir modal y verificar formulario",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5194,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:52.986Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "abaf0b6772ccc8b9cb05-2c698e09cd2f916bf8b2",
+              "file": "clientes.spec.ts",
+              "line": 33,
+              "column": 5
+            },
+            {
+              "title": "8.6 Botones exportar clientes en PDF y Excel",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 9777,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n\u001b[2m    9 ├ù locator resolved to <button class=\"w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 text-gray-700\">Descargar PDF</button>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n\u001b[2m    9 ├ù locator resolved to <button class=\"w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 text-gray-700\">Descargar PDF</button>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\clientes.spec.ts:55:30",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\clientes.spec.ts",
+                          "column": 30,
+                          "line": 55
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 53 |\u001b[39m         \u001b[36mconst\u001b[39m pdfBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[32m'PDF'\u001b[39m })\u001b[33m.\u001b[39mfirst()\n \u001b[90m 54 |\u001b[39m         \u001b[36mconst\u001b[39m excelBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[32m'Excel'\u001b[39m })\u001b[33m.\u001b[39mfirst()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m expect(pdfBtn)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 56 |\u001b[39m         \u001b[36mawait\u001b[39m expect(excelBtn)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 57 |\u001b[39m     })\n \u001b[90m 58 |\u001b[39m })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\clientes.spec.ts",
+                            "column": 30,
+                            "line": 55
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nReceived: hidden\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n\u001b[2m    9 ├ù locator resolved to <button class=\"w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 text-gray-700\">Descargar PDF</button>\u001b[22m\n\u001b[2m      - unexpected value \"hidden\"\u001b[22m\n\n\n  53 |         const pdfBtn = page.locator('button').filter({ hasText: 'PDF' }).first()\n  54 |         const excelBtn = page.locator('button').filter({ hasText: 'Excel' }).first()\n> 55 |         await expect(pdfBtn).toBeVisible()\n     |                              ^\n  56 |         await expect(excelBtn).toBeVisible()\n  57 |     })\n  58 | })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\clientes.spec.ts:55:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:16:58.189Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\clientes-M├│dulo-8-ÔÇö-Client-bf643-tar-clientes-en-PDF-y-Excel-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\clientes-M├│dulo-8-ÔÇö-Client-bf643-tar-clientes-en-PDF-y-Excel-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\clientes-M├│dulo-8-ÔÇö-Client-bf643-tar-clientes-en-PDF-y-Excel-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\clientes.spec.ts",
+                        "column": 30,
+                        "line": 55
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "abaf0b6772ccc8b9cb05-3932c19ad790ccfc6ac6",
+              "file": "clientes.spec.ts",
+              "line": 48,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "configuracion.spec.ts",
+      "file": "configuracion.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 9 ÔÇö Configuraci├│n",
+          "file": "configuracion.spec.ts",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "9.1 P├ígina de configuraci├│n carga con datos del usuario",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3780,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:09.407Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a13bd05064442b6fdfb4-fab05a6c4c8c459f4a36",
+              "file": "configuracion.spec.ts",
+              "line": 15,
+              "column": 5
+            },
+            {
+              "title": "9.2 Formulario de perfil contiene campos editables",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 3744,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\configuracion.spec.ts:25:30",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\configuracion.spec.ts",
+                          "column": 30,
+                          "line": 25
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 23 |\u001b[39m         \u001b[36mconst\u001b[39m nameInput \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'input'\u001b[39m)\u001b[33m.\u001b[39mfirst()\n \u001b[90m 24 |\u001b[39m         \u001b[36mconst\u001b[39m value \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nameInput\u001b[33m.\u001b[39minputValue()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 25 |\u001b[39m         expect(value\u001b[33m.\u001b[39mlength)\u001b[33m.\u001b[39mtoBeGreaterThan(\u001b[35m0\u001b[39m)\n \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 26 |\u001b[39m     })\n \u001b[90m 27 |\u001b[39m\n \u001b[90m 28 |\u001b[39m     test(\u001b[32m'9.5 Navegar de vuelta al dashboard'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\configuracion.spec.ts",
+                            "column": 30,
+                            "line": 25
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\n  23 |         const nameInput = page.locator('input').first()\n  24 |         const value = await nameInput.inputValue()\n> 25 |         expect(value.length).toBeGreaterThan(0)\n     |                              ^\n  26 |     })\n  27 |\n  28 |     test('9.5 Navegar de vuelta al dashboard', async ({ page }) => {\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\configuracion.spec.ts:25:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:13.286Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\configuracion-M├│dulo-9-ÔÇö-C-eeb04-l-contiene-campos-editables-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\configuracion-M├│dulo-9-ÔÇö-C-eeb04-l-contiene-campos-editables-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\configuracion-M├│dulo-9-ÔÇö-C-eeb04-l-contiene-campos-editables-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\configuracion.spec.ts",
+                        "column": 30,
+                        "line": 25
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "a13bd05064442b6fdfb4-aaf3cd8726920cf4e69b",
+              "file": "configuracion.spec.ts",
+              "line": 22,
+              "column": 5
+            },
+            {
+              "title": "9.5 Navegar de vuelta al dashboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3905,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:18.354Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "a13bd05064442b6fdfb4-8872d6d7815f67991b60",
+              "file": "configuracion.spec.ts",
+              "line": 28,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "contacto.spec.ts",
+      "file": "contacto.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 10 ÔÇö Formulario de Contacto",
+          "file": "contacto.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "10.1 Formulario renderiza con todos los campos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1396,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:22.362Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5519cb1a017dff926fd0-357b99828402cbb6dc1d",
+              "file": "contacto.spec.ts",
+              "line": 10,
+              "column": 5
+            },
+            {
+              "title": "10.2 Enviar con datos v├ílidos ÔåÆ feedback de ├®xito",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4976,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:23.769Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5519cb1a017dff926fd0-6bd70c622d877578bf5d",
+              "file": "contacto.spec.ts",
+              "line": 21,
+              "column": 5
+            },
+            {
+              "title": "10.3 Enviar con campos vac├¡os ÔåÆ validaci├│n del formulario",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3035,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:28.756Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5519cb1a017dff926fd0-093a057b0f0026660590",
+              "file": "contacto.spec.ts",
+              "line": 44,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "dashboard-nav.spec.ts",
+      "file": "dashboard-nav.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 3 ÔÇö Navegaci├│n del Dashboard",
+          "file": "dashboard-nav.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "3.1 Sidebar muestra items base: Vista General, Rutas, Entregas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3115,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:31.813Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d8a84144ef0c18840b49-b2fc20d804fbeede1992",
+              "file": "dashboard-nav.spec.ts",
+              "line": 10,
+              "column": 5
+            },
+            {
+              "title": "3.2 Admin ve items adicionales: Veh├¡culos, Usuarios, Clientes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3067,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:34.938Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d8a84144ef0c18840b49-116f0226b52be74aba25",
+              "file": "dashboard-nav.spec.ts",
+              "line": 17,
+              "column": 5
+            },
+            {
+              "title": "3.3 Click en items del sidebar cambia la vista activa",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5361,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:38.015Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d8a84144ef0c18840b49-39c5774e604e22d66bed",
+              "file": "dashboard-nav.spec.ts",
+              "line": 24,
+              "column": 5
+            },
+            {
+              "title": "3.5 Bot├│n logout funciona desde footer del sidebar",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13070,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aside').getByText('Cerrar sesi├│n')\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aside').getByText('Cerrar sesi├│n')\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\dashboard-nav.spec.ts:56:60",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\dashboard-nav.spec.ts",
+                          "column": 60,
+                          "line": 56
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m         \u001b[36mconst\u001b[39m dashboard \u001b[33m=\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mDashboardPage\u001b[39m(page)\n \u001b[90m 55 |\u001b[39m         \u001b[90m// The logout button is in the sidebar footer\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 56 |\u001b[39m         \u001b[36mawait\u001b[39m dashboard\u001b[33m.\u001b[39msidebar\u001b[33m.\u001b[39mgetByText(\u001b[32m'Cerrar sesi├│n'\u001b[39m)\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 57 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForURL(\u001b[32m'**/login'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m 58 |\u001b[39m         expect(page\u001b[33m.\u001b[39murl())\u001b[33m.\u001b[39mtoContain(\u001b[32m'/login'\u001b[39m)\n \u001b[90m 59 |\u001b[39m     })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\dashboard-nav.spec.ts",
+                            "column": 60,
+                            "line": 56
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('aside').getByText('Cerrar sesi├│n')\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-d080fe38=\"\" class=\"w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    18 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  54 |         const dashboard = new DashboardPage(page)\n  55 |         // The logout button is in the sidebar footer\n> 56 |         await dashboard.sidebar.getByText('Cerrar sesi├│n').click()\n     |                                                            ^\n  57 |         await page.waitForURL('**/login', { timeout: 10000 })\n  58 |         expect(page.url()).toContain('/login')\n  59 |     })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\dashboard-nav.spec.ts:56:60"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:43.387Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\dashboard-nav-M├│dulo-3-ÔÇö-N-84a20-na-desde-footer-del-sidebar-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\dashboard-nav-M├│dulo-3-ÔÇö-N-84a20-na-desde-footer-del-sidebar-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\dashboard-nav-M├│dulo-3-ÔÇö-N-84a20-na-desde-footer-del-sidebar-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\dashboard-nav.spec.ts",
+                        "column": 60,
+                        "line": 56
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d8a84144ef0c18840b49-99bf96b6129cc72a91be",
+              "file": "dashboard-nav.spec.ts",
+              "line": 53,
+              "column": 5
+            },
+            {
+              "title": "3.6 Badge de notificaciones o icono de campana visible",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2144,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:17:57.855Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d8a84144ef0c18840b49-ebfd7ae4d46d5c5a17c8",
+              "file": "dashboard-nav.spec.ts",
+              "line": 61,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "entregas.spec.ts",
+      "file": "entregas.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 6 ÔÇö Entregas CRUD",
+          "file": "entregas.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "6.1 Tabla de entregas carga con KPIs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3660,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:00.111Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6736262f047ac348c4bf-c76f77c827601a7ccba5",
+              "file": "entregas.spec.ts",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "6.2 B├║squeda y filtro de entregas",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4278,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:03.783Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6736262f047ac348c4bf-0e54346220c630c683d9",
+              "file": "entregas.spec.ts",
+              "line": 22,
+              "column": 5
+            },
+            {
+              "title": "6.6 Ver detalle de una entrega en tabla",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3740,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:08.074Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6736262f047ac348c4bf-b67245d44d410561b732",
+              "file": "entregas.spec.ts",
+              "line": 33,
+              "column": 5
+            },
+            {
+              "title": "6.8 Botones exportar entregas en PDF y Excel",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3764,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:11.827Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6736262f047ac348c4bf-8cad7f563de2ad4fd690",
+              "file": "entregas.spec.ts",
+              "line": 43,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "public-pages.spec.ts",
+      "file": "public-pages.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 2 ÔÇö P├íginas P├║blicas",
+          "file": "public-pages.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "2.1 Landing page (/) carga con hero, nav y footer",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1472,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:15.613Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-9ca986fe6ee00172dca6",
+              "file": "public-pages.spec.ts",
+              "line": 6,
+              "column": 5
+            },
+            {
+              "title": "2.2 Navegaci├│n del header: Inicio, Servicios, Dashboard links",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1260,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:17.097Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-b527ec8cb9cc3e1df117",
+              "file": "public-pages.spec.ts",
+              "line": 25,
+              "column": 5
+            },
+            {
+              "title": "2.3 Servicios (/servicios) renderiza correctamente",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1345,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:18.367Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-beef919da5a230d9d640",
+              "file": "public-pages.spec.ts",
+              "line": 45,
+              "column": 5
+            },
+            {
+              "title": "2.4 Dashboard Demo (/dashboard-demo) accesible sin login",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1174,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:19.721Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-01def39de3f395221111",
+              "file": "public-pages.spec.ts",
+              "line": 56,
+              "column": 5
+            },
+            {
+              "title": "2.5 P├íginas legales renderizan correctamente",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2369,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:20.908Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-73077f19db4b4969d4a9",
+              "file": "public-pages.spec.ts",
+              "line": 67,
+              "column": 5
+            },
+            {
+              "title": "2.6 Contacto (/contacto) renderiza formulario e informaci├│n",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1537,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:23.288Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-3342cc7a1b3945cb43a7",
+              "file": "public-pages.spec.ts",
+              "line": 84,
+              "column": 5
+            },
+            {
+              "title": "2.7 Header muestra bot├│n login cuando no autenticado",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 842,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:24.834Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-4a1719b2f2d2d4ce54a7",
+              "file": "public-pages.spec.ts",
+              "line": 95,
+              "column": 5
+            },
+            {
+              "title": "2.8 Header muestra avatar + dropdown cuando autenticado",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11214,
+                      "error": {
+                        "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================",
+                        "stack": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================\n    at LoginPage.loginAndWait (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\LoginPage.ts:37:25)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\public-pages.spec.ts:107:9",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\LoginPage.ts",
+                          "column": 25,
+                          "line": 37
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\pages\\LoginPage.ts:37\n\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mlogin(email\u001b[33m,\u001b[39m password)\n \u001b[90m 36 |\u001b[39m         \u001b[90m// Wait for navigation away from login\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForURL(\u001b[35m/\\/(dashboard|configuracion|$)/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\n \u001b[90m    |\u001b[39m                         \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 38 |\u001b[39m     }\n \u001b[90m 39 |\u001b[39m\n \u001b[90m 40 |\u001b[39m     \u001b[36masync\u001b[39m getErrorToast() {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\LoginPage.ts",
+                            "column": 25,
+                            "line": 37
+                          },
+                          "message": "TimeoutError: page.waitForURL: Timeout 10000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation until \"load\"\n============================================================\n\n   at ..\\pages\\LoginPage.ts:37\n\n  35 |         await this.login(email, password)\n  36 |         // Wait for navigation away from login\n> 37 |         await this.page.waitForURL(/\\/(dashboard|configuracion|$)/, { timeout: 10000 })\n     |                         ^\n  38 |     }\n  39 |\n  40 |     async getErrorToast() {\n    at LoginPage.loginAndWait (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\LoginPage.ts:37:25)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\public-pages.spec.ts:107:9"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:25.686Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\public-pages-M├│dulo-2-ÔÇö-P├í-d63e0-dropdown-cuando-autenticado-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\public-pages-M├│dulo-2-ÔÇö-P├í-d63e0-dropdown-cuando-autenticado-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\public-pages-M├│dulo-2-ÔÇö-P├í-d63e0-dropdown-cuando-autenticado-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\LoginPage.ts",
+                        "column": 25,
+                        "line": 37
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e87f96acaad393366f41-5b01de3793e661c43df9",
+              "file": "public-pages.spec.ts",
+              "line": 102,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "rutas.spec.ts",
+      "file": "rutas.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 5 ÔÇö Rutas CRUD",
+          "file": "rutas.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "5.1 Lista de rutas carga con KPIs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4929,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:38.334Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b24464ab1b7b68458b5a-f9c77d6bebf4db51aa48",
+              "file": "rutas.spec.ts",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "5.2 B├║squeda y filtro de rutas por estado",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4282,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:43.352Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b24464ab1b7b68458b5a-6de78b0f3c1602bb9163",
+              "file": "rutas.spec.ts",
+              "line": 22,
+              "column": 5
+            },
+            {
+              "title": "5.3 Seleccionar una ruta muestra panel de detalle",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14051,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cursor-pointer').first()\u001b[22m\n\u001b[2m    - locator resolved to <div data-v-d080fe38=\"\" class=\"flex items-center p-3 rounded-xl transition-colors cursor-pointer hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm\">ÔÇª</div>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cursor-pointer').first()\u001b[22m\n\u001b[2m    - locator resolved to <div data-v-d080fe38=\"\" class=\"flex items-center p-3 rounded-xl transition-colors cursor-pointer hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm\">ÔÇª</div>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts:42:30",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                          "column": 30,
+                          "line": 42
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 40 |\u001b[39m         \u001b[36mconst\u001b[39m routeCards \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'.cursor-pointer'\u001b[39m)\u001b[33m.\u001b[39mfirst()\n \u001b[90m 41 |\u001b[39m         \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m routeCards\u001b[33m.\u001b[39misVisible()) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m             \u001b[36mawait\u001b[39m routeCards\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m1000\u001b[39m)\n \u001b[90m 44 |\u001b[39m         }\n \u001b[90m 45 |\u001b[39m     })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                            "column": 30,
+                            "line": 42
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.cursor-pointer').first()\u001b[22m\n\u001b[2m    - locator resolved to <div data-v-d080fe38=\"\" class=\"flex items-center p-3 rounded-xl transition-colors cursor-pointer hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm\">ÔÇª</div>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <p class=\"text-gray-500 text-sm leading-relaxed max-w-2xl\"> Utilizamos cookies propias y de terceros para meÔÇª</p> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  40 |         const routeCards = page.locator('.cursor-pointer').first()\n  41 |         if (await routeCards.isVisible()) {\n> 42 |             await routeCards.click()\n     |                              ^\n  43 |             await page.waitForTimeout(1000)\n  44 |         }\n  45 |     })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts:42:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:18:47.649Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-97647-ta-muestra-panel-de-detalle-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-97647-ta-muestra-panel-de-detalle-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-97647-ta-muestra-panel-de-detalle-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                        "column": 30,
+                        "line": 42
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b24464ab1b7b68458b5a-f37aaf194de3032b20c4",
+              "file": "rutas.spec.ts",
+              "line": 34,
+              "column": 5
+            },
+            {
+              "title": "5.9 Botones exportar PDF y Excel est├ín visibles",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 8917,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts:54:30",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                          "column": 30,
+                          "line": 54
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 52 |\u001b[39m         \u001b[36mconst\u001b[39m pdfBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[32m'PDF'\u001b[39m })\u001b[33m.\u001b[39mfirst()\n \u001b[90m 53 |\u001b[39m         \u001b[36mconst\u001b[39m excelBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[32m'Excel'\u001b[39m })\u001b[33m.\u001b[39mfirst()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 54 |\u001b[39m         \u001b[36mawait\u001b[39m expect(pdfBtn)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 55 |\u001b[39m         \u001b[36mawait\u001b[39m expect(excelBtn)\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m 56 |\u001b[39m     })\n \u001b[90m 57 |\u001b[39m })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                            "column": 30,
+                            "line": 54
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('button').filter({ hasText: 'PDF' }).first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('button').filter({ hasText: 'PDF' }).first()\u001b[22m\n\n\n  52 |         const pdfBtn = page.locator('button').filter({ hasText: 'PDF' }).first()\n  53 |         const excelBtn = page.locator('button').filter({ hasText: 'Excel' }).first()\n> 54 |         await expect(pdfBtn).toBeVisible()\n     |                              ^\n  55 |         await expect(excelBtn).toBeVisible()\n  56 |     })\n  57 | })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts:54:30"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:19:03.213Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-a0009--PDF-y-Excel-est├ín-visibles-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-a0009--PDF-y-Excel-est├ín-visibles-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\rutas-M├│dulo-5-ÔÇö-Rutas-CRU-a0009--PDF-y-Excel-est├ín-visibles-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\rutas.spec.ts",
+                        "column": 30,
+                        "line": 54
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b24464ab1b7b68458b5a-aea187bfe245a6f241ef",
+              "file": "rutas.spec.ts",
+              "line": 47,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "usuarios.spec.ts",
+      "file": "usuarios.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 7 ÔÇö Usuarios CRUD",
+          "file": "usuarios.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "7.1 Tabla de usuarios carga con datos",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13846,
+                      "error": {
+                        "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:14:20",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                          "column": 20,
+                          "line": 14
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 12 |\u001b[39m\n \u001b[90m 13 |\u001b[39m     test(\u001b[32m'7.1 Tabla de usuarios carga con datos'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m\n \u001b[90m    |\u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 15 |\u001b[39m             document\u001b[33m.\u001b[39mquerySelectorAll(\u001b[32m'.animate-pulse'\u001b[39m)\u001b[33m.\u001b[39mlength \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 16 |\u001b[39m             { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m }\n \u001b[90m 17 |\u001b[39m         )\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                            "column": 20,
+                            "line": 14
+                          },
+                          "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n\n  12 |\n  13 |     test('7.1 Tabla de usuarios carga con datos', async ({ page }) => {\n> 14 |         await page.waitForFunction(() =>\n     |                    ^\n  15 |             document.querySelectorAll('.animate-pulse').length === 0,\n  16 |             { timeout: 15000 }\n  17 |         )\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:14:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:19:13.605Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-6a4c1-de-usuarios-carga-con-datos-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-6a4c1-de-usuarios-carga-con-datos-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-6a4c1-de-usuarios-carga-con-datos-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                        "column": 20,
+                        "line": 14
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "18a25fcb5139a262d10f-cc5ae182a2c9e503322d",
+              "file": "usuarios.spec.ts",
+              "line": 13,
+              "column": 5
+            },
+            {
+              "title": "7.2 B├║squeda de usuarios por nombre/email",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13918,
+                      "error": {
+                        "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:23:20",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                          "column": 20,
+                          "line": 23
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 21 |\u001b[39m\n \u001b[90m 22 |\u001b[39m     test(\u001b[32m'7.2 B├║squeda de usuarios por nombre/email'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 23 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m\n \u001b[90m    |\u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 24 |\u001b[39m             document\u001b[33m.\u001b[39mquerySelectorAll(\u001b[32m'.animate-pulse'\u001b[39m)\u001b[33m.\u001b[39mlength \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 25 |\u001b[39m             { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m }\n \u001b[90m 26 |\u001b[39m         )\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                            "column": 20,
+                            "line": 23
+                          },
+                          "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n\n  21 |\n  22 |     test('7.2 B├║squeda de usuarios por nombre/email', async ({ page }) => {\n> 23 |         await page.waitForFunction(() =>\n     |                    ^\n  24 |             document.querySelectorAll('.animate-pulse').length === 0,\n  25 |             { timeout: 15000 }\n  26 |         )\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:23:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:19:28.914Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-34ec5-e-usuarios-por-nombre-email-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-34ec5-e-usuarios-por-nombre-email-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-34ec5-e-usuarios-por-nombre-email-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                        "column": 20,
+                        "line": 23
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "18a25fcb5139a262d10f-f43a823f8e8a63bf77de",
+              "file": "usuarios.spec.ts",
+              "line": 22,
+              "column": 5
+            },
+            {
+              "title": "7.3 Crear usuario: abrir modal y verificar formulario",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13839,
+                      "error": {
+                        "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:33:20",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                          "column": 20,
+                          "line": 33
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 31 |\u001b[39m\n \u001b[90m 32 |\u001b[39m     test(\u001b[32m'7.3 Crear usuario: abrir modal y verificar formulario'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 33 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m\n \u001b[90m    |\u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 34 |\u001b[39m             document\u001b[33m.\u001b[39mquerySelectorAll(\u001b[32m'.animate-pulse'\u001b[39m)\u001b[33m.\u001b[39mlength \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 35 |\u001b[39m             { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m }\n \u001b[90m 36 |\u001b[39m         )\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                            "column": 20,
+                            "line": 33
+                          },
+                          "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n\n  31 |\n  32 |     test('7.3 Crear usuario: abrir modal y verificar formulario', async ({ page }) => {\n> 33 |         await page.waitForFunction(() =>\n     |                    ^\n  34 |             document.querySelectorAll('.animate-pulse').length === 0,\n  35 |             { timeout: 15000 }\n  36 |         )\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:33:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:19:44.333Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-dc7aa-odal-y-verificar-formulario-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-dc7aa-odal-y-verificar-formulario-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-dc7aa-odal-y-verificar-formulario-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                        "column": 20,
+                        "line": 33
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "18a25fcb5139a262d10f-a5eeb0b6a03d7a06d743",
+              "file": "usuarios.spec.ts",
+              "line": 32,
+              "column": 5
+            },
+            {
+              "title": "7.8 Botones exportar usuarios en PDF y Excel",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 13848,
+                      "error": {
+                        "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:50:20",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                          "column": 20,
+                          "line": 50
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 48 |\u001b[39m\n \u001b[90m 49 |\u001b[39m     test(\u001b[32m'7.8 Botones exportar usuarios en PDF y Excel'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 50 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m\n \u001b[90m    |\u001b[39m                    \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 51 |\u001b[39m             document\u001b[33m.\u001b[39mquerySelectorAll(\u001b[32m'.animate-pulse'\u001b[39m)\u001b[33m.\u001b[39mlength \u001b[33m===\u001b[39m \u001b[35m0\u001b[39m\u001b[33m,\u001b[39m\n \u001b[90m 52 |\u001b[39m             { timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m }\n \u001b[90m 53 |\u001b[39m         )\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                            "column": 20,
+                            "line": 50
+                          },
+                          "message": "TimeoutError: page.waitForFunction: Timeout 10000ms exceeded.\n\n  48 |\n  49 |     test('7.8 Botones exportar usuarios en PDF y Excel', async ({ page }) => {\n> 50 |         await page.waitForFunction(() =>\n     |                    ^\n  51 |             document.querySelectorAll('.animate-pulse').length === 0,\n  52 |             { timeout: 15000 }\n  53 |         )\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts:50:20"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:19:59.741Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-e04ed-tar-usuarios-en-PDF-y-Excel-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-e04ed-tar-usuarios-en-PDF-y-Excel-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\usuarios-M├│dulo-7-ÔÇö-Usuari-e04ed-tar-usuarios-en-PDF-y-Excel-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\usuarios.spec.ts",
+                        "column": 20,
+                        "line": 50
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "18a25fcb5139a262d10f-096313d3a35f47aa5047",
+              "file": "usuarios.spec.ts",
+              "line": 49,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "vehiculos.spec.ts",
+      "file": "vehiculos.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "M├│dulo 4 ÔÇö Veh├¡culos CRUD",
+          "file": "vehiculos.spec.ts",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "4.1 Tabla de veh├¡culos carga con datos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4299,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:20:15.097Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-649e1aec9ae3c4a20ecc",
+              "file": "vehiculos.spec.ts",
+              "line": 14,
+              "column": 5
+            },
+            {
+              "title": "4.2 B├║squeda por matr├¡cula/modelo filtra resultados",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4792,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:20:19.497Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-1a7c1caab8f21f6e7786",
+              "file": "vehiculos.spec.ts",
+              "line": 20,
+              "column": 5
+            },
+            {
+              "title": "4.3 Filtro por estado funciona",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5891,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:20:24.300Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-c3038e54723a0cb01985",
+              "file": "vehiculos.spec.ts",
+              "line": 30,
+              "column": 5
+            },
+            {
+              "title": "4.4 Crear veh├¡culo: llenar formulario y guardar",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 15051,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Crear Veh├¡culo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Crear Veh├¡culo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:49:33",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                          "column": 33,
+                          "line": 49
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 47 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalMatricula\u001b[33m.\u001b[39mfill(\u001b[32m'9999 ZZZ'\u001b[39m)\n \u001b[90m 48 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalModelo\u001b[33m.\u001b[39mfill(\u001b[32m'Test Playwright Van'\u001b[39m)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 49 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalSaveButton\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 50 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\n \u001b[90m 51 |\u001b[39m\n \u001b[90m 52 |\u001b[39m         \u001b[90m// Modal should close after success\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                            "column": 33,
+                            "line": 49
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Crear Veh├¡culo</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  47 |         await v.modalMatricula.fill('9999 ZZZ')\n  48 |         await v.modalModelo.fill('Test Playwright Van')\n> 49 |         await v.modalSaveButton.click()\n     |                                 ^\n  50 |         await page.waitForTimeout(2000)\n  51 |\n  52 |         // Modal should close after success\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:49:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:20:30.203Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-3db12-llenar-formulario-y-guardar-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-3db12-llenar-formulario-y-guardar-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-3db12-llenar-formulario-y-guardar-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                        "column": 33,
+                        "line": 49
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-ee737291598e0326a33e",
+              "file": "vehiculos.spec.ts",
+              "line": 39,
+              "column": 5
+            },
+            {
+              "title": "4.6 Editar veh├¡culo: abrir modal, cambiar datos, guardar",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 15003,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Guardar Cambios</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Guardar Cambios</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:69:33",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                          "column": 33,
+                          "line": 69
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalModelo\u001b[33m.\u001b[39mclear()\n \u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalModelo\u001b[33m.\u001b[39mfill(\u001b[32m'Modelo Editado E2E'\u001b[39m)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m         \u001b[36mawait\u001b[39m v\u001b[33m.\u001b[39mmodalSaveButton\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\n \u001b[90m 71 |\u001b[39m\n \u001b[90m 72 |\u001b[39m         \u001b[36mawait\u001b[39m expect(v\u001b[33m.\u001b[39mmodal)\u001b[33m.\u001b[39mnot\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m5000\u001b[39m })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                            "column": 33,
+                            "line": 69
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.fixed.inset-0.z-50').first().locator('button.bg-\\\\[\\\\#E67E50\\\\]').first()\u001b[22m\n\u001b[2m    - locator resolved to <button data-v-163a0322=\"\" class=\"flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]\">Guardar Cambios</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"max-w-7xl mx-auto bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 md:flex items-center justify-between gap-6 relative overflow-hidden\">ÔÇª</div> from <div id=\"app\" data-v-app=\"\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n\n  67 |         await v.modalModelo.clear()\n  68 |         await v.modalModelo.fill('Modelo Editado E2E')\n> 69 |         await v.modalSaveButton.click()\n     |                                 ^\n  70 |         await page.waitForTimeout(2000)\n  71 |\n  72 |         await expect(v.modal).not.toBeVisible({ timeout: 5000 })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:69:33"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:20:46.816Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-47dfb-modal-cambiar-datos-guardar-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-47dfb-modal-cambiar-datos-guardar-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-47dfb-modal-cambiar-datos-guardar-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                        "column": 33,
+                        "line": 69
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-cc3e367508b7f1960248",
+              "file": "vehiculos.spec.ts",
+              "line": 57,
+              "column": 5
+            },
+            {
+              "title": "4.7 Eliminar veh├¡culo: confirmar eliminaci├│n",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14441,
+                      "error": {
+                        "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('table tbody tr').nth(13).locator('button[title=\"Eliminar\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button title=\"Eliminar\" data-v-163a0322=\"\" class=\"p-1.5 rounded-lg transition-colors hover:bg-red-50 text-gray-400 hover:text-red-600\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n",
+                        "stack": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('table tbody tr').nth(13).locator('button[title=\"Eliminar\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button title=\"Eliminar\" data-v-163a0322=\"\" class=\"p-1.5 rounded-lg transition-colors hover:bg-red-50 text-gray-400 hover:text-red-600\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\n    at VehiculosPage.clickDeleteOnRow (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\VehiculosPage.ts:43:55)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:80:17",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\VehiculosPage.ts",
+                          "column": 55,
+                          "line": 43
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m..\\pages\\VehiculosPage.ts:43\n\n\u001b[0m \u001b[90m 41 |\u001b[39m     \u001b[36masync\u001b[39m clickDeleteOnRow(index\u001b[33m:\u001b[39m number) {\n \u001b[90m 42 |\u001b[39m         \u001b[36mconst\u001b[39m row \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mtableRows\u001b[33m.\u001b[39mnth(index)\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 43 |\u001b[39m         \u001b[36mawait\u001b[39m row\u001b[33m.\u001b[39mlocator(\u001b[32m'button[title=\"Eliminar\"]'\u001b[39m)\u001b[33m.\u001b[39mclick()\n \u001b[90m    |\u001b[39m                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 44 |\u001b[39m     }\n \u001b[90m 45 |\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[90m// ÔöÇÔöÇÔöÇ Modal helpers ÔöÇÔöÇÔöÇ\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\VehiculosPage.ts",
+                            "column": 55,
+                            "line": 43
+                          },
+                          "message": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('table tbody tr').nth(13).locator('button[title=\"Eliminar\"]')\u001b[22m\n\u001b[2m    - locator resolved to <button title=\"Eliminar\" data-v-163a0322=\"\" class=\"p-1.5 rounded-lg transition-colors hover:bg-red-50 text-gray-400 hover:text-red-600\">ÔÇª</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    4 ├ù waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m      - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m    - element is visible, enabled and stable\u001b[22m\n\u001b[2m    - scrolling into view if needed\u001b[22m\n\u001b[2m    - done scrolling\u001b[22m\n\u001b[2m    - <div class=\"flex items-center gap-3 mt-6 md:mt-0 w-full md:w-auto flex-wrap\">ÔÇª</div> from <div class=\"fixed bottom-0 left-0 right-0 z-[100] p-4 md:p-6\">ÔÇª</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m  - retrying click action\u001b[22m\n\u001b[2m    - waiting 500ms\u001b[22m\n\n\n   at ..\\pages\\VehiculosPage.ts:43\n\n  41 |     async clickDeleteOnRow(index: number) {\n  42 |         const row = this.tableRows.nth(index)\n> 43 |         await row.locator('button[title=\"Eliminar\"]').click()\n     |                                                       ^\n  44 |     }\n  45 |\n  46 |     // ÔöÇÔöÇÔöÇ Modal helpers ÔöÇÔöÇÔöÇ\n    at VehiculosPage.clickDeleteOnRow (C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\VehiculosPage.ts:43:55)\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:80:17"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:21:03.350Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-6d310-├¡culo-confirmar-eliminaci├│n-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-6d310-├¡culo-confirmar-eliminaci├│n-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-6d310-├¡culo-confirmar-eliminaci├│n-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\pages\\VehiculosPage.ts",
+                        "column": 55,
+                        "line": 43
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-586433d235d4a2ea4161",
+              "file": "vehiculos.spec.ts",
+              "line": 75,
+              "column": 5
+            },
+            {
+              "title": "4.10 KPIs reflejan conteos correctos",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 4411,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('En Ruta')\nExpected: visible\nError: strict mode violation: getByText('En Ruta') resolved to 2 elements:\n    1) <p data-v-163a0322=\"\" class=\"text-xs font-medium mb-1 text-[#757575]\">En Ruta</p> aka getByRole('paragraph').filter({ hasText: 'En Ruta' })\n    2) <option value=\"EN_RUTA\" data-v-163a0322=\"\" data-v-inspector=\"src/vistas/VehiculosVista.vue:262:9\">En Ruta</option> aka getByRole('combobox')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('En Ruta')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('En Ruta')\nExpected: visible\nError: strict mode violation: getByText('En Ruta') resolved to 2 elements:\n    1) <p data-v-163a0322=\"\" class=\"text-xs font-medium mb-1 text-[#757575]\">En Ruta</p> aka getByRole('paragraph').filter({ hasText: 'En Ruta' })\n    2) <option value=\"EN_RUTA\" data-v-163a0322=\"\" data-v-inspector=\"src/vistas/VehiculosVista.vue:262:9\">En Ruta</option> aka getByRole('combobox')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('En Ruta')\u001b[22m\n\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:97:49",
+                        "location": {
+                          "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                          "column": 49,
+                          "line": 97
+                        },
+                        "snippet": "\u001b[0m \u001b[90m  95 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Total Flota'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m  96 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Disponibles'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  97 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'En Ruta'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m     |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  98 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mgetByText(\u001b[32m'Mantenimiento'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\n \u001b[90m  99 |\u001b[39m     })\n \u001b[90m 100 |\u001b[39m })\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                            "column": 49,
+                            "line": 97
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('En Ruta')\nExpected: visible\nError: strict mode violation: getByText('En Ruta') resolved to 2 elements:\n    1) <p data-v-163a0322=\"\" class=\"text-xs font-medium mb-1 text-[#757575]\">En Ruta</p> aka getByRole('paragraph').filter({ hasText: 'En Ruta' })\n    2) <option value=\"EN_RUTA\" data-v-163a0322=\"\" data-v-inspector=\"src/vistas/VehiculosVista.vue:262:9\">En Ruta</option> aka getByRole('combobox')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('En Ruta')\u001b[22m\n\n\n   95 |         await expect(page.getByText('Total Flota')).toBeVisible()\n   96 |         await expect(page.getByText('Disponibles')).toBeVisible()\n>  97 |         await expect(page.getByText('En Ruta')).toBeVisible()\n      |                                                 ^\n   98 |         await expect(page.getByText('Mantenimiento')).toBeVisible()\n   99 |     })\n  100 | })\n    at C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts:97:49"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-03-06T20:21:19.372Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-74e97--reflejan-conteos-correctos-chromium\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-74e97--reflejan-conteos-correctos-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\test-results\\vehiculos-M├│dulo-4-ÔÇö-Veh├¡c-74e97--reflejan-conteos-correctos-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\HOME\\Documents\\GitHub\\MOVEO_FRONT\\tests\\e2e\\specs\\vehiculos.spec.ts",
+                        "column": 49,
+                        "line": 97
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8e1e101d3c48255e9582-8e3c8675405990446e0d",
+              "file": "vehiculos.spec.ts",
+              "line": 91,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-06T20:15:58.956Z",
+    "duration": 324999.109,
+    "expected": 36,
+    "skipped": 0,
+    "unexpected": 15,
+    "flaky": 0
+  }
+}
+

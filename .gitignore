@@ -55,3 +55,10 @@ __screenshots__/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

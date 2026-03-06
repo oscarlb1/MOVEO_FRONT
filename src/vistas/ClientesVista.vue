@@ -161,20 +161,14 @@ function exportarExcel() {
          </p>
       </div>
       <div class="flex items-center gap-3">
-        <!-- Exportar -->
-        <div class="relative group">
-          <button class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-white hover:bg-gray-800' : 'bg-white border-gray-200 text-[#424242] hover:bg-gray-50'">
-             Exportar
-          </button>
-          <div class="absolute right-0 top-full mt-2 w-48 rounded-xl shadow-lg border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20"
-               :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-            <button @click="exportarPDF" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar PDF</button>
-            <button @click="exportarExcel" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar Excel</button>
-          </div>
-        </div>
+        <button @click="exportarPDF" class="p-2 border rounded-xl transition-colors hover:bg-opacity-80"
+          :class="darkMode ? 'border-gray-700 text-gray-300 hover:bg-gray-800' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" title="Exportar PDF">
+          <Building2 class="w-4 h-4 text-red-500" />
+        </button>
+        <button @click="exportarExcel" class="p-2 border rounded-xl transition-colors hover:bg-opacity-80"
+          :class="darkMode ? 'border-gray-700 text-gray-300 hover:bg-gray-800' : 'border-gray-200 text-gray-600 hover:bg-gray-50'" title="Exportar Excel">
+          <Building2 class="w-4 h-4 text-green-600" />
+        </button>
         <button @click="abrirModalCrear" class="px-4 py-2 bg-[#E67E50] hover:bg-[#d4603a] text-white rounded-xl font-medium text-sm transition-colors shadow-sm flex items-center gap-2">
           <Plus class="w-4 h-4" /> Nuevo Cliente
         </button>

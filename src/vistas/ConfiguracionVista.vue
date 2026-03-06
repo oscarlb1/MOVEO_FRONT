@@ -193,10 +193,11 @@ const onArchivoSeleccionado = async (event: Event) => {
             <!-- Profile Form -->
             <div class="grid md:grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700">Nombre completo</label>
+                <label for="perfil-nombre" class="text-sm font-bold text-gray-700">Nombre completo</label>
                 <div class="relative group">
                   <User class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50] transition-colors" />
                   <input 
+                    id="perfil-nombre"
                     v-model="formularioPerfil.nombre"
                     type="text" 
                     class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] focus:ring-4 focus:ring-[#E67E50]/5 outline-none transition-all"
@@ -204,10 +205,11 @@ const onArchivoSeleccionado = async (event: Event) => {
                 </div>
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700">Correo electrónico</label>
+                <label for="perfil-email" class="text-sm font-bold text-gray-700">Correo electrónico</label>
                 <div class="relative group">
                   <Mail class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input 
+                    id="perfil-email"
                     v-model="formularioPerfil.email"
                     type="email" 
                     disabled
@@ -216,10 +218,11 @@ const onArchivoSeleccionado = async (event: Event) => {
                 </div>
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700">Teléfono</label>
+                <label for="perfil-telefono" class="text-sm font-bold text-gray-700">Teléfono</label>
                 <div class="relative group">
                   <Phone class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50]" />
                   <input 
+                    id="perfil-telefono"
                     v-model="formularioPerfil.telefono"
                     type="tel" 
                     class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all"
@@ -227,10 +230,11 @@ const onArchivoSeleccionado = async (event: Event) => {
                 </div>
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-bold text-gray-700">Cargo / Posición</label>
+                <label for="perfil-cargo" class="text-sm font-bold text-gray-700">Cargo / Posición</label>
                 <div class="relative group">
                   <Settings class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#E67E50]" />
                   <input 
+                    id="perfil-cargo"
                     v-model="formularioPerfil.cargo"
                     type="text" 
                     class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all"
@@ -238,8 +242,9 @@ const onArchivoSeleccionado = async (event: Event) => {
                 </div>
               </div>
               <div class="md:col-span-2 space-y-2">
-                <label class="text-sm font-bold text-gray-700">Biografía</label>
+                <label for="perfil-biografia" class="text-sm font-bold text-gray-700">Biografía</label>
                 <textarea 
+                  id="perfil-biografia"
                   v-model="formularioPerfil.biografia"
                   rows="4"
                   class="w-full p-4 bg-gray-50 border border-transparent rounded-xl focus:bg-white focus:border-[#E67E50] outline-none transition-all resize-none"

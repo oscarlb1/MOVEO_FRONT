@@ -251,8 +251,8 @@ onMounted(async () => {
         <option value="ADMIN">Admin</option>
         <option value="REPARTIDOR">Repartidor</option>
       </select>
-      <button @click="exportarUsuariosPDF" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Usuarios PDF"><FileText class="w-4 h-4 text-red-500" /> <span class="hidden sm:inline">PDF</span></button>
-      <button @click="exportarUsuariosExcel" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Usuarios Excel"><FileSpreadsheet class="w-4 h-4 text-green-600" /> <span class="hidden sm:inline">Excel</span></button>
+      <button @click="exportarUsuariosPDF" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar PDF"><FileText class="w-4 h-4 text-red-500" /> <span class="hidden sm:inline">PDF</span></button>
+      <button @click="exportarUsuariosExcel" class="flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors shadow-sm" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Excel"><FileSpreadsheet class="w-4 h-4 text-green-600" /> <span class="hidden sm:inline">Excel</span></button>
       <button v-if="esAdmin" @click="abrirModalCrearUsuario" class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-[#E67E50] text-white hover:bg-[#d4703f] transition-colors shadow-sm"><Plus class="w-4 h-4" />Nuevo Usuario</button>
     </div>
 

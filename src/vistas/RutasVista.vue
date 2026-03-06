@@ -686,7 +686,8 @@ watch(() => props.darkMode, (isDark) => {
           <template v-else>
             <div v-for="ruta in rutasFiltradas" :key="ruta.id"
                  @click="seleccionarRuta(ruta.id)"
-                 class="p-4 rounded-xl border cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden"
+                 class="route-card p-4 rounded-xl border cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden"
+                 :data-ruta-id="ruta.id"
                  :class="[
                    darkMode ? 'border-gray-700 hover:border-gray-600' : 'border-gray-100 hover:border-gray-300 hover:shadow-md',
                    rutaSeleccionada?.id === ruta.id ? (darkMode ? 'bg-gray-800 border-[#E67E50]' : 'bg-orange-50 border-[#E67E50]') : (darkMode ? 'bg-transparent' : 'bg-white')

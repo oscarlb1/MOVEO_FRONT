@@ -332,17 +332,17 @@ onMounted(async () => {
           <div class="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Matrícula *</label>
-                <input v-model="formularioVehiculo.matricula" type="text" placeholder="ej: 1234 ABC" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent uppercase" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-matricula" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Matrícula *</label>
+                <input id="vehiculo-matricula" v-model="formularioVehiculo.matricula" type="text" placeholder="ej: 1234 ABC" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent uppercase" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
               </div>
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Marca / Modelo *</label>
-                <input v-model="formularioVehiculo.marcaModelo" type="text" placeholder="ej: Renault Kangoo" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-modelo" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Marca / Modelo *</label>
+                <input id="vehiculo-modelo" v-model="formularioVehiculo.marcaModelo" type="text" placeholder="ej: Renault Kangoo" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
               </div>
             </div>
             <div>
-              <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Estado</label>
-              <select v-model="formularioVehiculo.estado" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white bg-[#111827]' : 'border-gray-200 text-[#424242] bg-white'">
+              <label for="vehiculo-estado" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Estado</label>
+              <select id="vehiculo-estado" v-model="formularioVehiculo.estado" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white bg-[#111827]' : 'border-gray-200 text-[#424242] bg-white'">
                 <option value="DISPONIBLE">Disponible</option>
                 <option value="EN_RUTA">En Ruta</option>
                 <option value="EN_MANTENIMIENTO">Mantenimiento</option>
@@ -351,30 +351,30 @@ onMounted(async () => {
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Capacidad de carga (kg)</label>
-                <input v-model.number="formularioVehiculo.capacidadCarga" type="number" min="0" step="0.1" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-capacidad" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Capacidad de carga (kg)</label>
+                <input id="vehiculo-capacidad" v-model.number="formularioVehiculo.capacidadCarga" type="number" min="0" step="0.1" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
               </div>
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Consumo medio (L/100km)</label>
-                <input v-model.number="formularioVehiculo.consumoMedio" type="number" min="0" step="0.1" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-consumo" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Consumo medio (L/100km)</label>
+                <input id="vehiculo-consumo" v-model.number="formularioVehiculo.consumoMedio" type="number" min="0" step="0.1" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
               </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Kilometraje actual (km)</label>
-                <input v-model.number="formularioVehiculo.kilometrajeActual" type="number" min="0" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-kilometraje" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Kilometraje actual (km)</label>
+                <input id="vehiculo-kilometraje" v-model.number="formularioVehiculo.kilometrajeActual" type="number" min="0" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-white' : 'border-gray-200 text-[#424242]'" />
               </div>
               <div>
-                <label class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Última revisión</label>
-                <input v-model="formularioVehiculo.fechaUltimaRevision" type="date" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-gray-300 bg-[#111827]' : 'border-gray-200 text-[#424242]'" />
+                <label for="vehiculo-revision" class="block text-xs font-semibold mb-1.5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Última revisión</label>
+                <input id="vehiculo-revision" v-model="formularioVehiculo.fechaUltimaRevision" type="date" class="w-full px-3 py-2.5 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent" :class="darkMode ? 'border-gray-600 text-gray-300 bg-[#111827]' : 'border-gray-200 text-[#424242]'" />
               </div>
             </div>
             <p v-if="feedbackVehiculo === 'ok'" class="flex items-center gap-1.5 text-xs text-green-500 font-semibold"><CheckCircle2 class="w-4 h-4" /> {{ feedbackMensaje }}</p>
             <p v-if="feedbackVehiculo === 'error'" class="flex items-center gap-1.5 text-xs text-red-500 font-semibold"><AlertCircle class="w-4 h-4" /> {{ feedbackMensaje }}</p>
           </div>
           <div class="px-6 py-4 flex gap-3 border-t" :class="darkMode ? 'border-gray-700 bg-[#0d1422]' : 'border-gray-100 bg-gray-50'">
-            <button @click="guardarVehiculo" :disabled="guardandoVehiculo || !formularioVehiculo.matricula.trim() || !formularioVehiculo.marcaModelo.trim()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]">{{ guardandoVehiculo ? 'Guardando...' : (vehiculoEditando ? 'Guardar Cambios' : 'Crear Vehículo') }}</button>
-            <button @click="vehiculoModalAbierto = false" class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors" :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'">Cancelar</button>
+            <button id="modal-save-button" @click="guardarVehiculo" :disabled="guardandoVehiculo || !formularioVehiculo.matricula.trim() || !formularioVehiculo.marcaModelo.trim()" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition-all disabled:opacity-50 bg-[#E67E50] text-white hover:bg-[#d4703f]">{{ guardandoVehiculo ? 'Guardando...' : (vehiculoEditando ? 'Guardar Cambios' : 'Crear Vehículo') }}</button>
+            <button id="modal-cancel-button" @click="vehiculoModalAbierto = false" class="px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors" :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'">Cancelar</button>
           </div>
         </div>
       </div>
@@ -392,7 +392,7 @@ onMounted(async () => {
               <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">Esta acción no se puede deshacer. El vehículo será eliminado permanentemente del sistema.</p>
             </div>
             <div class="flex gap-3 w-full">
-              <button @click="confirmarEliminar(vehiculoEliminandoId!)" :disabled="eliminandoVehiculo" class="flex-1 py-2.5 rounded-xl text-sm font-bold bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50">{{ eliminandoVehiculo ? 'Eliminando...' : 'Sí, eliminar' }}</button>
+              <button id="confirm-delete-button" @click="confirmarEliminar(vehiculoEliminandoId!)" :disabled="eliminandoVehiculo" class="flex-1 py-2.5 rounded-xl text-sm font-bold bg-red-500 text-white hover:bg-red-600 transition-colors disabled:opacity-50">{{ eliminandoVehiculo ? 'Eliminando...' : 'Sí, eliminar' }}</button>
               <button @click="vehiculoEliminandoId = null" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors" :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">Cancelar</button>
             </div>
           </div>
