@@ -16,7 +16,10 @@
           :enter="{ opacity: 1, y: 0, transition: { delay: 200 } }"
           class="mb-8"
         >
-          <div class="inline-flex items-center gap-2 mb-4">
+          <div 
+            class="inline-flex items-center gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
+            @click="navigate('home')"
+          >
             <div class="w-10 h-10 bg-[#E67E50] rounded-lg flex items-center justify-center">
               <Truck class="w-6 h-6 text-white" />
             </div>
