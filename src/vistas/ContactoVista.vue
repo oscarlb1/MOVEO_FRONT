@@ -59,9 +59,8 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
 </script>
 
 <template>
-  <div class="bg-white">
+  <div class="bg-white dark:bg-[#16181A] transition-colors duration-300">
 
-    <!-- ==================== HERO + FORMULARIO ==================== -->
     <section class="relative bg-gradient-to-br from-[#092C4C] via-[#1a3a52] to-[#092C4C] pt-28 pb-40 lg:py-0 lg:min-h-[calc(100vh-80px)] flex items-center overflow-hidden">
       <div class="absolute inset-0 overflow-hidden">
         <div class="burbuja-naranja absolute top-0 right-0 w-[500px] h-[500px] bg-[#E67E50] rounded-full blur-[120px] opacity-20" />
@@ -73,7 +72,6 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
 
       <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
         <div class="grid lg:grid-cols-2 gap-16 items-center">
-          <!-- Info -->
           <div class="animar-izquierda text-white lg:pr-4 text-center lg:text-left">
             <div class="animar-arriba inline-flex items-center gap-2 bg-[#E67E50]/20 border border-[#E67E50]/30 rounded-full px-5 py-2 mb-8">
               <Zap class="w-5 h-5 text-[#E67E50]" />
@@ -113,7 +111,6 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
               </div>
             </div>
           </div>
-          <!-- Formulario -->
           <div class="animar-formulario">
             <FormularioContacto />
           </div>
@@ -121,12 +118,11 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
       </div>
     </section>
 
-    <!-- ==================== METODOS DE CONTACTO ==================== -->
-    <section class="py-24 bg-gradient-to-b from-gray-50 to-white relative">
+    <section class="py-24 bg-gradient-to-b from-gray-50 to-white dark:from-[#16181A] dark:to-[#16181A] relative transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-6">
         <div class="animar-vista text-center mb-12">
-          <h2 class="text-[#424242] text-3xl font-bold mb-4">Múltiples formas de contactar</h2>
-          <p class="text-[#757575] text-lg">Elige la opción que más te convenga</p>
+          <h2 class="text-[#424242] dark:text-white text-3xl font-bold mb-4 transition-colors duration-300">Múltiples formas de contactar</h2>
+          <p class="text-[#757575] dark:text-[#82A1B1] text-lg transition-colors duration-300">Elige la opción que más te convenga</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
           <a
@@ -159,7 +155,6 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
       </div>
     </section>
 
-    <!-- ==================== ESTADISTICAS ==================== -->
     <section class="py-20 bg-gradient-to-br from-[#092C4C] via-[#1a3a52] to-[#374B54] relative overflow-hidden">
       <div class="absolute inset-0">
         <div class="burbuja-stats-1 absolute top-0 left-1/4 w-96 h-96 bg-[#E67E50] rounded-full blur-[150px] opacity-20" />
@@ -191,15 +186,13 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
       </div>
     </section>
 
-    <!-- ==================== MAPA ==================== -->
-    <section id="map" class="py-20 bg-gradient-to-b from-white to-[#FAFAFA]">
+    <section id="map" class="py-20 bg-gradient-to-b from-white to-[#FAFAFA] dark:from-[#16181A] dark:to-[#16181A] transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-12">
-          <h2 class="text-[#424242] text-3xl font-bold mb-4">Visítanos en Madrid</h2>
-          <p class="text-[#757575] text-lg">Estaremos encantados de mostrarte en persona cómo funciona Moveo</p>
+          <h2 class="text-[#424242] dark:text-white text-3xl font-bold mb-4 transition-colors duration-300">Visítanos en Madrid</h2>
+          <p class="text-[#757575] dark:text-[#82A1B1] text-lg transition-colors duration-300">Estaremos encantados de mostrarte en persona cómo funciona Moveo</p>
         </div>
         <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <!-- Mapa visual -->
           <div class="animar-izquierda relative rounded-3xl overflow-hidden shadow-2xl group">
             <div class="aspect-square bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] relative">
               <div class="absolute inset-0 flex items-center justify-center">
@@ -221,19 +214,18 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
               </div>
             </div>
           </div>
-          <!-- Info Cards -->
           <div class="animar-derecha flex flex-col gap-6">
             <div
               v-for="(item, i) in infoMapa" :key="i"
-              class="tarjeta-info bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 group"
+              class="tarjeta-info bg-white dark:bg-[#272A30] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-[#374B54] group"
             >
               <div class="flex items-start gap-4">
                 <div class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-br" :class="item.gradient">
                   <component :is="item.icon" class="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h4 class="text-[#424242] font-bold text-xl mb-2">{{ item.title }}</h4>
-                  <p class="text-[#757575] whitespace-pre-line">{{ item.content }}</p>
+                  <h4 class="text-[#424242] dark:text-white font-bold text-xl mb-2 transition-colors duration-300">{{ item.title }}</h4>
+                  <p class="text-[#757575] dark:text-[#82A1B1] whitespace-pre-line transition-colors duration-300">{{ item.content }}</p>
                 </div>
               </div>
             </div>
@@ -251,7 +243,6 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
       </div>
     </section>
 
-    <!-- ==================== CTA FINAL ==================== -->
     <section class="py-24 bg-gradient-to-br from-[#092C4C] via-[#E67E50] to-[#374B54] relative overflow-hidden">
       <div
         class="absolute inset-0 opacity-10 grid-animado"

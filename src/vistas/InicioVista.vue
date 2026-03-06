@@ -151,17 +151,14 @@ function esVisible(id: string) {
 </script>
 
 <template>
-  <div>
-    <!-- ══════════════ HERO ══════════════ -->
+  <div class="transition-colors duration-300">
     <section class="relative bg-gradient-to-br from-[#0B1120] via-[#0F172A] to-[#1E293B] min-h-[calc(100vh-80px)] flex items-center overflow-hidden">
       <MapaAnimado />
       
-      <!-- Decorative background glows -->
       <div class="absolute top-1/4 -left-20 w-96 h-96 bg-[#E67E50]/5 blur-[120px] rounded-full"></div>
       <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#E67E50]/10 blur-[150px] rounded-full"></div>
 
       <div class="relative z-10 max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-16 items-center w-full">
-        <!-- Texto hero -->
         <div class="hero-texto">
           <div class="inline-flex items-center gap-2 bg-white/[0.03] border border-white/10 px-4 py-1.5 rounded-full mb-8 hero-badge">
             <Zap class="w-3.5 h-3.5 text-[#E67E50] fill-[#E67E50]" />
@@ -192,7 +189,6 @@ function esVisible(id: string) {
             </router-link>
           </div>
 
-          <!-- Hero stats -->
           <div class="flex gap-16 hero-stats-line">
             <div v-for="stat in statsHero" :key="stat.label" class="flex flex-col">
               <span class="text-3xl font-bold text-[#E67E50] tracking-tight">{{ stat.value }}</span>
@@ -201,17 +197,13 @@ function esVisible(id: string) {
           </div>
         </div>
 
-        <!-- Dashboard preview mockup -->
         <div class="relative hero-dashboard">
-          <!-- Live badge -->
           <div class="absolute -top-3 right-6 z-20 flex items-center gap-2 bg-[#00D97E] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg shadow-[#00D97E]/20 animate-pulse">
             <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
             Live
           </div>
 
-          <!-- Outer container -->
           <div class="bg-[#2D3748]/40 backdrop-blur-md rounded-[3rem] p-10 border border-white/5 shadow-2xl relative">
-            <!-- Glass cards grid -->
             <div class="grid grid-cols-3 gap-5 mb-10">
               <div v-for="card in heroCards" :key="card.label" class="bg-[#4A5568]/40 border border-white/5 rounded-2xl p-5">
                 <div class="flex items-center gap-2 mb-3">
@@ -222,7 +214,6 @@ function esVisible(id: string) {
               </div>
             </div>
 
-            <!-- Main dashboard content -->
             <div class="bg-[#1A202C]/90 rounded-[2.5rem] p-8 border border-white/5">
               <div class="flex items-center justify-between mb-10 text-white/40">
                 <div class="flex gap-3">
@@ -232,7 +223,6 @@ function esVisible(id: string) {
                 <div class="w-20 h-4 bg-white/5 rounded-full"></div>
               </div>
 
-              <!-- Bar chart mockup -->
               <div class="flex items-end justify-between gap-2.5 h-40 px-4">
                 <div v-for="(h, i) in [35, 55, 45, 75, 65, 50, 40]" :key="i" 
                      class="flex-1 rounded-t-xl bg-gradient-to-t from-[#E67E50]/10 via-[#E67E50]/60 to-[#FF9B71] transition-all duration-1000"
@@ -240,34 +230,31 @@ function esVisible(id: string) {
                 </div>
               </div>
 
-              <!-- Bottom elements -->
               <div class="grid grid-cols-3 gap-4 mt-10">
                 <div v-for="j in 3" :key="j" class="h-12 bg-white/5 rounded-2xl"></div>
               </div>
             </div>
             
-            <!-- Glow behind dashboard -->
             <div class="absolute -inset-4 bg-[#E67E50]/10 blur-[100px] -z-10 rounded-full"></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ══════════════ BENEFICIOS (TECNOLOGÍA) ══════════════ -->
     <section
       id="sec-beneficios"
       data-animar
-      class="py-24 bg-white"
+      class="py-24 bg-white dark:bg-[#16181A] transition-colors duration-300"
     >
       <div class="max-w-7xl mx-auto px-6">
         <div
           class="text-center mb-20 transicion-seccion"
           :class="{ 'visible': esVisible('sec-beneficios') }"
         >
-          <p class="text-gray-500 font-medium text-sm mb-3 uppercase tracking-wider">
+          <p class="text-gray-500 dark:text-[#82A1B1] font-medium text-sm mb-3 uppercase tracking-wider">
             Tecnología que <span class="text-[#E67E50]">impulsa resultados</span>
           </p>
-          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] max-w-4xl mx-auto text-balance">
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] dark:text-white max-w-4xl mx-auto text-balance transition-colors">
             Características diseñadas para empresas que buscan excelencia operativa
           </h2>
         </div>
@@ -276,17 +263,17 @@ function esVisible(id: string) {
           <div
             v-for="(b, i) in beneficios"
             :key="b.titulo"
-            class="bg-[#FAFAFA]/50 rounded-[2rem] p-8 border border-gray-100/50 hover:bg-white hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] transition-all duration-500 group transicion-seccion"
+            class="bg-[#FAFAFA]/50 dark:bg-[#272A30] rounded-[2rem] p-8 border border-gray-100/50 dark:border-[#374B54] hover:bg-white dark:hover:bg-[#374B54]/50 hover:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] dark:hover:shadow-none transition-all duration-500 group transicion-seccion"
             :class="{ 'visible': esVisible('sec-beneficios') }"
             :style="{ transitionDelay: `${i * 100}ms` }"
           >
             <div :class="[b.bgColor, 'w-14 h-14 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500']">
               <component :is="b.icon" :class="['w-7 h-7', b.color]" />
             </div>
-            <h3 class="text-lg font-bold text-[#092C4C] mb-4 leading-tight group-hover:text-[#E67E50] transition-colors">
+            <h3 class="text-lg font-bold text-[#092C4C] dark:text-white mb-4 leading-tight group-hover:text-[#E67E50] dark:group-hover:text-[#E67E50] transition-colors">
               {{ b.titulo }}
             </h3>
-            <p class="text-gray-500 text-sm leading-relaxed">
+            <p class="text-gray-500 dark:text-[#82A1B1] text-sm leading-relaxed">
               {{ b.descripcion }}
             </p>
           </div>
@@ -294,37 +281,34 @@ function esVisible(id: string) {
       </div>
     </section>
 
-    <!-- ══════════════ CÓMO FUNCIONA ══════════════ -->
     <section
       id="sec-pasos"
       data-animar
-      class="py-24 bg-gray-50/50"
+      class="py-24 bg-gray-50/50 dark:bg-[#1A1D23] transition-colors duration-300"
     >
       <div class="max-w-7xl mx-auto px-6">
         <div
           class="text-center mb-20 transicion-seccion"
           :class="{ 'visible': esVisible('sec-pasos') }"
         >
-          <p class="text-gray-500 font-medium text-sm mb-3 uppercase tracking-wider">¿Cómo funciona?</p>
-          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] text-balance">
+          <p class="text-gray-500 dark:text-[#82A1B1] font-medium text-sm mb-3 uppercase tracking-wider">¿Cómo funciona?</p>
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] dark:text-white text-balance transition-colors">
             Tres pasos para transformar tu logística
           </h2>
         </div>
 
         <div class="relative">
-          <!-- Línea conectora (visible solo en desktop) -->
-          <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -translate-y-1/2 z-0"></div>
+          <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-[#374B54] -translate-y-1/2 z-0"></div>
 
           <div class="grid md:grid-cols-3 gap-8 relative z-10">
             <div
               v-for="(paso, i) in pasos"
               :key="paso.numero"
-              class="bg-white rounded-[2rem] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col items-center text-center relative overflow-hidden transform hover:-translate-y-2 transition-all duration-500 group transicion-seccion"
+              class="bg-white dark:bg-[#272A30] rounded-[2rem] p-10 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] dark:shadow-none border border-gray-100 dark:border-[#374B54] flex flex-col items-center text-center relative overflow-hidden transform hover:-translate-y-2 transition-all duration-500 group transicion-seccion"
               :class="{ 'visible': esVisible('sec-pasos') }"
               :style="{ transitionDelay: `${i * 200}ms` }"
             >
-              <!-- Número de fondo -->
-              <span class="absolute top-6 right-8 text-7xl font-bold text-gray-50/80 group-hover:text-gray-100 transition-colors pointer-events-none italic">
+              <span class="absolute top-6 right-8 text-7xl font-bold text-gray-50/80 dark:text-white/[0.03] group-hover:text-gray-100 dark:group-hover:text-white/[0.05] transition-colors pointer-events-none italic">
                 {{ paso.numero }}
               </span>
 
@@ -332,8 +316,8 @@ function esVisible(id: string) {
                 <component :is="paso.icon" class="w-8 h-8 text-white" />
               </div>
               
-              <h3 class="text-xl font-bold text-[#092C4C] mb-4">{{ paso.titulo }}</h3>
-              <p class="text-gray-500 text-sm leading-relaxed px-2">
+              <h3 class="text-xl font-bold text-[#092C4C] dark:text-white mb-4 transition-colors">{{ paso.titulo }}</h3>
+              <p class="text-gray-500 dark:text-[#82A1B1] text-sm leading-relaxed px-2 transition-colors">
                 {{ paso.descripcion }}
               </p>
             </div>
@@ -342,11 +326,10 @@ function esVisible(id: string) {
       </div>
     </section>
 
-    <!-- ══════════════ STACK TECNOLÓGICO ══════════════ -->
     <section
       id="sec-tech"
       data-animar
-      class="py-20 bg-[#092C4C]"
+      class="py-20 bg-[#092C4C] dark:bg-[#16181A] transition-colors duration-300"
     >
       <div class="max-w-7xl mx-auto px-6">
         <div
@@ -356,7 +339,7 @@ function esVisible(id: string) {
           <h2 class="text-3xl lg:text-4xl font-bold text-white mb-4 text-balance">
             Tecnología de Vanguardia
           </h2>
-          <p class="text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p class="text-gray-300 dark:text-[#82A1B1] max-w-2xl mx-auto leading-relaxed">
             Construido con las mejores tecnologías para máximo rendimiento
           </p>
         </div>
@@ -365,7 +348,7 @@ function esVisible(id: string) {
           <div
             v-for="(tech, i) in tecnologias"
             :key="tech.nombre"
-            class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300 group transicion-seccion"
+            class="bg-white/5 dark:bg-[#272A30] backdrop-blur-sm border border-white/10 dark:border-[#374B54] rounded-xl p-6 hover:bg-white/10 dark:hover:bg-[#374B54]/50 transition-all duration-300 group transicion-seccion"
             :class="{ 'visible': esVisible('sec-tech') }"
             :style="{ transitionDelay: `${i * 100}ms` }"
           >
@@ -373,13 +356,12 @@ function esVisible(id: string) {
               <component :is="tech.icon" class="w-6 h-6 text-[#E67E50]" />
             </div>
             <h3 class="text-lg font-semibold text-white mb-1">{{ tech.nombre }}</h3>
-            <p class="text-gray-400 text-sm">{{ tech.descripcion }}</p>
+            <p class="text-gray-400 dark:text-[#82A1B1] text-sm">{{ tech.descripcion }}</p>
           </div>
         </div>
 
-        <!-- Stats -->
         <div
-          class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-white/10 transicion-seccion"
+          class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-white/10 dark:border-[#374B54] transicion-seccion"
           :class="{ 'visible': esVisible('sec-tech') }"
           style="transition-delay: 400ms"
         >
@@ -387,45 +369,44 @@ function esVisible(id: string) {
             <div class="text-3xl lg:text-4xl font-bold text-[#E67E50]">
               <ContadorAnimado :end="500" suffix="+" />
             </div>
-            <p class="text-gray-400 mt-2">Empresas activas</p>
+            <p class="text-gray-400 dark:text-[#82A1B1] mt-2">Empresas activas</p>
           </div>
           <div class="text-center">
             <div class="text-3xl lg:text-4xl font-bold text-[#E67E50]">
               <ContadorAnimado :end="50" suffix="K+" />
             </div>
-            <p class="text-gray-400 mt-2">Vehículos rastreados</p>
+            <p class="text-gray-400 dark:text-[#82A1B1] mt-2">Vehículos rastreados</p>
           </div>
           <div class="text-center">
             <div class="text-3xl lg:text-4xl font-bold text-[#E67E50]">
               <ContadorAnimado :end="99" suffix="%" />
             </div>
-            <p class="text-gray-400 mt-2">Uptime garantizado</p>
+            <p class="text-gray-400 dark:text-[#82A1B1] mt-2">Uptime garantizado</p>
           </div>
           <div class="text-center">
             <div class="text-3xl lg:text-4xl font-bold text-[#E67E50]">
               <ContadorAnimado :end="30" suffix="%" />
             </div>
-            <p class="text-gray-400 mt-2">Reducción de costos</p>
+            <p class="text-gray-400 dark:text-[#82A1B1] mt-2">Reducción de costos</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ══════════════ TESTIMONIOS ══════════════ -->
     <section
       id="sec-testimonios"
       data-animar
-      class="py-20 bg-[#FAFAFA]"
+      class="py-20 bg-[#FAFAFA] dark:bg-[#1A1D23] transition-colors duration-300"
     >
       <div class="max-w-7xl mx-auto px-6">
         <div
           class="text-center mb-16 transicion-seccion"
           :class="{ 'visible': esVisible('sec-testimonios') }"
         >
-          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] mb-4 text-balance">
+          <h2 class="text-3xl lg:text-4xl font-bold text-[#092C4C] dark:text-white mb-4 text-balance transition-colors">
             Lo que dicen nuestros clientes
           </h2>
-          <p class="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p class="text-gray-600 dark:text-[#82A1B1] max-w-2xl mx-auto leading-relaxed transition-colors">
             Empresas que ya transformaron su logística con Moveo
           </p>
         </div>
@@ -434,7 +415,7 @@ function esVisible(id: string) {
           <div
             v-for="(t, i) in testimonios"
             :key="t.nombre"
-            class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 transicion-seccion"
+            class="bg-white dark:bg-[#272A30] rounded-xl p-6 shadow-sm border border-gray-100 dark:border-[#374B54] hover:shadow-lg transition-all duration-300 transicion-seccion"
             :class="{ 'visible': esVisible('sec-testimonios') }"
             :style="{ transitionDelay: `${i * 150}ms` }"
           >
@@ -445,14 +426,14 @@ function esVisible(id: string) {
                 class="w-5 h-5 text-yellow-400 fill-yellow-400"
               />
             </div>
-            <p class="text-gray-600 mb-6 leading-relaxed italic">{{ `"${t.texto}"` }}</p>
+            <p class="text-gray-600 dark:text-[#82A1B1] mb-6 leading-relaxed italic transition-colors">{{ `"${t.texto}"` }}</p>
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-[#E67E50]/10 rounded-full flex items-center justify-center">
                 <span class="text-[#E67E50] font-semibold text-sm">{{ t.nombre.split(' ').map(n => n[0]).join('') }}</span>
               </div>
               <div>
-                <p class="font-medium text-[#092C4C] text-sm">{{ t.nombre }}</p>
-                <p class="text-gray-500 text-xs">{{ t.cargo }}</p>
+                <p class="font-medium text-[#092C4C] dark:text-white text-sm transition-colors">{{ t.nombre }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-xs transition-colors">{{ t.cargo }}</p>
               </div>
             </div>
           </div>
@@ -460,7 +441,6 @@ function esVisible(id: string) {
       </div>
     </section>
 
-    <!-- ══════════════ CTA FINAL ══════════════ -->
     <section class="py-20 bg-gradient-to-r from-[#E67E50] to-[#d66d40]">
       <div class="max-w-4xl mx-auto px-6 text-center">
         <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6 text-balance">

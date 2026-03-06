@@ -8,9 +8,7 @@ import clientesServicio from '@/servicios/clientesServicio'
 import type { ClienteDto, CrearClienteDto, ActualizarClienteDto } from '@/modelos/Ruta'
 import exportadorServicio from '@/servicios/exportadorServicio'
 
-const props = defineProps<{
-  darkMode: boolean
-}>()
+// Prop darkMode eliminada: Tailwind se encarga con la clase .dark
 
 const clientes = ref<ClienteDto[]>([])
 const cargando = ref(true)
@@ -62,7 +60,7 @@ const clientesFiltrados = computed(() => {
 const kpis = computed(() => {
   const total = clientes.value.length
   return [
-    { icon: Building2, label: 'Total Clientes', value: total.toString(), subtitle: 'empresas registradas', color: '#092C4C' }
+    { icon: Building2, label: 'Total Clientes', value: total.toString(), subtitle: 'empresas registradas', color: '#E67E50' } // Ajustado al naranja de marca
   ]
 })
 
@@ -152,27 +150,25 @@ function exportarExcel() {
 
 <template>
   <div class="space-y-6 animate-in fade-in duration-300">
-    <!-- Encabezado y Acciones -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-         <h2 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Gestión de Clientes</h2>
-         <p class="text-sm mt-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">
+         <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white transition-colors duration-300">Gestión de Clientes</h2>
+         <p class="text-sm mt-1 text-[#757575] dark:text-[#82A1B1] transition-colors duration-300">
            Administra el directorio de clientes y sus ubicaciones
          </p>
       </div>
       <div class="flex items-center gap-3">
-        <!-- Exportar -->
         <div class="relative group">
-          <button class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-white hover:bg-gray-800' : 'bg-white border-gray-200 text-[#424242] hover:bg-gray-50'">
+          <button class="px-4 py-2 border rounded-xl font-medium text-sm transition-colors flex items-center gap-2 bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white hover:bg-gray-50 dark:hover:bg-[#374B54]">
              Exportar
           </button>
-          <div class="absolute right-0 top-full mt-2 w-48 rounded-xl shadow-lg border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20"
-               :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-            <button @click="exportarPDF" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar PDF</button>
-            <button @click="exportarExcel" class="w-full text-left px-4 py-2.5 text-sm transition-colors"
-                :class="darkMode ? 'hover:bg-gray-800 text-gray-200' : 'hover:bg-gray-50 text-gray-700'">Descargar Excel</button>
+          <div class="absolute right-0 top-full mt-2 w-48 rounded-xl shadow-lg border overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-20 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+            <button @click="exportarPDF" class="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-[#374B54] text-gray-700 dark:text-gray-200">
+              Descargar PDF
+            </button>
+            <button @click="exportarExcel" class="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-[#374B54] text-gray-700 dark:text-gray-200">
+              Descargar Excel
+            </button>
           </div>
         </div>
         <button @click="abrirModalCrear" class="px-4 py-2 bg-[#E67E50] hover:bg-[#d4603a] text-white rounded-xl font-medium text-sm transition-colors shadow-sm flex items-center gap-2">
@@ -181,44 +177,37 @@ function exportarExcel() {
       </div>
     </div>
 
-    <!-- KPIs -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div v-for="(kpi, i) in kpis" :key="i"
-        class="p-5 rounded-2xl border transition-all hover:shadow-md"
-        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+        class="p-5 rounded-2xl border transition-all hover:shadow-md bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] shadow-sm">
         <div class="flex items-start justify-between mb-3">
-          <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
-            <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
+          <div class="p-2.5 rounded-xl bg-[#E67E50]/10">
+            <component :is="kpi.icon" class="w-5 h-5 text-[#E67E50]" />
           </div>
         </div>
-        <p class="text-xs font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
-        <div class="text-2xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</div>
-        <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
+        <p class="text-xs font-medium mb-1 text-[#757575] dark:text-[#82A1B1]">{{ kpi.label }}</p>
+        <div class="text-2xl font-bold mb-1 text-[#092C4C] dark:text-white">{{ kpi.value }}</div>
+        <p class="text-xs text-[#9e9e9e] dark:text-gray-500">{{ kpi.subtitle }}</p>
       </div>
     </div>
 
-    <!-- Tabla de Clientes -->
-    <div class="rounded-2xl border shadow-sm" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-      <!-- Toolbar tabla -->
-      <div class="p-4 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
+    <div class="rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] overflow-hidden transition-colors duration-300">
+      <div class="p-4 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-gray-100 dark:border-[#374B54]">
         <div class="flex items-center gap-2">
           <div class="relative w-full sm:w-64">
-            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#82A1B1]" />
             <input v-model="busqueda" type="text" placeholder="Buscar empresa o teléfono..."
-              class="w-full pl-9 pr-4 py-2 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent"
-              :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242]'" />
+              class="w-full pl-9 pr-4 py-2 text-sm border rounded-xl focus:outline-none focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-colors bg-transparent border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white placeholder-gray-500" />
           </div>
         </div>
-        <button @click="cargarDatos" class="p-2 border rounded-xl transition-colors hover:bg-opacity-80"
-          :class="darkMode ? 'border-gray-700 text-gray-300 hover:bg-gray-800' : 'border-gray-200 text-gray-600 hover:bg-gray-50'">
+        <button @click="cargarDatos" class="p-2 border rounded-xl transition-colors hover:bg-opacity-80 border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-50 dark:hover:bg-[#374B54]">
           <RefreshCw class="w-4 h-4" :class="{ 'animate-spin': cargando }" />
         </button>
       </div>
 
-      <!-- Content -->
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm whitespace-nowrap">
-          <thead :class="darkMode ? 'bg-gray-800/50 text-gray-400' : 'bg-gray-50 text-[#757575]'">
+          <thead class="bg-gray-50 dark:bg-[#16181A] text-[#757575] dark:text-[#82A1B1]">
             <tr>
               <th class="px-6 py-4 font-medium">Empresa</th>
               <th class="px-6 py-4 font-medium w-96">Dirección</th>
@@ -226,47 +215,45 @@ function exportarExcel() {
               <th class="px-6 py-4 font-medium text-right w-24">Acciones</th>
             </tr>
           </thead>
-          <tbody class="divide-y" :class="darkMode ? 'divide-gray-700' : 'divide-gray-100'">
+          <tbody class="divide-y divide-gray-100 dark:divide-[#374B54]">
             <tr v-if="cargando">
-               <td colspan="4" class="px-6 py-8 text-center text-gray-500">Cargando clientes...</td>
+               <td colspan="4" class="px-6 py-8 text-center text-gray-500 dark:text-[#82A1B1]">Cargando clientes...</td>
             </tr>
             <tr v-else-if="clientesFiltrados.length === 0">
-               <td colspan="4" class="px-6 py-8 text-center text-gray-500">No se encontraron clientes.</td>
+               <td colspan="4" class="px-6 py-8 text-center text-gray-500 dark:text-[#82A1B1]">No se encontraron clientes.</td>
             </tr>
-            <tr v-for="c in clientesFiltrados" :key="c.id" class="transition-colors hover:bg-opacity-50" :class="darkMode ? 'hover:bg-gray-800/50' : 'hover:bg-gray-50'">
+            <tr v-for="c in clientesFiltrados" :key="c.id" class="transition-colors hover:bg-gray-50 dark:hover:bg-[#16181A]/50">
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-inner bg-gradient-to-br from-[#092C4C] to-[#374B54]">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-inner bg-gradient-to-br from-[#E67E50] to-[#374B54]">
                     {{ c.nombreEmpresa.substring(0, 2).toUpperCase() }}
                   </div>
                   <div>
-                    <p class="font-medium" :class="darkMode ? 'text-gray-200' : 'text-[#424242]'">
+                    <p class="font-medium text-[#424242] dark:text-gray-200">
                       {{ c.nombreEmpresa }}
                     </p>
-                    <p class="text-xs mt-0.5 text-gray-500">ID: CL-{{ String(c.id).padStart(4, '0') }}</p>
+                    <p class="text-xs mt-0.5 text-gray-500 dark:text-[#82A1B1]">ID: CL-{{ String(c.id).padStart(4, '0') }}</p>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="flex items-center gap-2" :class="darkMode ? 'text-gray-300' : 'text-gray-600'">
-                  <MapPin class="w-4 h-4 text-gray-400 opacity-70" />
+                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                  <MapPin class="w-4 h-4 text-gray-400 dark:text-[#82A1B1] opacity-70" />
                   <span class="truncate max-w-[250px]">{{ c.direccion }}</span>
                 </div>
               </td>
               <td class="px-6 py-4">
-                <div class="flex items-center gap-2" :class="darkMode ? 'text-gray-300' : 'text-gray-600'">
-                  <Phone class="w-4 h-4 text-gray-400 opacity-70" />
+                <div class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                  <Phone class="w-4 h-4 text-gray-400 dark:text-[#82A1B1] opacity-70" />
                   <span>{{ c.telefono || 'Sin teléfono' }}</span>
                 </div>
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
-                  <button @click="abrirModalEditar(c)" class="p-2 rounded-lg transition-colors border hover:bg-opacity-80"
-                    :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-blue-400 hover:bg-gray-800' : 'bg-white border-gray-200 text-blue-600 hover:bg-blue-50'" title="Editar cliente">
+                  <button @click="abrirModalEditar(c)" class="p-2 rounded-lg transition-colors border hover:bg-opacity-80 bg-white dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-[#374B54]" title="Editar cliente">
                     <Pencil class="w-4 h-4" />
                   </button>
-                  <button @click="confirmarEliminar(c.id)" :disabled="eliminandoId === c.id" class="p-2 rounded-lg transition-colors border hover:bg-opacity-80 disabled:opacity-50"
-                    :class="darkMode ? 'bg-[#1a2332] border-gray-700 text-red-400 hover:bg-gray-800' : 'bg-white border-gray-200 text-red-600 hover:bg-red-50'" title="Eliminar cliente">
+                  <button @click="confirmarEliminar(c.id)" :disabled="eliminandoId === c.id" class="p-2 rounded-lg transition-colors border hover:bg-opacity-80 disabled:opacity-50 bg-white dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-[#374B54]" title="Eliminar cliente">
                     <RefreshCw v-if="eliminandoId === c.id" class="w-4 h-4 animate-spin" />
                     <Trash2 v-else class="w-4 h-4" />
                   </button>
@@ -279,22 +266,20 @@ function exportarExcel() {
     </div>
   </div>
 
-  <!-- Modal Crear / Editar -->
   <div v-if="modalAbierto" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-    <div class="w-full max-w-lg rounded-2xl shadow-xl overflow-hidden" :class="darkMode ? 'bg-[#1a2332] border border-gray-700' : 'bg-white'">
-      <div class="p-6 border-b" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
-        <h3 class="text-xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+    <div class="w-full max-w-lg rounded-2xl shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-transparent dark:border-[#374B54] transition-colors duration-300">
+      <div class="p-6 border-b border-gray-100 dark:border-[#374B54]">
+        <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">
           {{ clienteEditando ? 'Editar Cliente' : 'Nuevo Cliente' }}
         </h3>
-        <p class="text-sm mt-1" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+        <p class="text-sm mt-1 text-gray-500 dark:text-[#82A1B1]">
           Completa los datos de la empresa cliente.
         </p>
       </div>
 
       <div class="p-6 space-y-4">
-        <!-- Feedback -->
         <div v-if="feedback" class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-in slide-in-from-top-2"
-          :class="feedback === 'ok' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'">
+          :class="feedback === 'ok' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'">
           <CheckCircle2 v-if="feedback === 'ok'" class="w-5 h-5" />
           <AlertCircle v-else class="w-5 h-5" />
           {{ feedbackMensaje }}
@@ -302,36 +287,31 @@ function exportarExcel() {
 
         <div class="space-y-4" :class="{'opacity-50 pointer-events-none': guardando}">
           <div class="space-y-1.5">
-            <label class="text-sm font-medium" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Nombre de Empresa *</label>
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de Empresa *</label>
             <input v-model="formulario.nombreEmpresa" type="text"
-              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] transition-all bg-transparent"
-              :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-gray-900'"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
               placeholder="Ej. Distribuciones Sur S.L." />
           </div>
 
           <div class="space-y-1.5">
-            <label class="text-sm font-medium" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Teléfono de Contacto</label>
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono de Contacto</label>
             <input v-model="formulario.telefono" type="text"
-              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] transition-all bg-transparent"
-              :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-gray-900'"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
               placeholder="Ej. +34 600..." />
           </div>
 
           <div class="space-y-1.5">
-            <label class="text-sm font-medium" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Dirección Completa *</label>
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dirección Completa *</label>
             <input v-model="formulario.direccion" type="text"
-              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] transition-all bg-transparent"
-              :class="darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-gray-900'"
+              class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
               placeholder="Ej. Calle Principal 123, Madrid" />
           </div>
         </div>
       </div>
 
-      <div class="p-6 border-t bg-opacity-50 flex items-center justify-end gap-3"
-        :class="darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-50 bg-gray-50'">
+      <div class="p-6 border-t flex items-center justify-end gap-3 border-gray-50 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
         <button @click="modalAbierto = false" :disabled="guardando"
-          class="px-5 py-2.5 rounded-xl font-medium text-sm transition-colors"
-          :class="darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-200'">
+          class="px-5 py-2.5 rounded-xl font-medium text-sm transition-colors text-gray-600 dark:text-[#82A1B1] hover:bg-gray-200 dark:hover:bg-[#374B54]">
           Cancelar
         </button>
         <button @click="guardarCliente" :disabled="guardando"

@@ -45,40 +45,57 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  /* Fondos y textos base */
+  --background: #16181A; /* Un fondo casi negro para resaltar las tarjetas */
+  --foreground: #FFFFFF; /* Texto principal en blanco */
+  
+  /* Tarjetas y modales (basado en 'Card Título') */
+  --card: #272A30; 
+  --card-foreground: #FFFFFF;
+  --popover: #272A30;
+  --popover-foreground: #FFFFFF;
+  
+  /* Colores de Marca */
+  --primary: #E67E50; /* Naranja Moveo */
+  --primary-foreground: #FFFFFF;
+  
+  --secondary: #374B54; /* Azul Moveo */
+  --secondary-foreground: #FFFFFF;
+  
+  /* Elementos atenuados y bordes */
+  --muted: #272A30; /* Fondo sutil */
+  --muted-foreground: #82A1B1; /* Gris Frío Moveo para textos secundarios */
+  
+  --accent: #374B54; /* Usamos el azul como color de acento/hover */
+  --accent-foreground: #FFFFFF;
+  
+  --destructive: #d4183d; /* Mantenemos el rojo destructivo que tenías */
+  --destructive-foreground: #ffffff;
+  
+  --border: #374B54; /* Bordes usando el azul corporativo para armonía */
+  --input: #272A30;
+  --ring: #E67E50; /* El anillo de focus (ring) usa el Naranja principal */
+  
+  /* Pesos de fuente (se mantienen) */
   --font-weight-medium: 500;
   --font-weight-normal: 400;
+
+  /* Gráficos (Mantenemos la escala OKLCH original o se pueden adaptar después) */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+
+  /* Sidebar */
+  --sidebar: #16181A;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #E67E50;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #272A30;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #374B54;
+  --sidebar-ring: #E67E50;
 }
 
 @theme inline {

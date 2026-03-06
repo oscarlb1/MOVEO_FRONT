@@ -58,7 +58,7 @@ const router = createRouter({
             path: '/configuracion',
             name: 'configuracion',
             component: () => import('@/vistas/ConfiguracionVista.vue'),
-            meta: { requiereAuth: true }
+            meta: { requiereAuth: false }
         },
         {
             path: '/privacidad',

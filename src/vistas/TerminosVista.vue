@@ -59,10 +59,8 @@ const ipRules = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Hero Section -->
+  <div class="min-h-screen bg-gray-50 dark:bg-[#16181A] transition-colors duration-300">
     <div class="bg-gradient-to-r from-[#374B54] to-[#092C4C] text-white py-20 relative overflow-hidden">
-      <!-- Background decoration -->
       <div class="absolute top-0 left-0 w-96 h-96 bg-[#E67E50]/10 rounded-full blur-3xl -translate-y-1/2 -translate-x-1/2"></div>
 
       <div class="max-w-4xl mx-auto px-6 relative z-10">
@@ -91,123 +89,125 @@ const ipRules = [
       </div>
     </div>
 
-    <!-- Content -->
     <div class="max-w-4xl mx-auto px-6 py-16">
       
-      <!-- Introduction -->
-      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-8 mb-12 animate-fade-in-up" style="animation-delay: 100ms;">
-        <h2 class="text-2xl font-bold text-[#092C4C] mb-4">Acuerdo Legal</h2>
-        <p class="text-gray-700 leading-relaxed">
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-[#272A30] dark:to-[#16181A] border border-blue-200 dark:border-[#374B54] rounded-2xl p-8 mb-12 animate-fade-in-up transition-colors duration-300" style="animation-delay: 100ms;">
+        <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mb-4 transition-colors">Acuerdo Legal</h2>
+        <p class="text-gray-700 dark:text-[#82A1B1] leading-relaxed transition-colors">
           Al acceder y utilizar la plataforma Moveo, aceptas estar legalmente vinculado por estos Términos y Condiciones. 
           Si no estás de acuerdo con alguna parte de estos términos, no deberás utilizar nuestros servicios.
         </p>
       </div>
 
-      <!-- Sections -->
       <div class="space-y-12">
         
-        <!-- 1. Definitions -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 200ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 200ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <FileText class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">1. Definiciones</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">1. Definiciones</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
             <p class="mb-6">A los efectos de estos Términos y Condiciones:</p>
             <div class="space-y-3">
-              <div v-for="(def, i) in definitions" :key="i" class="flex flex-col md:flex-row gap-2 md:gap-4 items-start bg-gray-50 rounded-lg p-4">
+              <div v-for="(def, i) in definitions" :key="i" class="flex flex-col md:flex-row gap-2 md:gap-4 items-start bg-gray-50 dark:bg-[#16181A] rounded-lg p-4 transition-colors">
                 <span class="font-semibold text-[#E67E50] min-w-[120px]">{{ def.term }}:</span>
-                <span class="text-gray-700">{{ def.definition }}</span>
+                <span class="text-gray-700 dark:text-gray-300 transition-colors">{{ def.definition }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 2. Uso de la Plataforma -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 300ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 300ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <CheckCircle class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">2. Uso de la Plataforma</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">2. Uso de la Plataforma</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
-            <p class="mb-4"><strong>Licencia de Uso:</strong></p>
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
+            <p class="mb-4"><strong class="text-[#092C4C] dark:text-white transition-colors">Licencia de Uso:</strong></p>
             <p class="mb-6">
               Moveo te otorga una licencia limitada, no exclusiva, intransferible y revocable para utilizar la Plataforma 
               de acuerdo con estos términos.
             </p>
             
-            <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
-              <h4 class="font-semibold text-green-900 mb-3 flex items-center gap-2">
+            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 mb-6 transition-colors">
+              <h4 class="font-semibold text-green-900 dark:text-green-400 mb-3 flex items-center gap-2 transition-colors">
                 <CheckCircle class="w-5 h-5" />
                 Usos Permitidos
               </h4>
               <ul class="space-y-2">
                 <li v-for="(use, i) in allowedUses" :key="i" class="flex items-start gap-2">
-                  <span class="text-green-600 mt-1 font-bold">✓</span>
-                  <span class="text-gray-700">{{ use }}</span>
+                  <span class="text-green-600 dark:text-green-500 mt-1 font-bold">✓</span>
+                  <span class="text-gray-700 dark:text-gray-300 transition-colors">{{ use }}</span>
                 </li>
               </ul>
             </div>
 
-            <div class="bg-red-50 border border-red-200 rounded-lg p-6">
-              <h4 class="font-semibold text-red-900 mb-3 flex items-center gap-2">
+            <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 transition-colors">
+              <h4 class="font-semibold text-red-900 dark:text-red-400 mb-3 flex items-center gap-2 transition-colors">
                 <XCircle class="w-5 h-5" />
                 Usos Prohibidos
               </h4>
               <ul class="space-y-2">
                 <li v-for="(use, i) in prohibitedUses" :key="i" class="flex items-start gap-2">
-                  <span class="text-red-600 mt-1 font-bold">✗</span>
-                  <span class="text-gray-700">{{ use }}</span>
+                  <span class="text-red-600 dark:text-red-500 mt-1 font-bold">✗</span>
+                  <span class="text-gray-700 dark:text-gray-300 transition-colors">{{ use }}</span>
                 </li>
               </ul>
             </div>
+
+            <div class="mt-6">
+              <template v-for="(block, bIdx) in []" :key="bIdx">
+                 <ul v-if="block.content && block.content[1] && block.content[1].type === 'list'" class="space-y-2 list-disc pl-5 mt-2 [&_strong]:text-[#092C4C] dark:[&_strong]:text-white [&_strong]:transition-colors [&_strong]:font-bold">
+                  <li v-for="(item, iIdx) in block.content[1].items" :key="iIdx" v-html="item"></li>
+                 </ul>
+              </template>
+            </div>
+
           </div>
         </div>
 
-        <!-- 3. Cuentas y Registro -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 400ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 400ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <Scale class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">3. Cuentas y Registro</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">3. Cuentas y Registro</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
             <ul class="list-disc pl-5 space-y-3">
               <li v-for="(rule, i) in accountRules" :key="i">{{ rule }}</li>
             </ul>
           </div>
         </div>
 
-        <!-- 4. Planes y Facturación -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 500ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 500ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <FileText class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">4. Planes y Facturación</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">4. Planes y Facturación</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
-            <p class="mb-4"><strong>Tipos de Suscripción:</strong></p>
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
+            <p class="mb-4"><strong class="text-[#092C4C] dark:text-white transition-colors">Tipos de Suscripción:</strong></p>
             <div class="grid md:grid-cols-3 gap-4 mb-6">
-              <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#E67E50] transition-colors">
-                <h4 class="font-semibold text-[#092C4C] mb-2">Starter</h4>
+              <div class="bg-white dark:bg-[#16181A] border border-gray-200 dark:border-[#374B54] rounded-lg p-4 hover:border-[#E67E50] dark:hover:border-[#E67E50] transition-colors">
+                <h4 class="font-semibold text-[#092C4C] dark:text-white mb-2 transition-colors">Starter</h4>
                 <p class="text-2xl font-bold text-[#E67E50] mb-1">€99/mes</p>
-                <p class="text-sm text-gray-500">Hasta 10 vehículos</p>
+                <p class="text-sm text-gray-500 dark:text-[#82A1B1] transition-colors">Hasta 10 vehículos</p>
               </div>
               <div class="bg-gradient-to-br from-[#E67E50] to-[#d66d40] text-white rounded-lg p-4 shadow-lg transform hover:-translate-y-1 transition-all">
                 <h4 class="font-semibold mb-2">Professional</h4>
                 <p class="text-2xl font-bold mb-1">€299/mes</p>
                 <p class="text-sm text-white/90">Hasta 50 vehículos</p>
               </div>
-              <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-[#E67E50] transition-colors">
-                <h4 class="font-semibold text-[#092C4C] mb-2">Enterprise</h4>
+              <div class="bg-white dark:bg-[#16181A] border border-gray-200 dark:border-[#374B54] rounded-lg p-4 hover:border-[#E67E50] dark:hover:border-[#E67E50] transition-colors">
+                <h4 class="font-semibold text-[#092C4C] dark:text-white mb-2 transition-colors">Enterprise</h4>
                 <p class="text-2xl font-bold text-[#E67E50] mb-1">Personalizado</p>
-                <p class="text-sm text-gray-500">Ilimitado</p>
+                <p class="text-sm text-gray-500 dark:text-[#82A1B1] transition-colors">Ilimitado</p>
               </div>
             </div>
             <ul class="list-disc pl-5 space-y-2">
@@ -220,18 +220,17 @@ const ipRules = [
           </div>
         </div>
 
-        <!-- 5. Limitación de Responsabilidad -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 600ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 600ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <AlertTriangle class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">5. Limitación de Responsabilidad</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">5. Limitación de Responsabilidad</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
-              <p class="text-gray-700 leading-relaxed">
-                <strong class="text-yellow-900 block mb-2 uppercase tracking-wide text-sm">Importante</strong>
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 rounded-lg p-6 mb-6 transition-colors">
+              <p class="text-gray-700 dark:text-yellow-100 leading-relaxed transition-colors">
+                <strong class="text-yellow-900 dark:text-yellow-400 block mb-2 uppercase tracking-wide text-sm transition-colors">Importante</strong>
                 La Plataforma se proporciona "tal cual" y "según disponibilidad". 
                 Moveo no garantiza que el servicio sea ininterrumpido, seguro o libre de errores.
               </p>
@@ -240,22 +239,21 @@ const ipRules = [
             <ul class="list-disc pl-5 space-y-2 mb-6">
               <li v-for="(item, i) in liabilityExclusions" :key="i">{{ item }}</li>
             </ul>
-            <p class="text-sm text-gray-500 italic border-l-4 border-gray-200 pl-4">
+            <p class="text-sm text-gray-500 dark:text-gray-400 italic border-l-4 border-gray-200 dark:border-[#374B54] pl-4 transition-colors">
               En ningún caso, la responsabilidad total de Moveo excederá el monto pagado por el Cliente 
               durante los 12 meses anteriores al evento que dio lugar a la reclamación.
             </p>
           </div>
         </div>
 
-        <!-- 6. Propiedad Intelectual -->
-        <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up" style="animation-delay: 700ms;">
+        <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] animate-fade-in-up transition-colors duration-300" style="animation-delay: 700ms;">
           <div class="flex items-start gap-4 mb-6">
             <div class="w-12 h-12 bg-[#E67E50]/10 rounded-xl flex items-center justify-center text-[#E67E50] shrink-0">
               <FileText class="w-6 h-6" />
             </div>
-            <h2 class="text-2xl font-bold text-[#092C4C] mt-2">6. Propiedad Intelectual</h2>
+            <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white mt-2 transition-colors">6. Propiedad Intelectual</h2>
           </div>
-          <div class="text-gray-600 leading-relaxed">
+          <div class="text-gray-600 dark:text-[#82A1B1] leading-relaxed transition-colors">
             <p class="mb-4">
               Todos los derechos de propiedad intelectual sobre la Plataforma, incluyendo código fuente, diseño, 
               marcas registradas, logos y contenido, son propiedad exclusiva de Moveo.
@@ -266,26 +264,25 @@ const ipRules = [
           </div>
         </div>
         
-        <!-- 7-8 Combined: Legal & Mods -->
         <div class="grid md:grid-cols-2 gap-6 animate-fade-in-up" style="animation-delay: 800ms;">
-          <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+          <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] transition-colors duration-300">
             <div class="flex items-center gap-3 mb-4">
                <Scale class="w-5 h-5 text-[#E67E50]" />
-               <h3 class="font-bold text-[#092C4C] text-lg">7. Ley Aplicable</h3>
+               <h3 class="font-bold text-[#092C4C] dark:text-white text-lg transition-colors">7. Ley Aplicable</h3>
             </div>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <p class="text-gray-600 dark:text-[#82A1B1] text-sm leading-relaxed transition-colors">
                Estos Términos se regirán e interpretarán de acuerdo con las leyes de España. 
                Cualquier disputa relacionada con estos términos estará sujeta a la jurisdicción exclusiva 
                de los tribunales de Madrid, España.
             </p>
           </div>
           
-          <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
+          <div class="bg-white dark:bg-[#272A30] rounded-xl p-8 shadow-sm border border-gray-100 dark:border-[#374B54] transition-colors duration-300">
              <div class="flex items-center gap-3 mb-4">
                <FileText class="w-5 h-5 text-[#E67E50]" />
-               <h3 class="font-bold text-[#092C4C] text-lg">8. Modificaciones</h3>
+               <h3 class="font-bold text-[#092C4C] dark:text-white text-lg transition-colors">8. Modificaciones</h3>
             </div>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <p class="text-gray-600 dark:text-[#82A1B1] text-sm leading-relaxed transition-colors">
               Moveo se reserva el derecho de modificar estos Términos en cualquier momento. 
               Te notificaremos sobre cambios significativos. El uso continuado de los servicios constituye tu aceptación.
             </p>
@@ -294,8 +291,7 @@ const ipRules = [
 
       </div>
 
-      <!-- Contact CTA -->
-      <div class="mt-16 bg-gradient-to-r from-[#374B54] to-[#092C4C] rounded-2xl p-10 text-white text-center animate-fade-in-up" style="animation-delay: 900ms;">
+      <div class="mt-16 bg-gradient-to-r from-[#374B54] to-[#092C4C] rounded-2xl p-10 text-white text-center animate-fade-in-up transition-colors duration-300" style="animation-delay: 900ms;">
         <h3 class="text-2xl font-bold mb-3">¿Necesitas aclarar algún término?</h3>
         <p class="mb-8 text-white/90 text-lg">
           Nuestro equipo legal está disponible para resolver tus dudas

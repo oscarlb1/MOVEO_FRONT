@@ -22,6 +22,9 @@ const sesionStore = useSesionStore()
 const seccionActiva = ref('general')
 const sidebarAbierto = ref(false)
 const perfilAbierto = ref(false)
+
+// Mantenemos la variable darkMode para los componentes hijos que aún dependen de ella como prop
+// y para inicializar la clase 'dark' en el <html>
 const darkMode = ref(localStorage.getItem('theme') === 'dark')
 
 const esAdmin = computed(() => sesionStore.usuario?.rol === 'ADMIN')
@@ -55,8 +58,14 @@ function irASeccion(id: string) {
   sidebarAbierto.value = false
 }
 
+// Opcional: si quieres seguir teniendo un botón para alternar el tema desde aquí
 function alternarTema() {
   darkMode.value = !darkMode.value
+  if (darkMode.value) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
   localStorage.setItem('theme', darkMode.value ? 'dark' : 'light')
 }
 
@@ -83,10 +92,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-screen flex overflow-hidden font-inter transition-colors duration-300"
-    :class="darkMode ? 'bg-[#111827] text-white' : 'bg-[#FAFAFA] text-[#092C4C]'">
+  <div class="h-screen flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white">
 
-    <!-- Overlay móvil -->
     <Transition name="fade">
       <div v-if="sidebarAbierto"
         class="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
@@ -94,36 +101,27 @@ onUnmounted(() => {
       </div>
     </Transition>
 
-    <!-- Sidebar -->
-    <aside class="fixed lg:static inset-y-0 left-0 z-50 w-72 flex flex-col transition-all duration-300 transform border-r lg:translate-x-0"
-      :class="[
-        sidebarAbierto ? 'translate-x-0' : '-translate-x-full',
-        darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'
-      ]">
+    <aside class="fixed lg:static inset-y-0 left-0 z-50 w-72 flex flex-col transition-all duration-300 transform border-r border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#272A30] shadow-sm lg:translate-x-0"
+      :class="sidebarAbierto ? 'translate-x-0' : '-translate-x-full'">
 
-      <!-- Header Sidebar -->
-      <div class="h-20 flex items-center justify-between px-6 border-b"
-        :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
+      <div class="h-20 flex items-center justify-between px-6 border-b border-gray-100 dark:border-[#374B54]">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E67E50] to-[#E67E50]/80 flex items-center justify-center shadow-lg shadow-[#E67E50]/20">
             <Activity class="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 class="text-xl font-black tracking-tight flex items-center gap-0.5"
-              :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+            <h1 class="text-xl font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white">
               MOVE<span class="text-[#E67E50]">O</span>
             </h1>
             <p class="text-[10px] font-bold tracking-widest uppercase opacity-60">Logística</p>
           </div>
         </div>
-        <button class="lg:hidden p-2 rounded-lg transition-colors"
-          :class="darkMode ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-100 text-[#424242]'"
+        <button class="lg:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#16181A] text-[#424242] dark:text-[#82A1B1]"
           @click="sidebarAbierto = false">
           <X class="w-5 h-5" />
         </button>
       </div>
 
-      <!-- Menú Navegación -->
       <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 scrollbar-thin">
         <button
           v-for="item in itemsMenu" :key="item.id"
@@ -131,10 +129,9 @@ onUnmounted(() => {
           class="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl transition-all duration-200 group relative"
           :class="[
             seccionActiva === item.id
-              ? (darkMode ? 'bg-[#E67E50]/15 text-[#E67E50]' : 'bg-[#E67E50]/10 text-[#E67E50]')
-              : (darkMode ? 'text-gray-400 hover:bg-gray-800/50 hover:text-white' : 'text-[#757575] hover:bg-gray-50 hover:text-[#092C4C]')
+              ? 'bg-[#E67E50]/10 dark:bg-[#E67E50]/15 text-[#E67E50]'
+              : 'text-[#757575] dark:text-[#82A1B1] hover:bg-gray-50 dark:hover:bg-[#16181A]/50 hover:text-[#092C4C] dark:hover:text-white'
           ]">
-          <!-- Indicador activo -->
           <div v-if="seccionActiva === item.id"
             class="absolute left-0 w-1.5 h-8 bg-[#E67E50] rounded-r-full shadow-[0_0_10px_rgba(230,126,80,0.4)]">
           </div>
@@ -145,55 +142,45 @@ onUnmounted(() => {
         </button>
       </nav>
 
-      <!-- Footer Sidebar -->
-      <div class="p-4 border-t" :class="darkMode ? 'border-gray-700 bg-[#161d2b]' : 'border-gray-100 bg-gray-50/50'">
-        <div class="flex items-center p-3 rounded-xl transition-colors cursor-pointer"
-          :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-white border border-transparent hover:border-gray-200 hover:shadow-sm'"
+      <div class="p-4 border-t border-gray-100 dark:border-[#374B54] bg-gray-50/50 dark:bg-[#272A30]">
+        <div class="flex items-center p-3 rounded-xl transition-colors cursor-pointer hover:bg-white dark:hover:bg-[#16181A] border border-transparent hover:border-gray-200 dark:hover:border-[#374B54] hover:shadow-sm"
           @click="router.push('/configuracion')">
           <div class="flex items-center gap-3 min-w-0">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden flex-shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-sm font-bold shadow-md overflow-hidden flex-shrink-0">
               <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
               <span v-else>{{ inicialUsuario }}</span>
             </div>
             <div class="min-w-0">
-              <p class="text-sm font-bold truncate leading-tight" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ nombreUsuario }}</p>
-              <p class="text-[11px] font-medium" :class="darkMode ? 'text-[#E67E50]' : 'text-[#E67E50]'">{{ rolUsuario }}</p>
+              <p class="text-sm font-bold truncate leading-tight text-[#092C4C] dark:text-white">{{ nombreUsuario }}</p>
+              <p class="text-[11px] font-medium text-[#E67E50]">{{ rolUsuario }}</p>
             </div>
           </div>
         </div>
         <button @click="cerrarSesion"
-          class="w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors"
-          :class="darkMode ? 'hover:bg-red-500/10' : 'hover:bg-red-50'">
+          class="w-full flex items-center gap-2 mt-2 px-4 py-2.5 text-xs font-semibold rounded-xl text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-500/10">
           <LogOut class="w-4 h-4" /> Cerrar sesión
         </button>
       </div>
     </aside>
 
-    <!-- Contenido Principal -->
-    <main class="flex-1 flex flex-col min-w-0 transition-colors duration-300"
-      :class="darkMode ? 'bg-[#0d131f]' : 'bg-[#F8F9FA]'">
+    <main class="flex-1 flex flex-col min-w-0 transition-colors duration-300 bg-[#F8F9FA] dark:bg-[#16181A]">
       
-      <!-- Top Header -->
-      <header class="h-20 flex items-center justify-between px-4 sm:px-8 border-b"
-        :class="darkMode ? 'bg-[#1a2332]/80 border-gray-700 backdrop-blur-md' : 'bg-white/80 border-gray-100 backdrop-blur-md'">
+      <header class="h-20 flex items-center justify-between px-4 sm:px-8 border-b border-gray-100 dark:border-[#374B54] bg-white/80 dark:bg-[#272A30]/80 backdrop-blur-md">
         
         <div class="flex items-center gap-4">
-          <button class="lg:hidden p-2.5 rounded-xl transition-colors"
-            :class="darkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-50 text-[#424242]'"
+          <button class="lg:hidden p-2.5 rounded-xl transition-colors bg-gray-50 dark:bg-[#16181A] text-[#424242] dark:text-[#82A1B1]"
             @click="sidebarAbierto = true">
             <Menu class="w-5 h-5" />
           </button>
           <div class="hidden md:block">
-            <h2 class="text-xl font-bold tracking-tight" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+            <h2 class="text-xl font-bold tracking-tight text-[#092C4C] dark:text-white">
               {{ itemsMenu.find(i => i.id === seccionActiva)?.label || 'Dashboard' }}
             </h2>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
-          
-          <!-- Avatar Móvil -->
-          <div class="lg:hidden w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer overflow-hidden flex-shrink-0"
+          <div class="lg:hidden w-10 h-10 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer overflow-hidden flex-shrink-0"
             @click="irASeccion('general')">
             <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
             <span v-else>{{ inicialUsuario }}</span>
@@ -201,7 +188,6 @@ onUnmounted(() => {
         </div>
       </header>
 
-      <!-- Contenedor Principal (Vistas dinámicas) -->
       <div class="flex-1 overflow-auto p-4 sm:px-5 sm:py-6">
         <div class="w-full">
           
