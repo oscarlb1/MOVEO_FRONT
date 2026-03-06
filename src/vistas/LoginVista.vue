@@ -1,7 +1,17 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] flex items-center justify-center">
+  <div class="min-h-screen bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] flex items-center justify-center relative">
+    
+    <div class="absolute top-6 left-6 z-50">
+      <button 
+        @click="navigate('home')"
+        class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white/20 transition-all group shadow-xl"
+      >
+        <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+        <span class="text-sm font-medium">Volver al inicio</span>
+      </button>
+    </div>
+
     <div class="w-full max-w-7xl flex min-h-screen">
-    <!-- Left Panel - Login Form -->
     <div class="w-full lg:w-1/2 flex items-start justify-center p-6 lg:p-12 lg:pt-24">
       <div
         v-motion
@@ -9,7 +19,6 @@
         :enter="{ opacity: 1, x: 0, transition: { duration: 600 } }"
         class="w-full max-w-md"
       >
-        <!-- Logo/Brand -->
         <div
           v-motion
           :initial="{ opacity: 0, y: -20 }"
@@ -20,12 +29,12 @@
             class="inline-flex items-center gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
             @click="navigate('home')"
           >
-            <div class="w-10 h-10 bg-[#E67E50] rounded-lg flex items-center justify-center">
+            <div class="w-10 h-10 bg-[#E67E50] rounded-lg flex items-center justify-center shadow-lg shadow-[#E67E50]/20">
               <Truck class="w-6 h-6 text-white" />
             </div>
-            <span class="text-white text-2xl font-semibold">Moveo</span>
+            <span class="text-white text-2xl font-semibold tracking-tight">Moveo</span>
           </div>
-          <h1 class="text-white text-3xl mb-2">
+          <h1 class="text-white text-3xl font-bold mb-2">
             Bienvenido de vuelta
           </h1>
           <p class="text-gray-300">
@@ -33,7 +42,6 @@
           </p>
         </div>
 
-        <!-- Login Form -->
         <div
           v-motion
           :initial="{ opacity: 0, y: 20 }"
@@ -41,9 +49,8 @@
           class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl"
         >
           <form @submit.prevent="handleLogin" class="space-y-6">
-            <!-- Email Field -->
             <div>
-              <label htmlFor="email" class="block text-white mb-2">
+              <label htmlFor="email" class="block text-white text-sm font-medium mb-2">
                 Correo electrónico
               </label>
               <div class="relative">
@@ -64,9 +71,8 @@
               </div>
             </div>
 
-            <!-- Password Field -->
             <div>
-              <label htmlFor="password" class="block text-white mb-2">
+              <label htmlFor="password" class="block text-white text-sm font-medium mb-2">
                 Contraseña
               </label>
               <div class="relative">
@@ -95,7 +101,6 @@
               </div>
             </div>
 
-            <!-- Remember & Forgot -->
             <div class="flex items-center justify-between">
               <label class="flex items-center gap-2 cursor-pointer">
                 <input
@@ -107,17 +112,16 @@
               </label>
               <button
                 type="button"
-                class="text-[#E67E50] text-sm hover:text-[#d66d40] transition-colors"
+                class="text-[#E67E50] text-sm font-medium hover:text-[#d66d40] transition-colors"
               >
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
 
-            <!-- Login Button -->
             <button
               type="submit"
               :disabled="isLoading"
-              class="w-full bg-[#E67E50] text-white py-3 rounded-lg hover:bg-[#d66d40] transition-all shadow-lg shadow-[#E67E50]/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full bg-[#E67E50] text-white py-3 rounded-lg hover:bg-[#d66d40] transition-all shadow-lg shadow-[#E67E50]/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed font-bold"
             >
               <div v-if="isLoading" class="flex items-center gap-2">
                 <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -130,7 +134,6 @@
               </template>
             </button>
 
-            <!-- Premium Contact CTA -->
             <div class="mt-10 pt-8 border-t border-white/10">
               <div class="bg-white/5 rounded-2xl p-6 border border-white/5 hover:border-white/10 transition-all group/card">
                 <div class="flex items-center gap-4 mb-4">
@@ -158,16 +161,13 @@
       </div>
     </div>
 
-    <!-- Right Panel - Features & Branding -->
     <div
       v-motion
       :initial="{ opacity: 0, x: 30 }"
       :enter="{ opacity: 1, x: 0, transition: { duration: 600, delay: 200 } }"
       class="hidden lg:flex lg:w-1/2 items-start justify-center p-12 lg:pt-24 relative overflow-hidden"
     >
-      <!-- Background decoration -->
       <div class="absolute inset-0 overflow-hidden opacity-20">
-        <!-- Grid lines -->
         <svg class="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -176,7 +176,6 @@
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
           
-          <!-- Animated routes -->
           <path
             class="ruta-animada ruta-1"
             d="M 100 200 Q 300 100 500 300 T 900 200"
@@ -193,7 +192,6 @@
           />
         </svg>
 
-        <!-- Animated vehicles -->
         <div
           v-for="vehicle in vehicles"
           :key="vehicle.id"
@@ -205,7 +203,6 @@
       </div>
 
       <div class="relative z-10 max-w-lg">
-        <!-- Spacer to match left logo height for perfect header alignment -->
         <div class="h-14 mb-4 hidden lg:block"></div>
         
         <div
@@ -213,7 +210,7 @@
             :initial="{ opacity: 0, y: 20 }"
             :enter="{ opacity: 1, y: 0, transition: { delay: 400 } }"
         >
-          <h2 class="text-white text-4xl mb-6">
+          <h2 class="text-white text-4xl font-bold mb-6">
             Gestión logística <span class="text-[#E67E50]">inteligente</span>
           </h2>
           <p class="text-gray-300 text-lg mb-12">
@@ -221,7 +218,6 @@
           </p>
         </div>
 
-        <!-- Features list -->
         <div class="space-y-6">
           <div
             v-for="(feature, index) in features"
@@ -238,12 +234,11 @@
               <component :is="feature.icon" class="w-6 h-6" :style="{ color: feature.color }" />
             </div>
             <div>
-              <h3 class="text-white mb-1">{{ feature.title }}</h3>
+              <h3 class="text-white font-semibold mb-1">{{ feature.title }}</h3>
             </div>
           </div>
         </div>
 
-        <!-- Stats -->
         <div
             v-motion
             :initial="{ opacity: 0, y: 20 }"
@@ -251,20 +246,20 @@
             class="mt-12 grid grid-cols-3 gap-6"
         >
           <div class="text-center">
-            <p class="text-[#E67E50] text-3xl font-semibold mb-1">
+            <p class="text-[#E67E50] text-3xl font-bold mb-1">
               <ContadorAnimado :end="500" suffix="+" :duration="2.5" />
             </p>
-            <p class="text-gray-400">Vehículos</p>
+            <p class="text-gray-400 text-sm">Vehículos</p>
           </div>
           <div class="text-center">
-            <p class="text-[#E67E50] text-3xl font-semibold mb-1">
+            <p class="text-[#E67E50] text-3xl font-bold mb-1">
               <ContadorAnimado :end="1000000" prefix="" suffix="+" :duration="3" />
             </p>
-            <p class="text-gray-400">Entregas</p>
+            <p class="text-gray-400 text-sm">Entregas</p>
           </div>
           <div class="text-center">
-            <p class="text-[#E67E50] text-3xl font-semibold mb-1">99.9%</p>
-            <p class="text-gray-400">Uptime</p>
+            <p class="text-[#E67E50] text-3xl font-bold mb-1">99.9%</p>
+            <p class="text-gray-400 text-sm">Uptime</p>
           </div>
         </div>
 
@@ -275,7 +270,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useSesionStore } from '@/tiendas/sesion';
 import { toast } from 'vue-sonner';
@@ -289,15 +284,13 @@ import {
   Truck, 
   Shield, 
   CheckCircle2, 
-  ArrowRight,
+  ArrowLeft,
   MessageSquare
 } from 'lucide-vue-next';
 
-// Router (equivalent to onNavigate)
 const router = useRouter();
 const sesionStore = useSesionStore();
 
-// State
 const showPassword = ref(false);
 const email = ref("");
 const password = ref("");
@@ -305,7 +298,6 @@ const isLoading = ref(false);
 const isError = ref(false);
 const rememberMe = ref(false);
 
-// Animated Background Logic
 interface Vehicle {
   id: number
   x: number
@@ -321,10 +313,7 @@ const vehicles = ref<Vehicle[]>([
 
 let interval: ReturnType<typeof setInterval> | null = null
 
-import { onMounted, onUnmounted } from 'vue';
-
 onMounted(() => {
-  // Check for saved email
   const savedEmail = localStorage.getItem('savedEmail');
   if (savedEmail) {
     email.value = savedEmail;
@@ -341,9 +330,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (interval) {
-    clearInterval(interval)
-  }
+  if (interval) clearInterval(interval)
 })
 
 const features = [
@@ -382,7 +369,6 @@ const handleLogin = async () => {
       return;
     }
 
-    // Handle Remember Me
     if (rememberMe.value) {
       localStorage.setItem('savedEmail', email.value);
     } else {
@@ -391,7 +377,6 @@ const handleLogin = async () => {
 
     navigate('dashboard');
   } catch (error: any) {
-    console.error("Error al iniciar sesión:", error);
     isError.value = true;
     toast.error('Error de acceso', {
       description: 'Credenciales inválidas. Por favor, inténtalo de nuevo.',
@@ -403,14 +388,12 @@ const handleLogin = async () => {
 };
 
 const navigate = (page: 'home' | 'services' | 'dashboard') => {
-  // Map page strings to route names or paths
   switch (page) {
     case 'home':
       router.push('/');
       break;
     case 'dashboard':
       router.push('/dashboard'); 
-      // Ensure 'dashboard' route exists, fallback to home or dashboard path
       break;
     case 'services':
       router.push('/services');
