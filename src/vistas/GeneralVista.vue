@@ -290,6 +290,7 @@ const mapContainer = ref<HTMLElement | null>(null)
 let map: L.Map | null = null
 const marcadoresVehiculos = new Map<number, L.Marker>()
 const lineasRutas = new Map<number, L.Polyline>()
+const rutasConSennal = ref(0)
 
 async function inicializarMapaVehiculos() {
   if (!mapContainer.value) return
@@ -313,6 +314,7 @@ async function actualizarUbicaciones() {
   try {
     const rutasEnProgreso = rutasActivas.value
     let bounds = L.latLngBounds([])
+    let contadorSennal = 0
 
     for (const ruta of rutasEnProgreso) {
       const ubicacion = await dashboardServicio.obtenerUltimaUbicacionRuta(ruta.id)
@@ -415,8 +417,11 @@ async function actualizarUbicaciones() {
         }
         
         bounds.extend(latLng)
+        contadorSennal++
       }
     }
+
+    rutasConSennal.value = contadorSennal
 
     if (bounds.isValid() && marcadoresVehiculos.size > 0) {
       map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 })
@@ -568,7 +573,12 @@ onUnmounted(() => {
             <h2 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Mapa en Tiempo Real</h2>
             <div class="flex items-center gap-2 text-sm">
               <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ rutasActivas.length }} rutas activas</span>
+              <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">
+                {{ rutasActivas.length }} rutas activas 
+                <span v-if="rutasConSennal < rutasActivas.length" class="ml-1 opacity-80 italic">
+                  ({{ rutasConSennal }} con señal en mapa)
+                </span>
+              </span>
             </div>
           </div>
         </div>
