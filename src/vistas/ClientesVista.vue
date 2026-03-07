@@ -106,6 +106,13 @@ async function guardarCliente() {
       }
       feedbackMensaje.value = 'Cliente actualizado'
     } else {
+      // Intentar geocodificación antes de crear
+      const coords = await obtenerCoordenadas(formulario.value.direccion)
+      if (coords) {
+        formulario.value.latitud = coords.lat
+        formulario.value.longitud = coords.lon
+      }
+
       const nuevo = await clientesServicio.crear(formulario.value)
       clientes.value.push(nuevo)
       feedbackMensaje.value = 'Cliente creado'
@@ -145,6 +152,22 @@ function exportarExcel() {
     Telefono: c.telefono
   }))
   exportadorServicio.exportarExcel('Clientes', data, 'Clientes_Reporte')
+}
+// Geocodificación con Nominatim
+async function obtenerCoordenadas(direccion: string) {
+  try {
+    const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(direccion)}&limit=1`)
+    const data = await resp.json()
+    if (data && data.length > 0) {
+      return {
+        lat: parseFloat(data[0].lat),
+        lon: parseFloat(data[0].lon)
+      }
+    }
+  } catch (error) {
+    console.error('Error en geocodificación:', error)
+  }
+  return null
 }
 </script>
 
