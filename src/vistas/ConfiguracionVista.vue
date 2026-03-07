@@ -100,7 +100,7 @@ const onArchivoSeleccionado = async (event: Event) => {
 <template>
   <div class="min-h-screen bg-gray-50/50 dark:bg-[#16181A] pb-20 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-6 pt-10">
-      <div class="mb-10">
+      <div class="mb-10 animacion-entrada">
         <div class="flex items-center gap-4 mb-2">
           <button @click="router.back()" class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#272A30] transition-colors text-gray-400 dark:text-[#82A1B1] hover:text-[#092C4C] dark:hover:text-white">
             <ArrowLeft class="w-6 h-6" />

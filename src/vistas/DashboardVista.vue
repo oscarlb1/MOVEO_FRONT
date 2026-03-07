@@ -160,41 +160,57 @@ onUnmounted(() => {
       </div>
     </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 transition-colors duration-300 bg-[#F8F9FA] dark:bg-[#16181A]">
+    <main class="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden transition-all duration-300 bg-[#F8F9FA] dark:bg-[#16181A]">
       
-      <header class="h-20 flex items-center justify-between px-4 sm:pl-12 sm:pr-4 border-b border-gray-100 dark:border-[#374B54] bg-white/80 dark:bg-[#272A30]/80 backdrop-blur-md">
+      <!-- Dashboard Header with Glassmorphism -->
+      <header class="h-20 flex items-center justify-between px-4 sm:px-8 border-b border-gray-100 dark:border-[#374B54] bg-white/70 dark:bg-[#272A30]/70 backdrop-blur-xl sticky top-0 z-30 transition-all duration-300">
         
         <div class="flex items-center gap-4">
-          <button class="lg:hidden p-2.5 rounded-xl transition-colors bg-gray-50 dark:bg-[#16181A] text-[#424242] dark:text-[#82A1B1]"
+          <button class="lg:hidden p-2.5 rounded-xl transition-all active:scale-95 bg-gray-50 dark:bg-[#16181A] text-[#424242] dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] shadow-sm"
             @click="sidebarAbierto = true">
             <Menu class="w-5 h-5" />
           </button>
           <div class="hidden md:block">
-            <h2 class="text-xl font-bold tracking-tight text-[#092C4C] dark:text-white">
+            <h2 class="text-xl font-bold tracking-tight text-[#092C4C] dark:text-white flex items-center gap-2">
+              <span class="w-1 h-6 bg-[#E67E50] rounded-full mr-2 hidden sm:block"></span>
               {{ itemsMenu.find(i => i.id === seccionActiva)?.label || 'Dashboard' }}
             </h2>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
-          <div class="lg:hidden w-10 h-10 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer overflow-hidden flex-shrink-0"
+          <!-- Profile Quick Access for Mobile -->
+          <div class="lg:hidden w-10 h-10 rounded-xl bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-[#E67E50]/20 cursor-pointer overflow-hidden flex-shrink-0 transition-transform active:scale-90"
             @click="irASeccion('general')">
             <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
             <span v-else>{{ inicialUsuario }}</span>
           </div>
+
+          <!-- Quick Settings Toggle (Desktop/Tablet) -->
+          <div class="hidden sm:flex items-center gap-2">
+             <button @click="alternarTema" class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
+               <component :is="darkMode ? Sun : Moon" class="w-5 h-5" />
+             </button>
+             <button @click="router.push('/configuracion')" class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
+               <Settings class="w-5 h-5" />
+             </button>
+          </div>
         </div>
       </header>
 
+      <!-- Main Content Area with Adaptive Padding and Transitions -->
       <div class="flex-1 overflow-x-hidden overflow-y-auto py-4 sm:py-6 px-1.5 sm:pl-3 sm:pr-12">
         <div class="w-full">
-          
-          <GeneralVista v-if="seccionActiva === 'general'" @actualizar-no-leidas="handleActualizarNoLeidas" />
-          <RutasVista v-else-if="seccionActiva === 'rutas'" />
-          <VehiculosVista v-else-if="seccionActiva === 'vehiculos' && esAdmin" />
-          <UsuariosVista v-else-if="seccionActiva === 'usuarios' && esAdmin" />
-          <EntregasVista v-else-if="seccionActiva === 'entregas'" />
-          <ClientesVista v-else-if="seccionActiva === 'clientes' && esAdmin" />
-          
+          <Transition name="page-fade" mode="out-in">
+            <div :key="seccionActiva">
+              <GeneralVista v-if="seccionActiva === 'general'" @actualizar-no-leidas="handleActualizarNoLeidas" />
+              <RutasVista v-else-if="seccionActiva === 'rutas'" />
+              <VehiculosVista v-else-if="seccionActiva === 'vehiculos' && esAdmin" />
+              <UsuariosVista v-else-if="seccionActiva === 'usuarios' && esAdmin" />
+              <EntregasVista v-else-if="seccionActiva === 'entregas'" />
+              <ClientesVista v-else-if="seccionActiva === 'clientes' && esAdmin" />
+            </div>
+          </Transition>
         </div>
       </div>
     </main>
@@ -204,4 +220,32 @@ onUnmounted(() => {
 <style scoped>
 .fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+.page-fade-enter-active, .page-fade-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.4);
+}
 </style>

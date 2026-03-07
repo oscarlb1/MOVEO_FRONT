@@ -346,7 +346,7 @@ onMounted(async () => {
             <td class="py-4 px-6"><span class="flex items-center gap-1 text-sm text-[#757575] dark:text-[#82A1B1]"><Gauge class="w-3.5 h-3.5 flex-shrink-0" />{{ v.kilometrajeActual.toLocaleString('es-ES') }} km</span></td>
             <td class="py-4 px-6"><span class="flex items-center gap-1 text-sm text-[#757575] dark:text-[#82A1B1]"><Clock class="w-3.5 h-3.5 flex-shrink-0" />{{ fechaRevision(v.fechaUltimaRevision) }}</span></td>
             <td v-if="esAdmin" class="py-4 px-6">
-              <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex items-center gap-1 transition-opacity">
                 <button @click="abrirModalEditar(v)" class="p-1.5 rounded-lg transition-colors border border-transparent text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400" title="Editar"><Pencil class="w-4 h-4" /></button>
                 <button @click="abrirModalMantenimientos(v)" class="p-1.5 rounded-lg transition-colors border border-transparent text-gray-400 hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-900/20 dark:hover:text-green-400" title="Mantenimientos"><Wrench class="w-4 h-4" /></button>
                 <button @click="vehiculoEliminandoId = v.id" class="p-1.5 rounded-lg transition-colors border border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400" title="Eliminar"><Trash2 class="w-4 h-4" /></button>

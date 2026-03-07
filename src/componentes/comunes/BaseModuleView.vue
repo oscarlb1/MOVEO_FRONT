@@ -78,14 +78,14 @@ const themeClasses = computed(() => {
 </script>
 
 <template>
-  <div class="space-y-6 relative">
+  <div class="space-y-6 relative animacion-entrada">
     <!-- Icono Decorativo de Fondo -->
     <div v-if="headerIcon" class="absolute -top-6 -right-6 opacity-[0.03] dark:opacity-[0.05] pointer-events-none transition-opacity duration-700">
       <component :is="headerIcon" class="w-64 h-64 rotate-12" />
     </div>
 
     <!-- Header KPIs -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
       <template v-if="props.cargando">
         <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
           <div class="h-10 bg-gray-200 dark:bg-[#374B54] rounded-lg w-10 mb-4"></div>
@@ -119,23 +119,23 @@ const themeClasses = computed(() => {
         <!-- Actions Bar -->
         <div class="p-5 border-b space-y-4 border-gray-100 dark:border-[#374B54]"
              :class="[ props.viewMode === 'cards' ? 'bg-gray-50/30 dark:bg-[#16181A]/30' : '' ]">
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h2 class="text-xl font-bold flex items-center gap-2 text-[#092C4C] dark:text-white">
-                <div class="p-1.5 rounded-lg" :class="themeClasses.kpiIcon">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex-1 min-w-0">
+              <h2 class="text-xl font-bold flex items-center gap-2 text-[#092C4C] dark:text-white truncate">
+                <div class="p-1.5 rounded-lg shrink-0" :class="themeClasses.kpiIcon">
                   <slot name="title-icon"></slot>
                 </div>
-                {{ props.title }}
+                <span class="truncate">{{ props.title }}</span>
               </h2>
-              <p v-if="props.description" class="text-xs text-gray-500 dark:text-[#82A1B1] mt-0.5 ml-11">{{ props.description }}</p>
+              <p v-if="props.description" class="text-xs text-gray-500 dark:text-[#82A1B1] mt-0.5 ml-11 line-clamp-1">{{ props.description }}</p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 self-end sm:self-auto">
               <slot name="header-actions"></slot>
               <button v-if="props.showNewButton" 
                       @click="emit('new-click')"
-                      class="text-white px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 ml-2 shadow-sm active:scale-95"
+                      class="text-white px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 shadow-sm active:scale-95"
                       :class="themeClasses.bg">
-                 <Plus class="w-4 h-4"/> {{ props.newButtonLabel || 'Nuevo' }}
+                 <Plus class="w-4 h-4"/> <span class="hidden xs:inline">{{ props.newButtonLabel || 'Nuevo' }}</span><span class="xs:hidden">Nuevo</span>
               </button>
             </div>
           </div>
@@ -156,15 +156,17 @@ const themeClasses = computed(() => {
         </div>
 
         <!-- Content Area -->
-        <div class="p-2 overflow-x-auto" :class="{ 'p-4': props.viewMode === 'cards' }">
+        <div class="p-2 overflow-x-auto custom-scrollbar" :class="{ 'p-4': props.viewMode === 'cards' }">
           <div v-if="props.cargando" class="py-24 flex flex-col items-center justify-center">
             <Loader2 class="w-12 h-12 animate-spin mb-4" :class="themeClasses.accent" />
             <p class="text-gray-500 dark:text-[#82A1B1] font-medium tracking-wide">Sincronizando datos...</p>
           </div>
           
           <template v-else>
-            <slot v-if="props.viewMode === 'cards'" name="cards"></slot>
-            <slot v-else name="table"></slot>
+            <!-- Tabla con scroll horizontal forzado e interno -->
+            <div class="w-full max-w-full overflow-x-auto overflow-y-hidden custom-scrollbar border rounded-xl border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#16181A]/30 shadow-sm transition-all hover:border-gray-200 dark:hover:border-gray-500">
+              <slot name="table"></slot>
+            </div>
           </template>
         </div>
       </div>
@@ -186,5 +188,17 @@ const themeClasses = computed(() => {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
+}
+
+/* Ocultar scrollbar pero permitir scroll */
+.overflow-x-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+}
+
+/* Breakdown for header labels on small screens */
+@media (max-width: 400px) {
+  .xs\:hidden { display: inline !important; }
+  .xs\:inline { display: none !important; }
 }
 </style>
