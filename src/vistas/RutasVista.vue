@@ -21,6 +21,7 @@ import type { UsuarioItem } from '@/modelos/Dashboard';
 import type { ClienteDto } from '@/modelos/Ruta';
 import type { UbicacionDto } from '@/servicios/ubicacionServicio';
 import { toast } from 'vue-sonner';
+import { formatearEstado } from '@/utiles/formateadores';
 
 const props = defineProps<{
   darkMode: boolean
@@ -700,7 +701,7 @@ watch(() => props.darkMode, (isDark) => {
                 <span class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">#RT-{{ ruta.id }}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border"
                       :class="[badgeEstado(ruta.estado).bg, badgeEstado(ruta.estado).text, badgeEstado(ruta.estado).border]">
-                  {{ ruta.estado }}
+                  {{ formatearEstado(ruta.estado) }}
                 </span>
               </div>
               
@@ -747,9 +748,9 @@ watch(() => props.darkMode, (isDark) => {
             <div>
               <div class="flex items-center gap-3 mb-1">
                 <h2 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Ruta #RT-{{ rutaSeleccionada?.id }}</h2>
-                <span class="px-3 py-1 rounded text-xs font-bold border"
+                <span class="px-3 py-1.5 rounded text-xs font-bold border"
                       :class="[badgeEstado(rutaSeleccionada?.estado || '').bg, badgeEstado(rutaSeleccionada?.estado || '').text, badgeEstado(rutaSeleccionada?.estado || '').border]">
-                  {{ rutaSeleccionada?.estado }}
+                  {{ formatearEstado(rutaSeleccionada?.estado) }}
                 </span>
               </div>
               <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">

@@ -14,6 +14,7 @@ import type {
 } from '@/modelos/Dashboard'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { formatearEstado } from '@/utiles/formateadores'
 
 const props = defineProps<{
   darkMode: boolean
@@ -173,8 +174,7 @@ function colorEstadoEntrega(estado: string) {
   return { bg: 'bg-yellow-50', text: 'text-yellow-700', border: 'border-yellow-200' }
 }
 function labelEstado(estado: string) {
-  const map: Record<string, string> = { ENTREGADO: 'completada', EN_CAMINO: 'en-ruta', PENDIENTE: 'pendiente', FALLIDO: 'fallido' }
-  return map[estado] ?? estado.toLowerCase()
+  return formatearEstado(estado)
 }
 function colorNotificacion(titulo: string) {
   const t = titulo.toLowerCase()
@@ -381,7 +381,7 @@ async function actualizarUbicaciones() {
                   </div>
                   <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; display: flex; align-items: center; gap: 6px;">
                     <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: ${estadoColor};"></span>
-                    ${ruta.estado ? ruta.estado.replace('_', ' ') : 'DESCONOCIDO'}
+                    ${formatearEstado(ruta.estado)}
                   </div>
                 </div>
               </div>

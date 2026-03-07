@@ -13,6 +13,7 @@ import type { EntregaDto, CrearEntregaDto } from '@/modelos/Ruta';
 import type { EntregasEstadisticasDto } from '@/servicios/entregasServicio';
 import type { RutaDto, ClienteDto } from '@/modelos/Ruta';
 import { toast } from 'vue-sonner';
+import { formatearEstado } from '@/utiles/formateadores';
 
 const props = defineProps<{
   darkMode: boolean
@@ -365,7 +366,7 @@ onMounted(() => {
               <td class="px-6 py-4">
                 <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider border"
                       :class="[badgeEstado(entrega.estado).bg, badgeEstado(entrega.estado).text, badgeEstado(entrega.estado).border]">
-                  {{ entrega.estado.replace('_', ' ') }}
+                  {{ formatearEstado(entrega.estado) }}
                 </span>
               </td>
               <td class="px-6 py-4 text-center text-xs" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
@@ -470,10 +471,10 @@ onMounted(() => {
         <div class="flex justify-between items-start">
            <div>
               <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Estado Actual</p>
-              <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
+               <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
                       :class="[badgeEstado(entregaSeleccionada?.estado || '').bg, badgeEstado(entregaSeleccionada?.estado || '').text, badgeEstado(entregaSeleccionada?.estado || '').border]">
-                  {{ entregaSeleccionada?.estado }}
-              </span>
+                  {{ formatearEstado(entregaSeleccionada?.estado) }}
+               </span>
            </div>
            <div class="text-right">
               <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Hora Entrega Real</p>
