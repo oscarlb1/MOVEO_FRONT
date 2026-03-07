@@ -14,11 +14,13 @@ import {
 import VueApexCharts from 'vue3-apexcharts'
 
 import { useSesionStore } from '@/tiendas/sesion'
+import { useTemaStore } from '@/tiendas/tema'
 
 // State
 const router = useRouter()
 const sesionStore = useSesionStore()
-const darkMode = ref(false) // Toggle for demo purposes, could sync with store
+const temaStore = useTemaStore()
+const darkMode = computed(() => temaStore.isDark)
 const dateRange = ref("Hoy")
 const selectedFilter = ref("Todos")
 const notifications = ref(5)
@@ -48,13 +50,13 @@ const chartOptionsArea = computed<ApexOptions>(() => ({
     categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
     axisBorder: { show: false },
     axisTicks: { show: false },
-    labels: { style: { colors: darkMode.value ? '#9ca3af' : '#757575' } }
+    labels: { style: { colors: darkMode.value ? '#82A1B1' : '#757575' } }
   },
   yaxis: {
-    labels: { style: { colors: darkMode.value ? '#9ca3af' : '#757575' } }
+    labels: { style: { colors: darkMode.value ? '#82A1B1' : '#757575' } }
   },
   grid: {
-    borderColor: darkMode.value ? '#2a3441' : '#EEEEEE',
+    borderColor: darkMode.value ? '#374B54' : '#EEEEEE',
     strokeDashArray: 4,
   },
   tooltip: {
@@ -84,8 +86,10 @@ const chartOptionsDonut = computed<ApexOptions>(() => ({
         size: '75%',
         labels: {
           show: true,
+          // Añadido 'name' para evitar que herede el azul oscuro del segmento de mantenimiento
+          name: { color: darkMode.value ? '#82A1B1' : '#757575' }, 
           value: { color: darkMode.value ? '#ffffff' : '#424242' },
-          total: { show: true, label: 'Total', color: darkMode.value ? '#9ca3af' : '#757575' }
+          total: { show: true, label: 'Total', color: darkMode.value ? '#82A1B1' : '#757575' }
         }
       }
     }
@@ -94,14 +98,11 @@ const chartOptionsDonut = computed<ApexOptions>(() => ({
   dataLabels: { enabled: false },
   legend: { show: false },
   tooltip: { 
-    // Forzamos 'dark' para que el texto sea blanco por defecto
     theme: 'dark', 
     style: {
       fontSize: '12px',
-      // Aseguramos blanco puro
       color: '#ffffff' 
     },
-    // Esto quita la caja blanca extra que a veces sale en el eje x
     x: { show: false }
   }
 }))
@@ -148,9 +149,7 @@ async function inicializarMapa() {
   
   map = L.map(mapContainer.value).setView([40.4168, -3.7038], 12)
   
-  const tileUrl = darkMode.value 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+  const tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 
   L.tileLayer(tileUrl, {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
@@ -176,7 +175,7 @@ async function inicializarMapa() {
 
   const icon = L.divIcon({
     className: 'custom-vehicle-marker bg-transparent border-0',
-    html: `<div class="w-4 h-4 rounded-full shadow-lg border-2 ${darkMode.value ? 'border-[#1a2332]' : 'border-white'}" style="background-color: #E67E50;">
+    html: `<div class="w-4 h-4 rounded-full shadow-lg border-2 ${darkMode.value ? 'border-[#272A30]' : 'border-white'}" style="background-color: #E67E50;">
              <div class="absolute inset-0 rounded-full animate-ping opacity-50" style="background-color: #E67E50;"></div>
            </div>`,
     iconSize: [16, 16],
@@ -188,21 +187,7 @@ async function inicializarMapa() {
   }
 }
 
-watch(() => darkMode.value, (isDark) => {
-  if (map) {
-    map.eachLayer((layer) => {
-      if (layer instanceof L.TileLayer) {
-        map?.removeLayer(layer)
-      }
-    })
-    const tileUrl = isDark 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-    L.tileLayer(tileUrl, {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-    }).addTo(map)
-  }
-})
+// Eliminamos el watch que cambiaba las URLs de los tiles, ya que usaremos filtros CSS
 
 onMounted(() => {
   inicializarMapa()
@@ -217,38 +202,25 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="[
-    'min-h-screen transition-colors duration-300',
-    darkMode ? 'bg-[#0a0f1a] text-white' : 'bg-[#EEEEEE] text-[#424242]'
-  ]">
-    <!-- Toolbar / Filter Bar -->
+  <div class="min-h-screen transition-colors duration-300 bg-[#EEEEEE] dark:bg-[#16181A] text-[#424242] dark:text-white">
     <div class="max-w-[1600px] mx-auto px-6 pt-6 pb-2">
-      <div class="flex items-center justify-between p-4 rounded-2xl border transition-all"
-        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200 shadow-sm'">
+      <div class="flex items-center justify-between p-4 rounded-2xl border transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] shadow-sm">
         
-        <!-- Left: Secondary Navigation -->
         <div class="hidden lg:flex items-center gap-1">
           <button class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-medium">Vista General</button>
-          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium" 
-            :class="darkMode ? 'text-gray-400 hover:bg-gray-700' : 'text-[#757575] hover:bg-gray-100'">Rutas</button>
-          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium" 
-            :class="darkMode ? 'text-gray-400 hover:bg-gray-700' : 'text-[#757575] hover:bg-gray-100'">Flota</button>
+          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium text-[#757575] dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Rutas</button>
+          <button class="px-4 py-2 rounded-lg transition-colors text-sm font-medium text-[#757575] dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Flota</button>
         </div>
         
-        <!-- Right: Controls -->
         <div class="flex items-center gap-4">
-          <!-- Date -->
-          <button class="flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors text-sm"
-            :class="darkMode ? 'border-gray-700 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-[#424242] hover:bg-gray-50'">
+          <button class="flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors text-sm bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white hover:bg-gray-50 dark:hover:bg-[#374B54]/50">
             <Calendar class="w-4 h-4" />
             <span>{{ dateRange }}</span>
             <ChevronDown class="w-4 h-4" />
           </button>
 
-          <!-- Notifications -->
-          <button class="relative p-2 rounded-lg transition-colors"
-            :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-            <Bell class="w-5 h-5" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'" />
+          <button class="relative p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#374B54]/50">
+            <Bell class="w-5 h-5 text-[#424242] dark:text-[#82A1B1]" />
             <span v-if="notifications > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-[#E67E50] text-white text-xs rounded-full flex items-center justify-center">
               {{ notifications }}
             </span>
@@ -259,7 +231,6 @@ onUnmounted(() => {
 
     <div class="max-w-[1600px] mx-auto px-6 py-8">
       
-      <!-- KPI Cards -->
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div v-for="(kpi, i) in [
           { icon: Truck, label: 'Vehículos Activos', value: '35', change: 12, trend: 'up', color: '#E67E50', subtitle: 'de 60 totales' },
@@ -267,9 +238,8 @@ onUnmounted(() => {
           { icon: Users, label: 'Repartidores', value: '42', change: 5, trend: 'up', color: '#092C4C', subtitle: '38 activos ahora' },
           { icon: Activity, label: 'Eficiencia Global', value: '94%', change: 3, trend: 'up', color: '#E67E50', subtitle: 'vs 91% ayer' }
         ]" :key="i"
-        class="p-6 rounded-2xl shadow-sm border transition-all hover:shadow-lg animate-fade-in-up"
+        class="p-6 rounded-2xl shadow-sm border transition-all hover:shadow-lg animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]"
         :style="{ animationDelay: `${i * 100}ms` }"
-        :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'"
         >
           <div class="flex items-start justify-between mb-4">
             <div class="p-3 rounded-xl" :style="{ backgroundColor: `${kpi.color}20` }">
@@ -281,28 +251,25 @@ onUnmounted(() => {
               <span class="text-sm font-semibold">+{{ kpi.change }}%</span>
             </div>
           </div>
-          <p class="text-sm font-medium mb-1" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
-          <div class="text-3xl font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ kpi.value }}</div>
-          <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#9e9e9e]'">{{ kpi.subtitle }}</p>
+          <p class="text-sm font-medium mb-1 text-[#757575] dark:text-[#82A1B1]">{{ kpi.label }}</p>
+          <div class="text-3xl font-bold mb-1 text-[#424242] dark:text-white">{{ kpi.value }}</div>
+          <p class="text-xs text-[#9e9e9e] dark:text-gray-500">{{ kpi.subtitle }}</p>
         </div>
       </div>
 
-      <!-- Charts Row -->
       <div class="grid lg:grid-cols-3 gap-6 mb-8">
-        <!-- Main Chart -->
-        <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 200ms;"
-          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
+        <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 200ms;">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Entregas Semanales</h3>
-              <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">Comparativa de rendimiento</p>
+              <h3 class="font-bold text-lg mb-1 text-[#424242] dark:text-white">Entregas Semanales</h3>
+              <p class="text-sm text-[#757575] dark:text-[#82A1B1]">Comparativa de rendimiento</p>
             </div>
             <div class="flex gap-2">
-              <button class="p-2 rounded-lg transition-colors" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-                <Download class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
+              <button class="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#374B54]/50">
+                <Download class="w-5 h-5 text-[#757575] dark:text-[#82A1B1]" />
               </button>
-              <button class="p-2 rounded-lg transition-colors" :class="darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'">
-                <RefreshCw class="w-5 h-5" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'" />
+              <button class="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#374B54]/50">
+                <RefreshCw class="w-5 h-5 text-[#757575] dark:text-[#82A1B1]" />
               </button>
             </div>
           </div>
@@ -311,10 +278,8 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Donut Chart -->
-        <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 300ms;"
-          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
-          <h3 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#424242]'">Estado de Flota</h3>
+        <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 300ms;">
+          <h3 class="font-bold text-lg mb-6 text-[#424242] dark:text-white">Estado de Flota</h3>
           <div class="w-full h-[250px] flex items-center justify-center">
             <VueApexCharts height="100%" width="100%" :options="chartOptionsDonut" :series="chartSeriesDonut" />
           </div>
@@ -327,158 +292,144 @@ onUnmounted(() => {
              ]" :key="i" class="flex items-center justify-between text-sm">
                <div class="flex items-center gap-2">
                  <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: item.color }"></div>
-                 <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ item.label }}</span>
+                 <span class="text-[#757575] dark:text-[#82A1B1]">{{ item.label }}</span>
                </div>
-               <span class="font-semibold" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ item.val }}</span>
+               <span class="font-semibold text-[#424242] dark:text-white">{{ item.val }}</span>
              </div>
           </div>
         </div>
       </div>
 
-       <!-- Map + Heatmap -->
        <div class="grid lg:grid-cols-3 gap-6 mb-8">
-          <!-- Live Map Simulation -->
-          <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 400ms;"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <h3 class="font-bold text-lg mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Mapa en Tiempo Real</h3>
-                <div class="flex items-center gap-2 text-sm">
-                  <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">35 vehículos activos</span>
-                </div>
-              </div>
-            </div>
+         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 400ms;">
+           <div class="flex items-center justify-between mb-4">
+             <div>
+               <h3 class="font-bold text-lg mb-1 text-[#424242] dark:text-white">Mapa en Tiempo Real</h3>
+               <div class="flex items-center gap-2 text-sm">
+                 <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                 <span class="text-[#757575] dark:text-[#82A1B1]">35 vehículos activos</span>
+               </div>
+             </div>
+           </div>
 
-            <!-- Mapa Real -->
-            <div ref="mapContainer" class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border" :class="darkMode ? 'bg-gray-900 border-gray-700 shadow-inner' : 'bg-gray-100 border-gray-200 shadow-inner'">
-            </div>
-          </div>
+           <div ref="mapContainer" 
+                class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border bg-gray-100 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] shadow-inner"
+                :class="{ 'dark-mode-map': temaStore.isDark }">
+           </div>
+         </div>
 
-          <!-- Heatmap Zones -->
-          <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 500ms;"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
-            <h3 class="font-bold text-lg mb-6" :class="darkMode ? 'text-white' : 'text-[#424242]'">Actividad por Zona</h3>
-            <div class="space-y-5">
-              <div v-for="(zone, i) in heatmapData" :key="i">
-                <div class="flex justify-between mb-2 text-sm">
-                  <span :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ zone.zone }}</span>
-                  <span class="font-semibold" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ zone.actividad }}%</span>
-                </div>
-                <div class="h-2 rounded-full overflow-hidden" :class="darkMode ? 'bg-gray-700' : 'bg-gray-100'">
-                  <div class="h-full rounded-full transition-all duration-1000 ease-out"
-                    :style="{ width: `${zone.actividad}%`, background: `linear-gradient(90deg, #E67E50 0%, ${zone.actividad > 80 ? '#10b981' : '#f59e0b'} 100%)` }"
-                  ></div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="mt-8 p-4 rounded-xl" :class="darkMode ? 'bg-gray-800' : 'bg-gray-50'">
-              <h4 class="text-sm font-semibold mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">Zona más activa</h4>
-              <p class="text-lg font-bold text-[#E67E50]">Centro (95%)</p>
-              <p class="text-xs mt-1" :class="darkMode ? 'text-gray-500' : 'text-[#757575]'">+18% vs semana anterior</p>
-            </div>
-          </div>
+         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 500ms;">
+           <h3 class="font-bold text-lg mb-6 text-[#424242] dark:text-white">Actividad por Zona</h3>
+           <div class="space-y-5">
+             <div v-for="(zone, i) in heatmapData" :key="i">
+               <div class="flex justify-between mb-2 text-sm">
+                 <span class="text-[#757575] dark:text-[#82A1B1]">{{ zone.zone }}</span>
+                 <span class="font-semibold text-[#424242] dark:text-white">{{ zone.actividad }}%</span>
+               </div>
+               <div class="h-2 rounded-full overflow-hidden bg-gray-100 dark:bg-[#16181A]">
+                 <div class="h-full rounded-full transition-all duration-1000 ease-out"
+                   :style="{ width: `${zone.actividad}%`, background: `linear-gradient(90deg, #E67E50 0%, ${zone.actividad > 80 ? '#10b981' : '#f59e0b'} 100%)` }"
+                 ></div>
+               </div>
+             </div>
+           </div>
+           
+           <div class="mt-8 p-4 rounded-xl bg-gray-50 dark:bg-[#16181A]">
+             <h4 class="text-sm font-semibold mb-1 text-[#424242] dark:text-white">Zona más activa</h4>
+             <p class="text-lg font-bold text-[#E67E50]">Centro (95%)</p>
+             <p class="text-xs mt-1 text-[#757575] dark:text-[#82A1B1]">+18% vs semana anterior</p>
+           </div>
+         </div>
        </div>
 
-       <!-- Table & Incidents -->
        <div class="grid lg:grid-cols-3 gap-6">
-          <!-- Table -->
-          <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 600ms;"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#424242]'">Entregas Recientes</h3>
-              <div class="flex gap-2">
-                <div class="relative">
-                  <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <input type="text" placeholder="Buscar..." 
-                    class="pl-10 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent"
-                    :class="[
-                      darkMode ? 'border-gray-700 text-white placeholder-gray-500' : 'border-gray-200 text-[#424242] placeholder-gray-400'
-                    ]"
-                  >
-                </div>
-              </div>
-            </div>
+         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 600ms;">
+           <div class="flex items-center justify-between mb-6">
+             <h3 class="font-bold text-lg text-[#424242] dark:text-white">Entregas Recientes</h3>
+             <div class="flex gap-2">
+               <div class="relative">
+                 <Search class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#82A1B1]" />
+                 <input type="text" placeholder="Buscar..." 
+                   class="pl-10 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors bg-transparent border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                 >
+               </div>
+             </div>
+           </div>
 
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm text-left">
-                <thead>
-                  <tr class="border-b" :class="darkMode ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-[#757575]'">
-                    <th class="py-3 px-2 font-medium">ID</th>
-                    <th class="py-3 px-2 font-medium">Repartidor</th>
-                    <th class="py-3 px-2 font-medium">Ruta</th>
-                    <th class="py-3 px-2 font-medium">Estado</th>
-                    <th class="py-3 px-2 font-medium">Hora</th>
-                    <th class="py-3 px-2 font-medium">Paquetes</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y" :class="darkMode ? 'divide-gray-700' : 'divide-gray-100'">
-                  <tr v-for="d in recentDeliveries" :key="d.id" class="hover:bg-opacity-50 transition-colors"
-                    :class="darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-50'">
-                    <td class="py-4 px-2 font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.id }}</td>
-                    <td class="py-4 px-2">
-                      <p class="font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.driver }}</p>
-                      <p class="text-xs" :class="darkMode ? 'text-gray-500' : 'text-[#757575]'">{{ d.vehicle }}</p>
-                    </td>
-                    <td class="py-4 px-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ d.route }}</td>
-                    <td class="py-4 px-2">
-                      <span class="px-2.5 py-1 rounded-full text-xs font-semibold border"
-                        :class="d.status === 'completada' 
-                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
-                          : d.status === 'en-ruta'
-                          ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800'
-                          : 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800'"
-                      >
-                        {{ d.status }}
-                      </span>
-                    </td>
-                    <td class="py-4 px-2" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ d.time }}</td>
-                    <td class="py-4 px-2 font-medium" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ d.packages }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+           <div class="overflow-x-auto">
+             <table class="w-full text-sm text-left">
+               <thead>
+                 <tr class="border-b border-gray-200 dark:border-[#374B54] text-[#757575] dark:text-[#82A1B1]">
+                   <th class="py-3 px-2 font-medium">ID</th>
+                   <th class="py-3 px-2 font-medium">Repartidor</th>
+                   <th class="py-3 px-2 font-medium">Ruta</th>
+                   <th class="py-3 px-2 font-medium">Estado</th>
+                   <th class="py-3 px-2 font-medium">Hora</th>
+                   <th class="py-3 px-2 font-medium">Paquetes</th>
+                 </tr>
+               </thead>
+               <tbody class="divide-y divide-gray-100 dark:divide-[#374B54]">
+                 <tr v-for="d in recentDeliveries" :key="d.id" class="transition-colors hover:bg-gray-50 dark:hover:bg-[#16181A]/50">
+                   <td class="py-4 px-2 font-medium text-[#424242] dark:text-white">{{ d.id }}</td>
+                   <td class="py-4 px-2">
+                     <p class="font-medium text-[#424242] dark:text-white">{{ d.driver }}</p>
+                     <p class="text-xs text-[#757575] dark:text-[#82A1B1]">{{ d.vehicle }}</p>
+                   </td>
+                   <td class="py-4 px-2 text-[#757575] dark:text-[#82A1B1]">{{ d.route }}</td>
+                   <td class="py-4 px-2">
+                     <span class="px-2.5 py-1 rounded-full text-xs font-semibold border"
+                       :class="d.status === 'completada' 
+                         ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
+                         : d.status === 'en-ruta'
+                         ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800'
+                         : 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-800'"
+                     >
+                       {{ d.status }}
+                     </span>
+                   </td>
+                   <td class="py-4 px-2 text-[#757575] dark:text-[#82A1B1]">{{ d.time }}</td>
+                   <td class="py-4 px-2 font-medium text-[#424242] dark:text-white">{{ d.packages }}</td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+         </div>
 
-          <!-- Incidents -->
-          <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up" style="animation-delay: 700ms;"
-            :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200'">
-            <div class="flex items-center justify-between mb-6">
-              <h3 class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#424242]'">Alertas</h3>
-              <span class="w-6 h-6 bg-[#E67E50] text-white rounded-full flex items-center justify-center text-xs font-bold">{{ incidents.length }}</span>
-            </div>
+         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 700ms;">
+           <div class="flex items-center justify-between mb-6">
+             <h3 class="font-bold text-lg text-[#424242] dark:text-white">Alertas</h3>
+             <span class="w-6 h-6 bg-[#E67E50] text-white rounded-full flex items-center justify-center text-xs font-bold">{{ incidents.length }}</span>
+           </div>
 
-            <div class="space-y-4">
-              <div v-for="inc in incidents" :key="inc.id" class="p-4 rounded-xl border-l-4 shadow-sm transition-all hover:shadow-md"
-                :class="[
-                   darkMode ? 'bg-[#1a2332] border-r border-t border-b border-gray-700' : 'bg-white border-r border-t border-b border-gray-100',
-                   inc.type === 'warning' ? 'border-l-yellow-500' :
-                   inc.type === 'error' ? 'border-l-red-500' :
-                   inc.type === 'success' ? 'border-l-green-500' :
-                   'border-l-blue-500'
-                ]"
-              >
-                <div class="flex items-start gap-3">
-                  <div class="p-2 rounded-lg"
-                    :class="[
-                      inc.type === 'warning' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
-                      inc.type === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' :
-                      inc.type === 'success' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
-                      'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                    ]"
-                  >
-                    <component :is="inc.icon" class="w-5 h-5" />
-                  </div>
-                  <div class="flex-1">
-                    <h4 class="font-semibold text-sm mb-1" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ inc.title }}</h4>
-                    <p class="text-xs mb-2 leading-relaxed" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ inc.description }}</p>
-                    <p class="text-[10px] font-medium" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">{{ inc.time }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+           <div class="space-y-4">
+             <div v-for="inc in incidents" :key="inc.id" class="p-4 rounded-xl border-l-4 shadow-sm transition-all hover:shadow-md bg-white dark:bg-[#16181A] border-r border-t border-b border-gray-100 dark:border-r-[#374B54] dark:border-t-[#374B54] dark:border-b-[#374B54]"
+               :class="[
+                  inc.type === 'warning' ? 'border-l-yellow-500' :
+                  inc.type === 'error' ? 'border-l-red-500' :
+                  inc.type === 'success' ? 'border-l-green-500' :
+                  'border-l-blue-500'
+               ]"
+             >
+               <div class="flex items-start gap-3">
+                 <div class="p-2 rounded-lg"
+                   :class="[
+                     inc.type === 'warning' ? 'bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
+                     inc.type === 'error' ? 'bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400' :
+                     inc.type === 'success' ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
+                     'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                   ]"
+                 >
+                   <component :is="inc.icon" class="w-5 h-5" />
+                 </div>
+                 <div class="flex-1">
+                   <h4 class="font-semibold text-sm mb-1 text-[#424242] dark:text-white">{{ inc.title }}</h4>
+                   <p class="text-xs mb-2 leading-relaxed text-[#757575] dark:text-[#82A1B1]">{{ inc.description }}</p>
+                   <p class="text-[10px] font-medium text-gray-500 dark:text-gray-500">{{ inc.time }}</p>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
        </div>
 
     </div>
@@ -486,6 +437,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Estilos para el modo oscuro del mapa usando filtros CSS */
+.dark-mode-map .leaflet-tile-container {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-mode-map .leaflet-control-zoom,
+.dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }

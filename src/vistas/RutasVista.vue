@@ -26,6 +26,9 @@ const props = defineProps<{
   darkMode: boolean
 }>();
 
+import { useTemaStore } from '@/tiendas/tema';
+const temaStore = useTemaStore();
+
 // Estado
 const cargando = ref(true);
 const cargandoDetalle = ref(false);
@@ -132,9 +135,7 @@ function initMap() {
   map = L.map(mapContainer.value).setView([40.4168, -3.7038], 6); // Centro de España por defecto
   
   L.tileLayer(
-    props.darkMode 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
+    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
     {
       attribution: '© OpenStreetMap contributors © CARTO',
       subdomains: 'abcd',
@@ -236,19 +237,26 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
     // Crear marcador numerado (con DivIcon)
     const icon = L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background-color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : '#E67E50'}; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 1000;">${index + 1}</div>`,
+      html: `<div style="background-color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : '#E67E50'}; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid ${props.darkMode ? '#16181A' : 'white'}; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 1000;">${index + 1}</div>`,
       iconSize: [30, 30],
       iconAnchor: [15, 15]
     });
 
     const marker = L.marker([lat, lng], { icon }).addTo(markersLayer!);
+    
+    // Ajuste de colores del popup según el modo
+    const popupBg = props.darkMode ? '#272A30' : '#ffffff';
+    const popupTextMain = props.darkMode ? '#ffffff' : '#000000';
+    const popupTextSub = props.darkMode ? '#82A1B1' : '#666666';
+    const popupBorder = props.darkMode ? '#374B54' : '#eeeeee';
+
     marker.bindPopup(`
-      <div style="font-family: inherit; min-width: 150px;">
+      <div style="font-family: inherit; min-width: 150px; background-color: ${popupBg}; color: ${popupTextMain};">
         <strong style="font-size: 14px; display: block; margin-bottom: 4px; color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : '#E67E50'};">Parada ${index + 1}</strong>
         <p style="margin: 0; font-size: 14px; font-weight: 600;">${entrega.cliente!.nombreEmpresa}</p>
-        <p style="margin: 4px 0 0 0; font-size: 12px; color: #666;">${entrega.cliente!.direccion}</p>
-        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; font-size: 11px; font-weight: 600; color: #888;">
-           ESTADO: <span style="color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : (entrega.estado === 'PENDIENTE' ? '#E67E50' : '#888')}">${entrega.estado}</span>
+        <p style="margin: 4px 0 0 0; font-size: 12px; color: ${popupTextSub};">${entrega.cliente!.direccion}</p>
+        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${popupBorder}; font-size: 11px; font-weight: 600; color: ${popupTextSub};">
+           ESTADO: <span style="color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : (entrega.estado === 'PENDIENTE' ? '#E67E50' : popupTextSub)}">${entrega.estado}</span>
         </div>
       </div>
     `);
@@ -311,7 +319,7 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
   if (ultimaUbicacion.value) {
     const truckIcon = L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background-color: #3b82f6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 2000;">
+      html: `<div style="background-color: #3b82f6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid ${props.darkMode ? '#16181A' : 'white'}; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 2000;">
                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
              </div>`,
       iconSize: [36, 36],
@@ -323,9 +331,9 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
     
     L.marker([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud], { icon: truckIcon, zIndexOffset: 1000 }).addTo(map!)
       .bindPopup(`
-        <div style="font-family: inherit; min-width: 150px;">
+        <div style="font-family: inherit; min-width: 150px; background-color: ${props.darkMode ? '#272A30' : '#ffffff'}; color: ${props.darkMode ? '#ffffff' : '#000000'};">
           <strong style="font-size: 14px; display: block; margin-bottom: 4px; color: #3b82f6;">Última Ubicación</strong>
-          <p style="margin: 0; font-size: 12px; color: #666;">Registrada: ${fechaFormat}</p>
+          <p style="margin: 0; font-size: 12px; color: ${props.darkMode ? '#82A1B1' : '#666666'};">Registrada: ${fechaFormat}</p>
         </div>
       `);
     bounds.extend([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud]);
@@ -384,10 +392,10 @@ async function seleccionarRuta(id: number) {
 
 // Helpers visuales
 function badgeEstado(estado: string) {
-  if (estado === 'COMPLETADA') return { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' };
-  if (estado === 'EN_CURSO') return { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' };
-  if (estado === 'PENDIENTE') return { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' };
-  return { bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-200' };
+  if (estado === 'COMPLETADA') return { bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-700 dark:text-green-400', border: 'border-green-200 dark:border-green-800' };
+  if (estado === 'EN_CURSO') return { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-700 dark:text-blue-400', border: 'border-blue-200 dark:border-blue-800' };
+  if (estado === 'PENDIENTE') return { bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-700 dark:text-orange-400', border: 'border-orange-200 dark:border-orange-800' };
+  return { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-600 dark:text-gray-300', border: 'border-gray-200 dark:border-gray-700' };
 }
 
 // Recargar Ubicacion Especifica
@@ -597,67 +605,47 @@ function exportarListaExcel() {
 }
 
 // Respetar Dark Mode del dashboard
-watch(() => props.darkMode, (isDark) => {
-  if (map) {
-    map.remove();
-    map = null;
-    routeLine = null;
-    markersLayer = null;
-    nextTick(() => {
-      initMap();
-      if (rutaSeleccionada.value) {
-        dibujarRutaMapa(rutaSeleccionada.value.entregas);
-      }
-    });
-  }
-});
+// Eliminamos el watch que destruía el mapa al cambiar de tema, ya que ahora usamos filtros CSS reactivos
 </script>
 
 <template>
   <div class="space-y-6">
-    <!-- Header y KPIs -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <template v-if="cargando">
-        <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
-          <div class="h-10 bg-gray-200 rounded-lg w-10 mb-4" :class="darkMode ? 'bg-gray-700' : ''"></div>
-          <div class="h-6 bg-gray-200 w-16 mb-2 rounded" :class="darkMode ? 'bg-gray-700' : ''"></div>
-          <div class="h-4 bg-gray-200 w-24 rounded" :class="darkMode ? 'bg-gray-700' : ''"></div>
+        <div v-for="i in 4" :key="i" class="p-5 rounded-2xl border animate-pulse bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50]">
+          <div class="h-10 rounded-lg w-10 mb-4 bg-gray-200 dark:bg-[#374B54]"></div>
+          <div class="h-6 w-16 mb-2 rounded bg-gray-200 dark:bg-[#374B54]"></div>
+          <div class="h-4 w-24 rounded bg-gray-200 dark:bg-[#374B54]"></div>
         </div>
       </template>
       <template v-else>
         <div v-for="kpi in kpis" :key="kpi.label" 
-             class="p-5 rounded-2xl border transition-all"
-             :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+             class="p-5 rounded-2xl border transition-all shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50]">
           <div class="flex items-center gap-3 mb-2">
             <div class="p-2.5 rounded-xl" :style="{ backgroundColor: `${kpi.color}18` }">
               <component :is="kpi.icon" class="w-5 h-5" :style="{ color: kpi.color }" />
             </div>
-            <p class="text-sm font-medium" :class="darkMode ? 'text-gray-400' : 'text-[#757575]'">{{ kpi.label }}</p>
+            <p class="text-sm font-medium text-[#757575] dark:text-[#82A1B1]">{{ kpi.label }}</p>
           </div>
-          <p class="text-3xl font-bold mt-2" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ kpi.value }}</p>
+          <p class="text-3xl font-bold mt-2 text-[#092C4C] dark:text-white">{{ kpi.value }}</p>
         </div>
       </template>
     </div>
 
-    <!-- Main Content Grid -->
     <div class="grid lg:grid-cols-3 gap-6">
       
-      <!-- Lista de Rutas (Columna Izquierda) -->
-      <div class="lg:col-span-1 border rounded-2xl flex flex-col h-[700px] overflow-hidden"
-           :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
-        <!-- Search & Filter -->
-        <div class="p-4 border-b space-y-3" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
+      <div class="lg:col-span-1 border rounded-2xl flex flex-col h-[700px] overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+        <div class="p-4 border-b space-y-3 border-gray-100 dark:border-[#374B54]">
           <div class="flex gap-2">
             <div class="relative flex-1">
-              <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-[#82A1B1]" />
               <input v-model="busqueda" type="text" placeholder="Buscar por ID, Vehículo o Conductor"
-                     class="w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors"
-                     :class="darkMode ? 'bg-transparent border-gray-700 text-white placeholder-gray-500' : 'bg-gray-50 border-gray-200 text-[#424242]'"/>
+                     class="w-full pl-9 pr-4 py-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] transition-colors bg-gray-50 dark:bg-transparent border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white placeholder-gray-400 dark:placeholder-[#82A1B1]"/>
             </div>
-            <button @click="exportarListaPDF" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar PDF">
+            <button @click="exportarListaPDF" class="px-3 py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]" title="Exportar PDF">
               <FileText class="w-4 h-4 text-red-500"/>
             </button>
-            <button @click="exportarListaExcel" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1 shrink-0" :class="darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : ''" title="Exportar Excel">
+            <button @click="exportarListaExcel" class="px-3 py-2 rounded-lg transition-colors flex items-center gap-1 shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]" title="Exportar Excel">
               <FileSpreadsheet class="w-4 h-4 text-green-600"/>
             </button>
             <button @click="abrirModalNuevaRuta" class="bg-[#E67E50] text-white px-3 py-2 rounded-lg hover:bg-[#d46b3f] transition-colors flex items-center gap-1 shrink-0" title="Nueva Ruta">
@@ -665,8 +653,7 @@ watch(() => props.darkMode, (isDark) => {
             </button>
           </div>
           <select v-model="filtroEstado"
-                  class="w-full p-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] cursor-pointer transition-colors"
-                  :class="darkMode ? 'bg-transparent border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'">
+                  class="w-full p-2 text-sm border rounded-lg focus:outline-none focus:border-[#E67E50] cursor-pointer transition-colors bg-gray-50 dark:bg-transparent border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
             <option value="">Todos los estados</option>
             <option value="PENDIENTE">Planificadas</option>
             <option value="EN_CURSO">En Progreso</option>
@@ -675,12 +662,11 @@ watch(() => props.darkMode, (isDark) => {
           </select>
         </div>
 
-        <!-- Lista scrolleable -->
         <div class="flex-1 overflow-y-auto p-3 space-y-2">
           <div v-if="cargando" class="flex justify-center items-center h-full">
             <Loader2 class="w-8 h-8 text-[#E67E50] animate-spin" />
           </div>
-          <div v-else-if="rutasFiltradas.length === 0" class="text-center py-10" :class="darkMode ? 'text-gray-500' : 'text-gray-400'">
+          <div v-else-if="rutasFiltradas.length === 0" class="text-center py-10 text-gray-400 dark:text-[#82A1B1]">
             No se encontraron rutas.
           </div>
           <template v-else>
@@ -689,15 +675,14 @@ watch(() => props.darkMode, (isDark) => {
                  class="route-card p-4 rounded-xl border cursor-pointer transition-all hover:-translate-y-1 relative overflow-hidden"
                  :data-ruta-id="ruta.id"
                  :class="[
-                   darkMode ? 'border-gray-700 hover:border-gray-600' : 'border-gray-100 hover:border-gray-300 hover:shadow-md',
-                   rutaSeleccionada?.id === ruta.id ? (darkMode ? 'bg-gray-800 border-[#E67E50]' : 'bg-orange-50 border-[#E67E50]') : (darkMode ? 'bg-transparent' : 'bg-white')
+                   'border-gray-100 dark:border-[#374B54] hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-md dark:hover:shadow-none bg-white dark:bg-transparent',
+                   rutaSeleccionada?.id === ruta.id ? 'bg-orange-50 dark:bg-[#16181A]/80 !border-[#E67E50] dark:!border-[#E67E50]' : ''
                  ]">
               
-              <!-- Indicator of selected -->
               <div v-if="rutaSeleccionada?.id === ruta.id" class="absolute left-0 top-0 bottom-0 w-1 bg-[#E67E50]"></div>
               
               <div class="flex justify-between items-start mb-2 pl-1">
-                <span class="font-bold text-lg" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">#RT-{{ ruta.id }}</span>
+                <span class="font-bold text-lg text-[#092C4C] dark:text-white">#RT-{{ ruta.id }}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border"
                       :class="[badgeEstado(ruta.estado).bg, badgeEstado(ruta.estado).text, badgeEstado(ruta.estado).border]">
                   {{ ruta.estado }}
@@ -705,19 +690,15 @@ watch(() => props.darkMode, (isDark) => {
               </div>
               
               <div class="space-y-1.5 pl-1">
-                <div class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
-                  <Truck class="w-4 h-4 text-gray-500" />
+                <div class="flex items-center gap-2 text-sm text-[#424242] dark:text-gray-300">
+                  <Truck class="w-4 h-4 text-gray-500 dark:text-[#82A1B1]" />
                   <span>{{ ruta.matriculaVehiculo }}</span>
                 </div>
-                <div class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
-                  <Clock class="w-4 h-4 text-gray-500" />
+                <div class="flex items-center gap-2 text-sm text-[#424242] dark:text-gray-300">
+                  <Clock class="w-4 h-4 text-gray-500 dark:text-[#82A1B1]" />
                   <span>Conductor: {{ ruta.nombreConductor }}</span>
                 </div>
-                <!-- <div v-if="ruta.distanciaTotalEstimada" class="flex items-center gap-2 text-sm" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
-                  <MapPin class="w-4 h-4 text-gray-500" />
-                  <span>{{ ruta.distanciaTotalEstimada }} km</span>
-                </div> -->
-                <div class="flex justify-between items-center text-xs mt-3 pt-2 border-t" :class="darkMode ? 'border-gray-700 text-gray-500' : 'border-gray-100 text-gray-400'">
+                <div class="flex justify-between items-center text-xs mt-3 pt-2 border-t border-gray-100 dark:border-[#374B54] text-gray-400 dark:text-[#82A1B1]">
                   <span>{{ new Date(ruta.fecha).toLocaleDateString() }}</span>
                   <span class="flex items-center gap-1 group-hover:text-[#E67E50] transition-colors"><Eye class="w-3 h-3"/> Ver detalle</span>
                 </div>
@@ -727,14 +708,12 @@ watch(() => props.darkMode, (isDark) => {
         </div>
       </div>
 
-      <!-- Mapa y Detalle (Columna Derecha) -->
-      <div class="lg:col-span-2 flex flex-col h-[700px] border rounded-2xl overflow-hidden"
-           :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100 shadow-sm'">
+      <div class="lg:col-span-2 flex flex-col h-[700px] border rounded-2xl overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
         
         <div v-if="!rutaSeleccionada && !cargandoDetalle" class="flex flex-col items-center justify-center h-full text-center p-8">
-          <Map class="w-16 h-16 text-gray-300 mb-4" :class="darkMode ? 'opacity-20' : ''"/>
-          <h3 class="text-xl font-medium mb-2" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Ninguna ruta seleccionada</h3>
-          <p :class="darkMode ? 'text-gray-500' : 'text-[#757575]'">Selecciona una ruta de la lista para visualizar su trayecto en el mapa y los detalles de cada parada.</p>
+          <Map class="w-16 h-16 text-gray-300 dark:opacity-20 mb-4" />
+          <h3 class="text-xl font-medium mb-2 text-[#092C4C] dark:text-white">Ninguna ruta seleccionada</h3>
+          <p class="text-[#757575] dark:text-[#82A1B1]">Selecciona una ruta de la lista para visualizar su trayecto en el mapa y los detalles de cada parada.</p>
         </div>
 
         <div v-else-if="cargandoDetalle" class="flex justify-center items-center h-full">
@@ -742,38 +721,36 @@ watch(() => props.darkMode, (isDark) => {
         </div>
 
         <div v-else class="flex flex-col h-full">
-          <!-- Detalles Header -->
-          <div class="p-6 border-b flex justify-between items-start" :class="darkMode ? 'border-gray-700 bg-[#1e293b]' : 'border-gray-100 bg-[#f8fafc]'">
+          <div class="p-6 border-b flex justify-between items-start border-gray-100 dark:border-[#374B54] bg-[#f8fafc] dark:bg-[#16181A]">
             <div>
               <div class="flex items-center gap-3 mb-1">
-                <h2 class="text-2xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Ruta #RT-{{ rutaSeleccionada?.id }}</h2>
+                <h2 class="text-2xl font-bold text-[#092C4C] dark:text-white">Ruta #RT-{{ rutaSeleccionada?.id }}</h2>
                 <span class="px-3 py-1 rounded text-xs font-bold border"
                       :class="[badgeEstado(rutaSeleccionada?.estado || '').bg, badgeEstado(rutaSeleccionada?.estado || '').text, badgeEstado(rutaSeleccionada?.estado || '').border]">
                   {{ rutaSeleccionada?.estado }}
                 </span>
               </div>
-              <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+              <p class="text-sm text-gray-500 dark:text-[#82A1B1]">
                 Planificada para: {{ new Date(rutaSeleccionada?.fecha || '').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
               </p>
             </div>
             
-            <div class="flex gap-4 p-3 rounded-lg border" :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-200 shadow-sm'">
+            <div class="flex gap-4 p-3 rounded-lg border shadow-sm bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]">
               <div class="flex items-center gap-2">
-                <Truck class="w-5 h-5 text-gray-400" />
+                <Truck class="w-5 h-5 text-gray-400 dark:text-[#82A1B1]" />
                 <div class="text-sm">
-                  <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Vehículo</p>
-                  <p class="font-medium mt-0.5" :class="darkMode ? 'text-gray-200' : 'text-gray-700'">{{ rutaSeleccionada?.matriculaVehiculo }}</p>
+                  <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-[#82A1B1]">Vehículo</p>
+                  <p class="font-medium mt-0.5 text-gray-700 dark:text-gray-200">{{ rutaSeleccionada?.matriculaVehiculo }}</p>
                 </div>
               </div>
-              <div class="w-px bg-gray-200 mx-2" :class="darkMode ? 'bg-gray-700' : ''"></div>
+              <div class="w-px mx-2 bg-gray-200 dark:bg-[#374B54]"></div>
               <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded bg-gray-100 flex items-center justify-center text-gray-500 text-xs font-bold shrink-0"
-                     :class="darkMode ? 'bg-gray-800 text-gray-400' : ''">
+                <div class="w-8 h-8 rounded flex items-center justify-center text-xs font-bold shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1]">
                   {{ rutaSeleccionada?.nombreConductor ? rutaSeleccionada.nombreConductor.substring(0,2).toUpperCase() : 'ND' }}
                 </div>
                 <div class="text-sm max-w-[120px] truncate">
-                  <p class="text-[10px] uppercase text-gray-400 font-bold tracking-wider">Conductor</p>
-                  <p class="font-medium mt-0.5 truncate" :class="darkMode ? 'text-gray-200' : 'text-gray-700'">{{ rutaSeleccionada?.nombreConductor || 'Sin Asignar' }}</p>
+                  <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400 dark:text-[#82A1B1]">Conductor</p>
+                  <p class="font-medium mt-0.5 truncate text-gray-700 dark:text-gray-200">{{ rutaSeleccionada?.nombreConductor || 'Sin Asignar' }}</p>
                 </div>
               </div>
             </div>
@@ -785,73 +762,66 @@ watch(() => props.darkMode, (isDark) => {
                    <Sparkles v-else class="w-4 h-4"/>
                    <span class="text-sm">Optimizar Ruta con IA</span>
                  </button>
-                 <button @click="recargarUbicacion" :disabled="recargandoUbicacion" class="p-2 border rounded-md hover:bg-green-50 hover:text-green-600 transition-colors disabled:opacity-50" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-green-600' : 'border-gray-200 text-gray-500'" title="Actualizar Ubicación">
+                 <button @click="recargarUbicacion" :disabled="recargandoUbicacion" class="p-2 border rounded-md transition-colors disabled:opacity-50 border-gray-200 dark:border-[#374B54] text-gray-500 dark:text-[#82A1B1] hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-600 dark:hover:text-green-400" title="Actualizar Ubicación">
                    <RefreshCw class="w-4 h-4" :class="{'animate-spin': recargandoUbicacion}"/>
                  </button>
-                 <button @click="abrirModalEditarRuta(rutaSeleccionada!)" class="p-2 border rounded-md hover:bg-blue-50 hover:text-blue-600 transition-colors" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-blue-600' : 'border-gray-200 text-gray-500'" title="Editar Ruta">
+                 <button @click="abrirModalEditarRuta(rutaSeleccionada!)" class="p-2 border rounded-md transition-colors border-gray-200 dark:border-[#374B54] text-gray-500 dark:text-[#82A1B1] hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400" title="Editar Ruta">
                    <Edit class="w-4 h-4"/>
                  </button>
-                 <button @click="confirmarEliminarRuta(rutaSeleccionada!.id)" class="p-2 border rounded-md hover:bg-red-50 hover:text-red-600 transition-colors" :class="darkMode ? 'border-gray-700 text-gray-400 hover:border-red-600' : 'border-gray-200 text-gray-500'" title="Eliminar Ruta">
+                 <button @click="confirmarEliminarRuta(rutaSeleccionada!.id)" class="p-2 border rounded-md transition-colors border-gray-200 dark:border-[#374B54] text-gray-500 dark:text-[#82A1B1] hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400" title="Eliminar Ruta">
                    <Trash2 class="w-4 h-4"/>
                  </button>
               </div>
               
-              <!-- Ultima actualizacion texto -->
-              <div v-if="ultimaUbicacion && obtenerFechaUbicacion(ultimaUbicacion)" class="text-xs flex items-center gap-1.5 mt-1" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+              <div v-if="ultimaUbicacion && obtenerFechaUbicacion(ultimaUbicacion)" class="text-xs flex items-center gap-1.5 mt-1 text-gray-500 dark:text-[#82A1B1]">
                 <Navigation class="w-3 h-3 text-blue-500" />
                 <span>Última pos: {{ obtenerFechaUbicacion(ultimaUbicacion)!.toLocaleTimeString() }}</span>
               </div>
             </div>
           </div>
 
-          <!-- Métricas OSRM y Botones Rápidos -->
-          <div class="flex flex-wrap items-center justify-between p-4 border-b text-sm" :class="darkMode ? 'border-gray-700 bg-[#1a2332]' : 'border-gray-100 bg-white'">
-             
-             <!-- Metrics -->
+          <div class="flex flex-wrap items-center justify-between p-4 border-b text-sm border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#16181A]">
              <div class="flex items-center gap-6">
-                 <div class="flex items-center gap-2" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
+                 <div class="flex items-center gap-2 text-[#424242] dark:text-gray-300">
                      <Route class="w-4 h-4 text-[#E67E50]" />
                      <span class="font-medium">Distancia Total:</span>
                      <span v-if="rutaMetrics" class="font-bold">{{ rutaMetrics.distanciaKm }} km</span>
-                     <span v-else class="text-gray-400 italic font-medium">Calculando...</span>
+                     <span v-else class="italic font-medium text-gray-400 dark:text-[#82A1B1]">Calculando...</span>
                  </div>
                  
-                 <div class="flex items-center gap-2" :class="darkMode ? 'text-gray-300' : 'text-[#424242]'">
+                 <div class="flex items-center gap-2 text-[#424242] dark:text-gray-300">
                      <Clock class="w-4 h-4 text-blue-500" />
                      <span class="font-medium">Tiempo de Conducción:</span>
                      <span v-if="rutaMetrics" class="font-bold">{{ Math.floor(rutaMetrics.duracionMin / 60) }}h {{ rutaMetrics.duracionMin % 60 }}min</span>
-                     <span v-else class="text-gray-400 italic font-medium">Calculando...</span>
+                     <span v-else class="italic font-medium text-gray-400 dark:text-[#82A1B1]">Calculando...</span>
                  </div>
              </div>
           </div>
 
-          <!-- Contenedor del Mapa -->
-          <div class="h-[300px] w-full relative shrink-0 bg-[#e5e5e5] leaflet-wrapper">
+          <div class="h-[300px] w-full relative shrink-0 leaflet-wrapper bg-[#e5e5e5] dark:bg-[#16181A]"
+               :class="{ 'dark-mode-map': temaStore.isDark }">
             <div ref="mapContainer" class="w-full h-full absolute inset-0"></div>
           </div>
 
-          <!-- Entregas / Timeline -->
-          <div class="flex-1 overflow-y-auto p-6" :class="darkMode ? 'bg-[#1a2332]' : 'bg-white'">
+          <div class="flex-1 overflow-y-auto p-6 bg-white dark:bg-[#272A30]">
             <div class="flex justify-between items-center mb-4">
-              <h3 class="font-semibold text-lg flex items-center gap-2" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">
+              <h3 class="font-semibold text-lg flex items-center gap-2 text-[#092C4C] dark:text-white">
                 <Route class="w-5 h-5 text-[#E67E50]" />
                 Itinerario de Entregas ({{ rutaSeleccionada?.entregas.length }})
               </h3>
-              <button @click="abrirModalNuevaEntrega" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm bg-blue-50 text-blue-600 hover:bg-blue-100 font-semibold transition-colors" :class="darkMode ? 'bg-blue-900/30 hover:bg-blue-900/50 text-blue-400' : ''">
+              <button @click="abrirModalNuevaEntrega" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/50">
                  <Plus class="w-4 h-4"/> Añadir Parada
               </button>
             </div>
 
-            <div v-if="rutaSeleccionada?.entregas.length === 0" class="text-gray-500 text-center py-4">
+            <div v-if="rutaSeleccionada?.entregas.length === 0" class="text-center py-4 text-gray-500 dark:text-[#82A1B1]">
               Esta ruta no tiene entregas asignadas.
             </div>
             
-            <div v-else class="relative pl-6 border-l-2 ml-4 space-y-6" :class="darkMode ? 'border-gray-700' : 'border-gray-200'">
+            <div v-else class="relative pl-6 border-l-2 ml-4 space-y-6 border-gray-200 dark:border-[#374B54]">
               <div v-for="(entrega, index) in rutaSeleccionada?.entregas.slice().sort((a,b)=>a.ordenParada-b.ordenParada)" :key="entrega.id" class="relative">
-                <!-- Punto en el timeline -->
-                <div class="absolute -left-[35px] w-8 h-8 rounded-full border-[3px] flex items-center justify-center font-bold text-xs"
+                <div class="absolute -left-[35px] w-8 h-8 rounded-full border-[3px] flex items-center justify-center font-bold text-xs bg-white dark:bg-[#272A30]"
                      :class="[
-                       darkMode ? 'bg-[#1a2332]' : 'bg-white',
                        entrega.estado === 'ENTREGADO' ? 'border-green-500 text-green-500' : 
                        entrega.estado === 'FALLIDO' ? 'border-red-500 text-red-500' : 
                        'border-[#E67E50] text-[#E67E50]'
@@ -859,36 +829,34 @@ watch(() => props.darkMode, (isDark) => {
                   {{ index + 1 }}
                 </div>
 
-                <div class="p-4 rounded-xl border transition-colors hover:shadow-sm"
-                     :class="darkMode ? 'bg-gray-800/50 border-gray-700 hover:border-gray-600' : 'bg-gray-50 border-gray-100 hover:border-gray-200'">
+                <div class="p-4 rounded-xl border transition-colors hover:shadow-sm bg-gray-50 dark:bg-[#16181A]/50 border-gray-100 dark:border-[#374B54] hover:border-gray-200 dark:hover:border-gray-500">
                   <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-md" :class="darkMode ? 'text-white' : 'text-[#424242]'">{{ entrega.cliente?.nombreEmpresa || `Cliente #${entrega.clienteId}` }}</h4>
+                    <h4 class="font-bold text-md text-[#424242] dark:text-white">{{ entrega.cliente?.nombreEmpresa || `Cliente #${entrega.clienteId}` }}</h4>
                     <span class="text-xs font-semibold px-2 py-1 rounded"
-                          :class="entrega.estado === 'ENTREGADO' ? (darkMode ? 'bg-green-900/40 text-green-400' : 'bg-green-100 text-green-700') : 
-                                  entrega.estado === 'FALLIDO' ? (darkMode ? 'bg-red-900/40 text-red-400' : 'bg-red-100 text-red-700') : 
-                                  (darkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700')">
+                          :class="entrega.estado === 'ENTREGADO' ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' : 
+                                  entrega.estado === 'FALLIDO' ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400' : 
+                                  'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'">
                       {{ entrega.estado }}
                     </span>
-                    <button @click="confirmarEliminarEntrega(entrega.id)" class="text-gray-400 ml-2 hover:text-red-500 p-1" title="Eliminar Parada">
+                    <button @click="confirmarEliminarEntrega(entrega.id)" class="ml-2 p-1 text-gray-400 dark:text-[#82A1B1] hover:text-red-500 dark:hover:text-red-500" title="Eliminar Parada">
                       <Trash2 class="w-3.5 h-3.5"/>
                     </button>
                   </div>
                   
                   <div class="flex items-start gap-4 mb-3">
                     <div class="flex items-start gap-2 max-w-[60%]">
-                      <MapPin class="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
-                      <span class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-600'">{{ entrega.cliente?.direccion }}</span>
+                      <MapPin class="w-4 h-4 mt-0.5 shrink-0 text-gray-400 dark:text-[#82A1B1]" />
+                      <span class="text-sm text-gray-600 dark:text-gray-400">{{ entrega.cliente?.direccion }}</span>
                     </div>
                   </div>
 
-                  <!-- Optional Action/Footer -->
-                  <div v-if="entrega.horaEntregaReal || entrega.codigoQr" class="text-xs pt-3 border-t flex justify-between items-center" :class="darkMode ? 'border-gray-700 text-gray-500' : 'border-gray-200 text-gray-500'">
+                  <div v-if="entrega.horaEntregaReal || entrega.codigoQr" class="text-xs pt-3 border-t flex justify-between items-center border-gray-200 dark:border-[#374B54] text-gray-500 dark:text-[#82A1B1]">
                     <span v-if="entrega.horaEntregaReal" class="flex gap-1.5 items-center">
                       <Check class="w-3.5 h-3.5 outline outline-1 outline-green-500 outline-offset-1 rounded-full text-green-500 bg-transparent" />
                       Realizada: {{ new Date(entrega.horaEntregaReal).toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}) }}
                     </span>
                     <span v-else></span>
-                    <span v-if="entrega.codigoQr" class="font-mono bg-gray-100 px-1.5 py-0.5 rounded" :class="darkMode ? 'bg-gray-700 text-gray-300' : ''">QR: {{ entrega.codigoQr.substring(0,8) }}...</span>
+                    <span v-if="entrega.codigoQr" class="font-mono px-1.5 py-0.5 rounded bg-gray-100 dark:bg-[#272A30] text-[#424242] dark:text-gray-300">QR: {{ entrega.codigoQr.substring(0,8) }}...</span>
                   </div>
                 </div>
               </div>
@@ -900,35 +868,34 @@ watch(() => props.darkMode, (isDark) => {
     </div>
   </div>
 
-  <!-- MODAL RUTA -->
   <div v-if="mostrarModalRuta" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-    <div class="rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" :class="darkMode ? 'bg-[#1a2332]' : 'bg-white shadow-xl'">
-      <div class="p-6 border-b flex justify-between items-center" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
-        <h3 class="text-xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">{{ editandoRutaId ? 'Editar Ruta #' + editandoRutaId : 'Nueva Ruta' }}</h3>
-        <button @click="mostrarModalRuta = false" class="text-gray-400 hover:text-gray-600"><X class="w-5 h-5"/></button>
+    <div class="rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl bg-white dark:bg-[#272A30]">
+      <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
+        <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">{{ editandoRutaId ? 'Editar Ruta #' + editandoRutaId : 'Nueva Ruta' }}</h3>
+        <button @click="mostrarModalRuta = false" class="text-gray-400 dark:text-[#82A1B1] hover:text-gray-600 dark:hover:text-white"><X class="w-5 h-5"/></button>
       </div>
       <div class="p-6 space-y-4">
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Fecha Planificada *</label>
-          <input type="date" v-model="rutaFormData.fecha" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" required>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Fecha Planificada *</label>
+          <input type="date" v-model="rutaFormData.fecha" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" required>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Conductor Asignado *</label>
-          <select v-model="rutaFormData.conductorId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" required>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Conductor Asignado *</label>
+          <select v-model="rutaFormData.conductorId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" required>
              <option value="0" disabled>Selecciona un conductor...</option>
              <option v-for="user in conductoresDisponibles" :key="user.id" :value="user.id">{{ user.nombre }}</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Vehículo Asignado *</label>
-          <select v-model="rutaFormData.vehiculoId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" required>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Vehículo Asignado *</label>
+          <select v-model="rutaFormData.vehiculoId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" required>
              <option value="0" disabled>Selecciona un vehículo...</option>
              <option v-for="veh in vehiculosDisponibles" :key="veh.id" :value="veh.id">{{ veh.matricula }} - {{ veh.marcaModelo }}</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Estado Opcional</label>
-          <select v-model="rutaFormData.estado" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'">
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Estado Opcional</label>
+          <select v-model="rutaFormData.estado" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
              <option value="PENDIENTE">Planificada (Pendiente)</option>
              <option value="EN_CURSO">En Progreso</option>
              <option value="COMPLETADA">Completada</option>
@@ -936,60 +903,57 @@ watch(() => props.darkMode, (isDark) => {
           </select>
         </div>
       </div>
-      <div class="p-6 border-t flex justify-end gap-3 bg-gray-50" :class="darkMode ? 'bg-[#1e293b] border-gray-700' : 'border-gray-100'">
-        <button @click="mostrarModalRuta = false" class="px-4 py-2 border rounded-lg font-medium transition-colors" :class="darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-gray-600 hover:bg-gray-100'">Cancelar</button>
+      <div class="p-6 border-t flex justify-end gap-3 border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+        <button @click="mostrarModalRuta = false" class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
         <button @click="guardarRuta" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">Guardar Ruta</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL ENTREGA -->
   <div v-if="mostrarModalEntrega" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-    <div class="rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" :class="darkMode ? 'bg-[#1a2332]' : 'bg-white shadow-xl'">
-      <div class="p-6 border-b flex justify-between items-center" :class="darkMode ? 'border-gray-700' : 'border-gray-100'">
-        <h3 class="text-xl font-bold" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Añadir Parada a #RT-{{rutaSeleccionada?.id}}</h3>
-        <button @click="mostrarModalEntrega = false" class="text-gray-400 hover:text-gray-600"><X class="w-5 h-5"/></button>
+    <div class="rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl bg-white dark:bg-[#272A30]">
+      <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
+        <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">Añadir Parada a #RT-{{rutaSeleccionada?.id}}</h3>
+        <button @click="mostrarModalEntrega = false" class="text-gray-400 dark:text-[#82A1B1] hover:text-gray-600 dark:hover:text-white"><X class="w-5 h-5"/></button>
       </div>
       <div class="p-6 space-y-4">
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Cliente *</label>
-          <select v-model="entregaFormData.clienteId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" required>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Cliente *</label>
+          <select v-model="entregaFormData.clienteId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" required>
              <option value="0" disabled>Selecciona el cliente a entregar...</option>
              <option v-for="cli in clientesDisponibles" :key="cli.id" :value="cli.id">{{ cli.nombreEmpresa }} ({{ cli.direccion }})</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Número de Parada en la Ruta (Orden)</label>
-          <input type="number" v-model="entregaFormData.ordenParada" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" required>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Número de Parada en la Ruta (Orden)</label>
+          <input type="number" v-model="entregaFormData.ordenParada" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" required>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-1" :class="darkMode ? 'text-gray-300' : 'text-gray-700'">Notas (Opcional)</label>
-          <textarea v-model="entregaFormData.notas" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50]" :class="darkMode ? 'bg-gray-800 border-gray-700 text-white' : 'bg-gray-50 border-gray-200 text-[#424242]'" rows="3" placeholder="Instrucciones para la entrega..."></textarea>
+          <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Notas (Opcional)</label>
+          <textarea v-model="entregaFormData.notas" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" rows="3" placeholder="Instrucciones para la entrega..."></textarea>
         </div>
       </div>
-      <div class="p-6 border-t flex justify-end gap-3 bg-gray-50" :class="darkMode ? 'bg-[#1e293b] border-gray-700' : 'border-gray-100'">
-        <button @click="mostrarModalEntrega = false" class="px-4 py-2 border rounded-lg font-medium transition-colors" :class="darkMode ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-200 text-gray-600 hover:bg-gray-100'">Cancelar</button>
+      <div class="p-6 border-t flex justify-end gap-3 border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+        <button @click="mostrarModalEntrega = false" class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
         <button @click="guardarEntrega" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">Añadir Parada</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL ELIMINAR RUTA -->
   <Teleport to="body">
     <Transition name="fade">
       <div v-if="rutaEliminandoId !== null"
         class="fixed inset-0 z-50 flex items-center justify-center p-4"
         style="background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);"
         @click.self="rutaEliminandoId = null">
-        <div class="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
-          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <div class="w-full max-w-sm rounded-2xl shadow-2xl border p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
           <div class="flex flex-col items-center text-center gap-4">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-red-50">
-              <Trash2 class="w-7 h-7 text-red-500" />
+            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-red-50 dark:bg-red-900/20">
+              <Trash2 class="w-7 h-7 text-red-500 dark:text-red-400" />
             </div>
             <div>
-              <h3 class="text-lg font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Eliminar ruta</h3>
-              <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+              <h3 class="text-lg font-bold mb-1 text-[#092C4C] dark:text-white">Eliminar ruta</h3>
+              <p class="text-sm text-gray-500 dark:text-[#82A1B1]">
                 ¿Seguro que quieres eliminar la ruta #RT-{{ rutaEliminandoId }} y todas sus paradas asociadas? Esta acción no se puede deshacer.
               </p>
             </div>
@@ -1002,8 +966,7 @@ watch(() => props.darkMode, (isDark) => {
               </button>
               <button
                 @click="rutaEliminandoId = null"
-                class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-gray-100 dark:bg-[#16181A] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-200 dark:hover:bg-[#374B54]">
                 Cancelar
               </button>
             </div>
@@ -1013,22 +976,20 @@ watch(() => props.darkMode, (isDark) => {
     </Transition>
   </Teleport>
 
-  <!-- MODAL ELIMINAR ENTREGA -->
   <Teleport to="body">
     <Transition name="fade">
       <div v-if="entregaEliminandoId !== null"
         class="fixed inset-0 z-50 flex items-center justify-center p-4"
         style="background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);"
         @click.self="entregaEliminandoId = null">
-        <div class="w-full max-w-sm rounded-2xl shadow-2xl border p-6"
-          :class="darkMode ? 'bg-[#1a2332] border-gray-700' : 'bg-white border-gray-100'">
+        <div class="w-full max-w-sm rounded-2xl shadow-2xl border p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
           <div class="flex flex-col items-center text-center gap-4">
-            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-orange-50">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center bg-orange-50 dark:bg-orange-900/20">
               <AlertCircle class="w-7 h-7 text-[#E67E50]" />
             </div>
             <div>
-              <h3 class="text-lg font-bold mb-1" :class="darkMode ? 'text-white' : 'text-[#092C4C]'">Quitar parada</h3>
-              <p class="text-sm" :class="darkMode ? 'text-gray-400' : 'text-gray-500'">
+              <h3 class="text-lg font-bold mb-1 text-[#092C4C] dark:text-white">Quitar parada</h3>
+              <p class="text-sm text-gray-500 dark:text-[#82A1B1]">
                 ¿Seguro que quieres eliminar esta parada de la ruta?
               </p>
             </div>
@@ -1041,8 +1002,7 @@ watch(() => props.darkMode, (isDark) => {
               </button>
               <button
                 @click="entregaEliminandoId = null"
-                class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors"
-                :class="darkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+                class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-colors bg-gray-100 dark:bg-[#16181A] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-200 dark:hover:bg-[#374B54]">
                 Cancelar
               </button>
             </div>
@@ -1055,6 +1015,14 @@ watch(() => props.darkMode, (isDark) => {
 
 <style>
 /* Leaflet customizations to match theme - global styling for stability */
+.dark-mode-map .leaflet-tile-container {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-mode-map .leaflet-control-zoom,
+.dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
