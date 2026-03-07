@@ -159,13 +159,7 @@ const ipRules = [
               </ul>
             </div>
 
-            <div class="mt-6">
-              <template v-for="(block, bIdx) in []" :key="bIdx">
-                 <ul v-if="block.content && block.content[1] && block.content[1].type === 'list'" class="space-y-2 list-disc pl-5 mt-2 [&_strong]:text-[#092C4C] dark:[&_strong]:text-white [&_strong]:transition-colors [&_strong]:font-bold">
-                  <li v-for="(item, iIdx) in block.content[1].items" :key="iIdx" v-html="item"></li>
-                 </ul>
-              </template>
-            </div>
+
 
           </div>
         </div>

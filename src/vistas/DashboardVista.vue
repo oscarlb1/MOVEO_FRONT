@@ -188,12 +188,12 @@ onUnmounted(() => {
       <div class="flex-1 overflow-auto p-4 sm:px-5 sm:py-6">
         <div class="w-full">
           
-          <GeneralVista v-if="seccionActiva === 'general'" :darkMode="darkMode" @actualizar-no-leidas="handleActualizarNoLeidas" />
-          <RutasVista v-else-if="seccionActiva === 'rutas'" :darkMode="darkMode" />
-          <VehiculosVista v-else-if="seccionActiva === 'vehiculos' && esAdmin" :darkMode="darkMode" />
-          <UsuariosVista v-else-if="seccionActiva === 'usuarios' && esAdmin" :darkMode="darkMode" />
-          <EntregasVista v-else-if="seccionActiva === 'entregas'" :darkMode="darkMode" />
-          <ClientesVista v-else-if="seccionActiva === 'clientes' && esAdmin" :darkMode="darkMode" />
+          <GeneralVista v-if="seccionActiva === 'general'" @actualizar-no-leidas="handleActualizarNoLeidas" />
+          <RutasVista v-else-if="seccionActiva === 'rutas'" />
+          <VehiculosVista v-else-if="seccionActiva === 'vehiculos' && esAdmin" />
+          <UsuariosVista v-else-if="seccionActiva === 'usuarios' && esAdmin" />
+          <EntregasVista v-else-if="seccionActiva === 'entregas'" />
+          <ClientesVista v-else-if="seccionActiva === 'clientes' && esAdmin" />
           
         </div>
       </div>

@@ -23,7 +23,6 @@ import type { UbicacionDto } from '@/servicios/ubicacionServicio';
 import { toast } from 'vue-sonner';
 
 const props = defineProps<{
-  darkMode: boolean
 }>();
 
 import { useTemaStore } from '@/tiendas/tema';
@@ -237,7 +236,7 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
     // Crear marcador numerado (con DivIcon)
     const icon = L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background-color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : '#E67E50'}; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid ${props.darkMode ? '#16181A' : 'white'}; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 1000;">${index + 1}</div>`,
+      html: `<div style="background-color: ${entrega.estado === 'ENTREGADO' ? '#22c55e' : '#E67E50'}; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid ${temaStore.isDark ? '#16181A' : 'white'}; box-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 1000;">${index + 1}</div>`,
       iconSize: [30, 30],
       iconAnchor: [15, 15]
     });
@@ -245,10 +244,10 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
     const marker = L.marker([lat, lng], { icon }).addTo(markersLayer!);
     
     // Ajuste de colores del popup según el modo
-    const popupBg = props.darkMode ? '#272A30' : '#ffffff';
-    const popupTextMain = props.darkMode ? '#ffffff' : '#000000';
-    const popupTextSub = props.darkMode ? '#82A1B1' : '#666666';
-    const popupBorder = props.darkMode ? '#374B54' : '#eeeeee';
+    const popupBg = temaStore.isDark ? '#272A30' : '#ffffff';
+    const popupTextMain = temaStore.isDark ? '#ffffff' : '#000000';
+    const popupTextSub = temaStore.isDark ? '#82A1B1' : '#666666';
+    const popupBorder = temaStore.isDark ? '#374B54' : '#eeeeee';
 
     marker.bindPopup(`
       <div style="font-family: inherit; min-width: 150px; background-color: ${popupBg}; color: ${popupTextMain};">
@@ -319,7 +318,7 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
   if (ultimaUbicacion.value) {
     const truckIcon = L.divIcon({
       className: 'custom-div-icon',
-      html: `<div style="background-color: #3b82f6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid ${props.darkMode ? '#16181A' : 'white'}; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 2000;">
+      html: `<div style="background-color: #3b82f6; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid ${temaStore.isDark ? '#16181A' : 'white'}; box-shadow: 0 4px 6px rgba(0,0,0,0.3); z-index: 2000;">
                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
              </div>`,
       iconSize: [36, 36],
@@ -331,9 +330,9 @@ async function dibujarRutaMapa(entregas: EntregaDto[]) {
     
     L.marker([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud], { icon: truckIcon, zIndexOffset: 1000 }).addTo(map!)
       .bindPopup(`
-        <div style="font-family: inherit; min-width: 150px; background-color: ${props.darkMode ? '#272A30' : '#ffffff'}; color: ${props.darkMode ? '#ffffff' : '#000000'};">
+        <div style="font-family: inherit; min-width: 150px; background-color: ${temaStore.isDark ? '#272A30' : '#ffffff'}; color: ${temaStore.isDark ? '#ffffff' : '#000000'};">
           <strong style="font-size: 14px; display: block; margin-bottom: 4px; color: #3b82f6;">Última Ubicación</strong>
-          <p style="margin: 0; font-size: 12px; color: ${props.darkMode ? '#82A1B1' : '#666666'};">Registrada: ${fechaFormat}</p>
+          <p style="margin: 0; font-size: 12px; color: ${temaStore.isDark ? '#82A1B1' : '#666666'};">Registrada: ${fechaFormat}</p>
         </div>
       `);
     bounds.extend([ultimaUbicacion.value.latitud, ultimaUbicacion.value.longitud]);

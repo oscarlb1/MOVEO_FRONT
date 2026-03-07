@@ -15,7 +15,6 @@ import type { RutaDto, ClienteDto } from '@/modelos/Ruta';
 import { toast } from 'vue-sonner';
 
 const props = defineProps<{
-  darkMode: boolean
 }>();
 
 // --- ESTADO PRINCIPAL ---
