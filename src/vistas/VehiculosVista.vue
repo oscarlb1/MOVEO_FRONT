@@ -308,7 +308,7 @@ onMounted(async () => {
     </template>
 
     <template #table>
-      <table class="w-full text-sm">
+      <table class="w-full text-sm min-w-[1000px]">
         <thead>
           <tr class="border-b text-xs font-semibold uppercase tracking-wide bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54] text-[#9e9e9e] dark:text-[#82A1B1]">
             <th class="py-4 px-6 text-left">Matrícula</th>

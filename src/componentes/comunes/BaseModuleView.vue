@@ -111,10 +111,10 @@ const themeClasses = computed(() => {
       <slot name="custom-kpis" v-else></slot>
     </div>
 
-    <div class="flex flex-col lg:flex-row gap-6 relative z-10" 
+    <div class="flex flex-col lg:flex-row gap-6 relative z-10 w-full overflow-hidden" 
          :class="[ { 'items-start': $slots.side }, props.sidePosition === 'left' ? 'lg:flex-row-reverse' : '' ]">
       <!-- Main Card -->
-      <div class="flex-1 min-w-0 border rounded-2xl flex flex-col overflow-hidden bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] shadow-sm transition-colors duration-300">
+      <div class="flex-1 min-w-0 w-full overflow-hidden border rounded-2xl flex flex-col bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] shadow-sm transition-colors duration-300">
         
         <!-- Actions Bar -->
         <div class="p-5 border-b space-y-4 border-gray-100 dark:border-[#374B54]"
@@ -132,7 +132,7 @@ const themeClasses = computed(() => {
             <div class="flex items-center gap-2 self-end sm:self-auto">
               <slot name="header-actions"></slot>
               <button v-if="props.showNewButton" 
-                      @click="emit('new-click')"
+                      @click="$emit('new-click')"
                       class="text-white px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 shadow-sm active:scale-95"
                       :class="themeClasses.bg">
                  <Plus class="w-4 h-4"/> <span class="hidden xs:inline">{{ props.newButtonLabel || 'Nuevo' }}</span><span class="xs:hidden">Nuevo</span>
@@ -144,7 +144,7 @@ const themeClasses = computed(() => {
              <div class="relative col-span-1" :class="[ $slots.filters ? 'md:col-span-1' : 'md:col-span-2' ]">
                 <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                 <input :value="props.searchQuery" 
-                       @input="emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
+                       @input="$emit('update:searchQuery', ($event.target as HTMLInputElement).value)"
                        type="text" 
                        :placeholder="props.searchPlaceholder || 'Buscar...'"
                        class="w-full pl-9 pr-4 py-2.5 text-sm border rounded-xl transition-all bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-0 focus:outline-none"
@@ -156,15 +156,19 @@ const themeClasses = computed(() => {
         </div>
 
         <!-- Content Area -->
-        <div class="p-2 overflow-x-auto custom-scrollbar" :class="{ 'p-4': props.viewMode === 'cards' }">
+        <div class="relative" :class="props.viewMode === 'cards' ? 'p-6' : ''">
+          <!-- Loading State -->
           <div v-if="props.cargando" class="py-24 flex flex-col items-center justify-center">
             <Loader2 class="w-12 h-12 animate-spin mb-4" :class="themeClasses.accent" />
             <p class="text-gray-500 dark:text-[#82A1B1] font-medium tracking-wide">Sincronizando datos...</p>
           </div>
-          
+
+          <!-- Content -->
           <template v-else>
-            <!-- Tabla con scroll horizontal forzado e interno -->
-            <div class="w-full max-w-full overflow-x-auto overflow-y-hidden custom-scrollbar border rounded-xl border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#16181A]/30 shadow-sm transition-all hover:border-gray-200 dark:hover:border-gray-500">
+            <slot v-if="props.viewMode === 'cards'" name="cards"></slot>
+            
+            <!-- Tabla con scroll horizontal forzado e moderno -->
+            <div v-else class="w-full max-w-full overflow-x-auto custom-scrollbar bg-white dark:bg-[#16181A]/30 transition-all border-t border-gray-100 dark:border-[#374B54]">
               <slot name="table"></slot>
             </div>
           </template>

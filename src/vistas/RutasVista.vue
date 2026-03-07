@@ -633,7 +633,7 @@ function exportarListaExcel() {
 
     <div class="grid lg:grid-cols-3 gap-6">
       
-      <div class="lg:col-span-1 border rounded-2xl flex flex-col h-[700px] overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-1 border rounded-2xl flex flex-col lg:h-[700px] h-auto overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
         <div class="p-4 border-b space-y-3 border-gray-100 dark:border-[#374B54]">
           <div class="flex gap-2">
             <div class="relative flex-1">
@@ -707,7 +707,7 @@ function exportarListaExcel() {
         </div>
       </div>
 
-      <div class="lg:col-span-2 flex flex-col h-[700px] border rounded-2xl overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-2 flex flex-col lg:h-[700px] h-auto border rounded-2xl overflow-hidden shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
         
         <div v-if="!rutaSeleccionada && !cargandoDetalle" class="flex flex-col items-center justify-center h-full text-center p-8">
           <Map class="w-16 h-16 text-gray-300 dark:opacity-20 mb-4" />

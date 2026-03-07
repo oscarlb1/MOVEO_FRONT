@@ -282,62 +282,64 @@ async function obtenerCoordenadas(direccion: string) {
     </template>
 
     <template #modals>
-      <div v-if="modalAbierto" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-        <div class="w-full max-w-lg rounded-2xl shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-transparent dark:border-[#374B54] transition-colors duration-300">
-          <div class="p-6 border-b border-gray-100 dark:border-[#374B54]">
-            <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">
-              {{ clienteEditando ? 'Editar Cliente' : 'Nuevo Cliente' }}
-            </h3>
-            <p class="text-sm mt-1 text-gray-500 dark:text-[#82A1B1]">
-              Completa los datos de la empresa cliente.
-            </p>
-          </div>
-
-          <div class="p-6 space-y-4">
-            <div v-if="feedback" class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-in slide-in-from-top-2"
-              :class="feedback === 'ok' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'">
-              <CheckCircle2 v-if="feedback === 'ok'" class="w-5 h-5" />
-              <AlertCircle v-else class="w-5 h-5" />
-              {{ feedbackMensaje }}
+      <Teleport to="body">
+        <div v-if="modalAbierto" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div class="w-full max-w-lg rounded-2xl shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-transparent dark:border-[#374B54] transition-colors duration-300">
+            <div class="p-6 border-b border-gray-100 dark:border-[#374B54]">
+              <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">
+                {{ clienteEditando ? 'Editar Cliente' : 'Nuevo Cliente' }}
+              </h3>
+              <p class="text-sm mt-1 text-gray-500 dark:text-[#82A1B1]">
+                Completa los datos de la empresa cliente.
+              </p>
             </div>
 
-            <div class="space-y-4" :class="{'opacity-50 pointer-events-none': guardando}">
-              <div class="space-y-1.5">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de Empresa *</label>
-                <input v-model="formulario.nombreEmpresa" type="text"
-                  class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
-                  placeholder="Ej. Distribuciones Sur S.L." />
+            <div class="p-6 space-y-4">
+              <div v-if="feedback" class="p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-in slide-in-from-top-2"
+                :class="feedback === 'ok' ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'">
+                <CheckCircle2 v-if="feedback === 'ok'" class="w-5 h-5" />
+                <AlertCircle v-else class="w-5 h-5" />
+                {{ feedbackMensaje }}
               </div>
 
-              <div class="space-y-1.5">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono de Contacto</label>
-                <input v-model="formulario.telefono" type="text"
-                  class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
-                  placeholder="Ej. +34 600..." />
-              </div>
+              <div class="space-y-4" :class="{'opacity-50 pointer-events-none': guardando}">
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Nombre de Empresa *</label>
+                  <input v-model="formulario.nombreEmpresa" type="text"
+                    class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
+                    placeholder="Ej. Distribuciones Sur S.L." />
+                </div>
 
-              <div class="space-y-1.5">
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dirección Completa *</label>
-                <input v-model="formulario.direccion" type="text"
-                  class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
-                  placeholder="Ej. Calle Principal 123, Madrid" />
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Teléfono de Contacto</label>
+                  <input v-model="formulario.telefono" type="text"
+                    class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
+                    placeholder="Ej. +34 600..." />
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Dirección Completa *</label>
+                  <input v-model="formulario.direccion" type="text"
+                    class="w-full px-4 py-2.5 text-sm rounded-xl border focus:outline-none focus:ring-2 focus:ring-[#E67E50]/20 focus:border-[#E67E50] dark:focus:border-[#E67E50] transition-all bg-transparent border-gray-200 dark:border-[#374B54] text-gray-900 dark:text-white placeholder-gray-500"
+                    placeholder="Ej. Calle Principal 123, Madrid" />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="p-6 border-t flex items-center justify-end gap-3 border-gray-50 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <button @click="modalAbierto = false" :disabled="guardando"
-              class="px-5 py-2.5 rounded-xl font-medium text-sm transition-colors text-gray-600 dark:text-[#82A1B1] hover:bg-gray-200 dark:hover:bg-[#374B54]">
-              Cancelar
-            </button>
-            <button @click="guardarCliente" :disabled="guardando"
-              class="px-5 py-2.5 bg-[#E67E50] hover:bg-[#d4603a] text-white rounded-xl font-medium text-sm transition-colors shadow-sm flex items-center gap-2 disabled:opacity-70">
-              <RefreshCw v-if="guardando" class="w-4 h-4 animate-spin" />
-              {{ guardando ? 'Guardando...' : 'Guardar Cliente' }}
-            </button>
+            <div class="p-6 border-t flex items-center justify-end gap-3 border-gray-50 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+              <button @click="modalAbierto = false" :disabled="guardando"
+                class="px-5 py-2.5 rounded-xl font-medium text-sm transition-colors text-gray-600 dark:text-[#82A1B1] hover:bg-gray-200 dark:hover:bg-[#374B54]">
+                Cancelar
+              </button>
+              <button @click="guardarCliente" :disabled="guardando"
+                class="px-5 py-2.5 bg-[#E67E50] hover:bg-[#d4603a] text-white rounded-xl font-medium text-sm transition-colors shadow-sm flex items-center gap-2 disabled:opacity-70">
+                <RefreshCw v-if="guardando" class="w-4 h-4 animate-spin" />
+                {{ guardando ? 'Guardando...' : 'Guardar Cliente' }}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </Teleport>
     </template>
   </BaseModuleView>
 </template>
