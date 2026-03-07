@@ -39,6 +39,27 @@ const imagenUsuario = computed(() => sesionStore.usuario?.imagenUrl || null)
 const conteoNoLeidas = ref(0)
 let intervaloActualizacion: ReturnType<typeof setInterval>
 
+// Estado del Cargador
+const mostrarCargador = ref(true)
+const progresoCarga = ref(0)
+
+function iniciarSimulacionCarga() {
+  mostrarCargador.value = true
+  progresoCarga.value = 0
+  
+  const step = 100 / (1800 / 30) // 100% in ~1.8 seconds with 30ms intervals
+  const interval = setInterval(() => {
+    progresoCarga.value += step
+    if (progresoCarga.value >= 100) {
+      progresoCarga.value = 100
+      clearInterval(interval)
+      setTimeout(() => {
+        mostrarCargador.value = false
+      }, 200) // Pequeño retraso al 100% antes de ocultar
+    }
+  }, 30)
+}
+
 const itemsMenuBase = [
   { id: 'general', label: 'Vista General', icon: LayoutDashboard },
   { id: 'rutas', label: 'Rutas', icon: Map },
@@ -56,7 +77,12 @@ const itemsMenu = computed(() => {
 })
 
 function irASeccion(id: string) {
-  seccionActiva.value = id
+  if (seccionActiva.value !== id) {
+    iniciarSimulacionCarga()
+    setTimeout(() => {
+      seccionActiva.value = id
+    }, 400) // Cambiar sección oculto detrás de la animación
+  }
   sidebarAbierto.value = false
 }
 
@@ -77,6 +103,7 @@ function handleActualizarNoLeidas(conteo: number) {
 
 onMounted(() => {
   temaStore.aplicarTema()
+  iniciarSimulacionCarga()
   dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
   intervaloActualizacion = setInterval(() => {
     dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
@@ -89,7 +116,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white">
+  <div class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white relative">
+
+    <!-- Global Loading Overlay -->
+    <Transition name="loader-fade">
+      <div v-show="mostrarCargador" class="fixed inset-0 z-[100] bg-[#FAFAFA] dark:bg-[#16181A] flex flex-col items-center justify-center">
+        <!-- Logo Text -->
+        <h1 class="text-3xl font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white mb-8 animate-pulse">
+          MOVE<span class="text-[#E67E50]">O</span>
+        </h1>
+        
+        <!-- Truck Animation -->
+        <div class="relative w-48 h-32 mb-8 animate-pulse">
+          <img src="@/assets/camion-moveo.png" alt="Loading" class="w-full h-full object-contain" />
+        </div>
+
+        <!-- Progress Bar Background -->
+        <div class="w-64 h-2 bg-gray-200 dark:bg-[#374B54] rounded-full overflow-hidden shrink-0">
+          <!-- Progress Indicator -->
+          <div class="h-full bg-gradient-to-r from-[#E67E50] to-[#f59e0b] transition-all duration-75 ease-linear rounded-full"
+               :style="{ width: `${progresoCarga}%` }">
+          </div>
+        </div>
+        
+        <!-- Progress Text -->
+        <p class="mt-3 text-sm font-semibold text-[#757575] dark:text-[#82A1B1]">
+          Cargando... {{ Math.round(progresoCarga) }}%
+        </p>
+      </div>
+    </Transition>
 
     <Transition name="fade">
       <div v-if="sidebarAbierto"
@@ -103,9 +158,7 @@ onUnmounted(() => {
 
       <div class="h-20 flex items-center justify-between px-5 border-b border-gray-100 dark:border-[#374B54]">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E67E50] to-[#E67E50]/80 flex items-center justify-center shadow-lg shadow-[#E67E50]/20">
-            <Activity class="w-5.5 h-5.5 text-white" />
-          </div>
+          <img src="@/assets/logo-moveo.png" alt="Moveo Logo" class="h-9 w-auto object-contain drop-shadow-sm" />
           <div>
             <h1 class="text-lg font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white">
               MOVE<span class="text-[#E67E50]">O</span>
@@ -188,9 +241,6 @@ onUnmounted(() => {
 
           <!-- Quick Settings Toggle (Desktop/Tablet) -->
           <div class="hidden sm:flex items-center gap-2">
-             <button @click="alternarTema" class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
-               <component :is="darkMode ? Sun : Moon" class="w-5 h-5" />
-             </button>
              <button @click="router.push('/configuracion')" class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
                <Settings class="w-5 h-5" />
              </button>
@@ -231,6 +281,13 @@ onUnmounted(() => {
 .page-fade-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+.loader-fade-enter-active, .loader-fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.loader-fade-enter-from, .loader-fade-leave-to {
+  opacity: 0;
 }
 
 /* Custom scrollbar for webkit */

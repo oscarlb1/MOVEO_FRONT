@@ -53,9 +53,7 @@ const cerrarSesion = async () => {
           to="/"
           class="flex items-center gap-3 cursor-pointer group" 
         >
-          <div class="w-12 h-12 bg-[#E67E50] rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-lg shadow-[#E67E50]/20">
-            <Truck class="w-7 h-7 text-white" />
-          </div>
+          <img src="@/assets/logo-moveo.png" alt="Moveo Logo" class="h-10 w-auto object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-105" />
           <span class="text-2xl font-bold text-[#E67E50]">Moveo</span>
         </router-link>
 
