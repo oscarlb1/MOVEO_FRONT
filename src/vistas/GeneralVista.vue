@@ -465,8 +465,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="flex items-center justify-between">
+  <div class="space-y-6 pb-10">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animacion-entrada">
       <div>
         <p class="text-sm mt-1 text-[#757575] dark:text-[#82A1B1]">
           Resumen de operaciones — {{ new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }) }}
@@ -478,7 +478,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       <template v-if="cargando">
         <div v-for="i in 6" :key="i" class="p-5 rounded-2xl border animate-pulse bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50]">
           <div class="h-4 rounded w-24 mb-4 bg-gray-100 dark:bg-[#374B54]"></div>
@@ -500,8 +500,8 @@ onUnmounted(() => {
       </template>
     </div>
 
-    <div class="grid lg:grid-cols-5 gap-6">
-      <div class="lg:col-span-3 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-3 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 100ms">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Entregas por Día</h2>
@@ -518,7 +518,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 200ms">
         <h2 class="font-bold text-lg mb-4 text-[#092C4C] dark:text-white">Estado de Flota</h2>
         <div v-if="cargando" class="h-[250px] rounded-xl animate-pulse bg-gray-50 dark:bg-[#16181A]"></div>
         <template v-else>
@@ -543,8 +543,8 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 300ms">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="font-bold text-lg mb-1 text-[#092C4C] dark:text-white">Mapa en Tiempo Real</h2>
@@ -565,7 +565,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50]">
+      <div class="p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50] animacion-entrada" style="animation-delay: 400ms">
         <h2 class="font-bold text-lg mb-6 text-[#092C4C] dark:text-white">Actividad por Zona</h2>
         <div v-if="cargando" class="space-y-5">
           <div v-for="i in 5" :key="i" class="h-8 rounded-lg animate-pulse bg-gray-100 dark:bg-[#16181A]"></div>
@@ -592,7 +592,7 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-2 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 450ms">
         <div class="flex items-center justify-between p-6 pb-4">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Entregas Recientes</h2>
           <div class="flex items-center gap-2">
@@ -605,7 +605,7 @@ onUnmounted(() => {
         <div v-if="cargando" class="px-6 pb-6 space-y-3">
           <div v-for="i in 5" :key="i" class="h-12 rounded-lg animate-pulse bg-gray-50 dark:bg-[#16181A]"></div>
         </div>
-        <div v-else class="overflow-x-auto">
+        <div v-else class="max-h-[450px] overflow-y-auto overflow-x-auto custom-scrollbar">
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b text-xs font-semibold uppercase tracking-wide border-gray-100 dark:border-[#374B54] text-[#9e9e9e] dark:text-[#82A1B1]">
@@ -632,7 +632,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 500ms">
         <div class="flex items-center justify-between p-6 pb-4">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Alertas y Notificaciones</h2>
           <div class="flex items-center gap-2">
@@ -659,7 +659,7 @@ onUnmounted(() => {
         <div v-if="cargando" class="px-6 pb-6 space-y-3">
           <div v-for="i in 3" :key="i" class="h-20 rounded-xl animate-pulse bg-gray-50 dark:bg-[#16181A]"></div>
         </div>
-        <div v-else class="px-6 pb-6 space-y-3">
+        <div v-else class="px-6 pb-6 space-y-3 max-h-[450px] overflow-y-auto custom-scrollbar">
           <p v-if="notificacionesRecientes.length === 0" class="text-sm py-8 text-center text-gray-400 dark:text-gray-500">Sin alertas activas</p>
           <div v-for="n in notificacionesRecientes" :key="n.id" class="p-4 rounded-xl border-l-4 transition-all hover:shadow-sm bg-white dark:bg-[#16181A]/50 border-r border-t border-b border-gray-100 dark:border-r-[#374B54] dark:border-t-[#374B54] dark:border-b-[#374B54]" :class="[colorNotificacion(n.titulo).border, n.leido ? 'opacity-60' : '']">
             <div class="flex items-start gap-3">
@@ -679,7 +679,7 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-2 gap-6">
-      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 550ms">
         <h2 class="font-bold text-lg mb-5 text-[#092C4C] dark:text-white">Estado de Flota</h2>
         <div v-if="cargando" class="space-y-4">
           <div v-for="i in 4" :key="i" class="h-8 rounded-lg animate-pulse bg-gray-100 dark:bg-[#16181A]"></div>
@@ -723,7 +723,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 600ms">
         <div class="flex items-center justify-between mb-5">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Top Repartidores</h2>
           <div class="flex items-center gap-1 p-1 rounded-lg bg-gray-100 dark:bg-[#16181A]">
@@ -760,7 +760,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+    <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] animacion-entrada" style="animation-delay: 650ms">
       <div class="flex items-center justify-between mb-5">
         <h2 class="font-bold text-lg flex items-center gap-2 text-[#092C4C] dark:text-white">
           <Wifi class="w-5 h-5 text-green-500" />Repartidores Online
@@ -798,6 +798,22 @@ onUnmounted(() => {
 /* Estilos para el modo oscuro del mapa usando filtros CSS */
 .dark-mode-map .leaflet-tile-container {
     filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+/* Scrollbars sutiles */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.2);
 }
 .dark-mode-map .leaflet-control-zoom,
 .dark-mode-map .leaflet-control-attribution {

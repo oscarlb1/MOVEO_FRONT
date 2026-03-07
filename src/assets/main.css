@@ -46,36 +46,46 @@
 
 .dark {
   /* Fondos y textos base */
-  --background: #16181A; /* Un fondo casi negro para resaltar las tarjetas */
-  --foreground: #FFFFFF; /* Texto principal en blanco */
-  
+  --background: #16181A;
+  /* Un fondo casi negro para resaltar las tarjetas */
+  --foreground: #FFFFFF;
+  /* Texto principal en blanco */
+
   /* Tarjetas y modales (basado en 'Card Título') */
-  --card: #272A30; 
+  --card: #272A30;
   --card-foreground: #FFFFFF;
   --popover: #272A30;
   --popover-foreground: #FFFFFF;
-  
+
   /* Colores de Marca */
-  --primary: #E67E50; /* Naranja Moveo */
+  --primary: #E67E50;
+  /* Naranja Moveo */
   --primary-foreground: #FFFFFF;
-  
-  --secondary: #374B54; /* Azul Moveo */
+
+  --secondary: #374B54;
+  /* Azul Moveo */
   --secondary-foreground: #FFFFFF;
-  
+
   /* Elementos atenuados y bordes */
-  --muted: #272A30; /* Fondo sutil */
-  --muted-foreground: #82A1B1; /* Gris Frío Moveo para textos secundarios */
-  
-  --accent: #374B54; /* Usamos el azul como color de acento/hover */
+  --muted: #272A30;
+  /* Fondo sutil */
+  --muted-foreground: #82A1B1;
+  /* Gris Frío Moveo para textos secundarios */
+
+  --accent: #374B54;
+  /* Usamos el azul como color de acento/hover */
   --accent-foreground: #FFFFFF;
-  
-  --destructive: #d4183d; /* Mantenemos el rojo destructivo que tenías */
+
+  --destructive: #d4183d;
+  /* Mantenemos el rojo destructivo que tenías */
   --destructive-foreground: #ffffff;
-  
-  --border: #374B54; /* Bordes usando el azul corporativo para armonía */
+
+  --border: #374B54;
+  /* Bordes usando el azul corporativo para armonía */
   --input: #272A30;
-  --ring: #E67E50; /* El anillo de focus (ring) usa el Naranja principal */
-  
+  --ring: #E67E50;
+  /* El anillo de focus (ring) usa el Naranja principal */
+
   /* Pesos de fuente (se mantienen) */
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -204,7 +214,51 @@
   }
 }
 
-html {
+html,
+body {
   font-size: var(--font-size);
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+#app {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.4);
+}
+
+.animacion-entrada {
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
