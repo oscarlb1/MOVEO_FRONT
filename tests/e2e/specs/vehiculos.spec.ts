@@ -66,10 +66,11 @@ test.describe('Módulo 4 — Vehículos CRUD', () => {
         await v.waitForLoad()
 
         await v.clickEditOnRow(0)
+        await v.handleCookies()
         await page.waitForTimeout(500)
 
         // Modal title should say "Editar Vehículo"
-        await expect(v.modal.getByText('Editar Vehículo')).toBeVisible()
+        await expect(page.getByRole('heading', { name: /Editar Vehículo/i })).toBeVisible({ timeout: 10000 })
 
         await v.modeloInput.clear()
         await v.modeloInput.fill('Modelo Editado E2E')

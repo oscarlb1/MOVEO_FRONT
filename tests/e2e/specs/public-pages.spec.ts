@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, ADMIN_CREDENTIALS } from '../fixtures/auth.fixture'
 import { HeaderPage } from '../pages/HeaderPage'
 
 test.describe('Módulo 2 — Páginas Públicas', () => {
@@ -104,7 +104,7 @@ test.describe('Módulo 2 — Páginas Públicas', () => {
         const { LoginPage } = await import('../pages/LoginPage')
         const loginPage = new LoginPage(page)
         await loginPage.goto()
-        await loginPage.loginAndWait('admin@example.com', 'Admin123!')
+        await loginPage.loginAndWait(ADMIN_CREDENTIALS.email, ADMIN_CREDENTIALS.password)
 
         // Go to home
         await page.goto('/')

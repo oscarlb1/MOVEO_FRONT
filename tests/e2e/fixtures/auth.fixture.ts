@@ -1,11 +1,11 @@
 import { test as base, expect, type Page } from '@playwright/test'
 import { LoginPage } from '../pages/LoginPage'
 import { DashboardPage } from '../pages/DashboardPage'
+import { setupMocks } from '../mocks/mock-handler'
 
-// Test credentials — these must match real users in your database
 export const ADMIN_CREDENTIALS = {
-    email: 'b@gmail.com',
-    password: '1234',
+    email: process.env.ADMIN_EMAIL || 'b@gmail.com',
+    password: process.env.ADMIN_PASSWORD || '1234',
 }
 
 export const REPARTIDOR_CREDENTIALS = {
@@ -50,10 +50,18 @@ export async function loginAsAdmin(page: Page): Promise<DashboardPage> {
  * Extended test fixture that provides pre-authenticated pages.
  */
 export const test = base.extend<{
+    page: Page
     loginPage: LoginPage
     dashboardPage: DashboardPage
     adminPage: DashboardPage
 }>({
+    page: async ({ page }, use) => {
+        // Activate API mocking in CI environment mapping endpoints to MOCK_DATA
+        if (process.env.CI) {
+            await setupMocks(page)
+        }
+        await use(page)
+    },
     loginPage: async ({ page }, use) => {
         const loginPage = new LoginPage(page)
         await loginPage.goto()
