@@ -250,7 +250,7 @@ async function obtenerCoordenadas(direccion: string) {
               <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-black text-lg shadow-inner group-hover:scale-110 transition-transform">
                 {{ c.nombreEmpresa.substring(0, 2).toUpperCase() }}
               </div>
-              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex gap-1 transition-opacity">
                 <button @click="abrirModalEditar(c)" class="p-2 rounded-lg bg-gray-50 dark:bg-[#272A30] text-gray-600 dark:text-gray-400 hover:text-blue-500 transition-colors"><Pencil class="w-4 h-4" /></button>
                 <button @click="confirmarEliminar(c.id)" class="p-2 rounded-lg bg-gray-50 dark:bg-[#272A30] text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"><Trash2 class="w-4 h-4" /></button>
               </div>

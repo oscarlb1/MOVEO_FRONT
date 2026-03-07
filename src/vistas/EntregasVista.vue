@@ -336,7 +336,7 @@ onMounted(() => {
               <span v-else class="text-gray-300 dark:text-gray-600">-</span>
             </td>
             <td class="py-4 px-6 text-right">
-              <div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex justify-end gap-1 transition-opacity">
                  <button @click="abrirModalEstado(entrega)" class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-900/20 dark:hover:text-orange-400" title="Cambiar Estado">
                     <Activity class="w-4 h-4"/>
                  </button>
