@@ -26,6 +26,9 @@ const props = defineProps<{
   darkMode: boolean
 }>();
 
+import { useTemaStore } from '@/tiendas/tema';
+const temaStore = useTemaStore();
+
 // Estado
 const cargando = ref(true);
 const cargandoDetalle = ref(false);
@@ -132,9 +135,7 @@ function initMap() {
   map = L.map(mapContainer.value).setView([40.4168, -3.7038], 6); // Centro de España por defecto
   
   L.tileLayer(
-    props.darkMode 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
+    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', 
     {
       attribution: '© OpenStreetMap contributors © CARTO',
       subdomains: 'abcd',
@@ -604,20 +605,7 @@ function exportarListaExcel() {
 }
 
 // Respetar Dark Mode del dashboard
-watch(() => props.darkMode, (isDark) => {
-  if (map) {
-    map.remove();
-    map = null;
-    routeLine = null;
-    markersLayer = null;
-    nextTick(() => {
-      initMap();
-      if (rutaSeleccionada.value) {
-        dibujarRutaMapa(rutaSeleccionada.value.entregas);
-      }
-    });
-  }
-});
+// Eliminamos el watch que destruía el mapa al cambiar de tema, ya que ahora usamos filtros CSS reactivos
 </script>
 
 <template>
@@ -809,7 +797,8 @@ watch(() => props.darkMode, (isDark) => {
              </div>
           </div>
 
-          <div class="h-[300px] w-full relative shrink-0 leaflet-wrapper bg-[#e5e5e5] dark:bg-[#16181A]">
+          <div class="h-[300px] w-full relative shrink-0 leaflet-wrapper bg-[#e5e5e5] dark:bg-[#16181A]"
+               :class="{ 'dark-mode-map': temaStore.isDark }">
             <div ref="mapContainer" class="w-full h-full absolute inset-0"></div>
           </div>
 
@@ -1025,6 +1014,14 @@ watch(() => props.darkMode, (isDark) => {
 
 <style>
 /* Leaflet customizations to match theme - global styling for stability */
+.dark-mode-map .leaflet-tile-container {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-mode-map .leaflet-control-zoom,
+.dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);

@@ -19,6 +19,9 @@ const props = defineProps<{
   darkMode: boolean
 }>()
 
+import { useTemaStore } from '@/tiendas/tema'
+const temaStore = useTemaStore()
+
 const emit = defineEmits<{
   (e: 'actualizar-no-leidas', count: number): void
 }>()
@@ -297,9 +300,7 @@ async function inicializarMapaVehiculos() {
   
   map = L.map(mapContainer.value).setView([40.4168, -3.7038], 11) // Coordenada base
   
-  const tileUrl = props.darkMode 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+  const tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 
   L.tileLayer(tileUrl, {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
@@ -423,21 +424,7 @@ async function actualizarUbicaciones() {
   }
 }
 
-watch(() => props.darkMode, (isDark) => {
-  if (map) {
-    map.eachLayer((layer) => {
-      if (layer instanceof L.TileLayer) {
-        map?.removeLayer(layer)
-      }
-    })
-    const tileUrl = isDark 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-    L.tileLayer(tileUrl, {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-    }).addTo(map)
-  }
-})
+// Eliminamos el watch que cambiaba las URLs de los tiles, ya que usaremos filtros CSS
 
 // ── Actividad por Zona (computada desde entregas reales) ──
 const actividadZonas = computed(() => {
@@ -563,7 +550,9 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
-        <div ref="mapContainer" class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border shadow-inner bg-gray-100 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54]">
+        <div ref="mapContainer" 
+          class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border shadow-inner bg-gray-100 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54]"
+          :class="{ 'dark-mode-map': temaStore.isDark }">
         </div>
       </div>
 
@@ -797,7 +786,16 @@ onUnmounted(() => {
 </template>
 
 <style>
-/* Estilos personalizados para los Tooltips de Leaflet en Tiempo Real */
+/* Estilos para el modo oscuro del mapa usando filtros CSS */
+.dark-mode-map .leaflet-tile-container {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-mode-map .leaflet-control-zoom,
+.dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
+/* Otros estilos personalizados */
 .leaflet-tooltip.custom-light-tooltip {
   background-color: rgba(255, 255, 255, 0.98);
   border: 1px solid rgba(229, 231, 235, 0.8);

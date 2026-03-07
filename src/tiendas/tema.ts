@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 export type Tema = 'claro' | 'oscuro' | 'sistema'
 
@@ -12,13 +12,14 @@ export const useTemaStore = defineStore('tema', () => {
         aplicarTema()
     }
 
+    const isDark = computed(() =>
+        tema.value === 'oscuro' ||
+        (tema.value === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    )
+
     const aplicarTema = () => {
         const root = document.documentElement
-        const esOscuro =
-            tema.value === 'oscuro' ||
-            (tema.value === 'sistema' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-
-        if (esOscuro) {
+        if (isDark.value) {
             root.classList.add('dark')
         } else {
             root.classList.remove('dark')
@@ -37,6 +38,7 @@ export const useTemaStore = defineStore('tema', () => {
 
     return {
         tema,
+        isDark,
         setTema,
         aplicarTema
     }

@@ -16,16 +16,18 @@ import UsuariosVista from './UsuariosVista.vue'
 import EntregasVista from './EntregasVista.vue'
 import ClientesVista from './ClientesVista.vue'
 
+import { useTemaStore } from '@/tiendas/tema'
+
 const router = useRouter()
 const sesionStore = useSesionStore()
+const temaStore = useTemaStore()
 
 const seccionActiva = ref('general')
 const sidebarAbierto = ref(false)
 const perfilAbierto = ref(false)
 
-// Mantenemos la variable darkMode para los componentes hijos que aún dependen de ella como prop
-// y para inicializar la clase 'dark' en el <html>
-const darkMode = ref(localStorage.getItem('theme') === 'dark')
+// Usamos el store para el modo oscuro
+const darkMode = computed(() => temaStore.isDark)
 
 const esAdmin = computed(() => sesionStore.usuario?.rol === 'ADMIN')
 const nombreUsuario = computed(() => sesionStore.usuario?.nombre || 'Usuario')
@@ -60,13 +62,8 @@ function irASeccion(id: string) {
 
 // Opcional: si quieres seguir teniendo un botón para alternar el tema desde aquí
 function alternarTema() {
-  darkMode.value = !darkMode.value
-  if (darkMode.value) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-  localStorage.setItem('theme', darkMode.value ? 'dark' : 'light')
+  const nuevoTema = temaStore.isDark ? 'claro' : 'oscuro'
+  temaStore.setTema(nuevoTema)
 }
 
 async function cerrarSesion() {
@@ -79,7 +76,7 @@ function handleActualizarNoLeidas(conteo: number) {
 }
 
 onMounted(() => {
-  if (darkMode.value) document.documentElement.classList.add('dark')
+  temaStore.aplicarTema()
   dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
   intervaloActualizacion = setInterval(() => {
     dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})

@@ -14,11 +14,13 @@ import {
 import VueApexCharts from 'vue3-apexcharts'
 
 import { useSesionStore } from '@/tiendas/sesion'
+import { useTemaStore } from '@/tiendas/tema'
 
 // State
 const router = useRouter()
 const sesionStore = useSesionStore()
-const darkMode = ref(false) // Toggle for demo purposes, could sync with store
+const temaStore = useTemaStore()
+const darkMode = computed(() => temaStore.isDark)
 const dateRange = ref("Hoy")
 const selectedFilter = ref("Todos")
 const notifications = ref(5)
@@ -147,9 +149,7 @@ async function inicializarMapa() {
   
   map = L.map(mapContainer.value).setView([40.4168, -3.7038], 12)
   
-  const tileUrl = darkMode.value 
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+  const tileUrl = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
 
   L.tileLayer(tileUrl, {
     attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
@@ -187,21 +187,7 @@ async function inicializarMapa() {
   }
 }
 
-watch(() => darkMode.value, (isDark) => {
-  if (map) {
-    map.eachLayer((layer) => {
-      if (layer instanceof L.TileLayer) {
-        map?.removeLayer(layer)
-      }
-    })
-    const tileUrl = isDark 
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-    L.tileLayer(tileUrl, {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
-    }).addTo(map)
-  }
-})
+// Eliminamos el watch que cambiaba las URLs de los tiles, ya que usaremos filtros CSS
 
 onMounted(() => {
   inicializarMapa()
@@ -326,7 +312,9 @@ onUnmounted(() => {
              </div>
            </div>
 
-           <div ref="mapContainer" class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border bg-gray-100 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] shadow-inner">
+           <div ref="mapContainer" 
+                class="w-full h-[350px] sm:h-[400px] z-0 rounded-xl relative overflow-hidden border bg-gray-100 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] shadow-inner"
+                :class="{ 'dark-mode-map': temaStore.isDark }">
            </div>
          </div>
 
@@ -449,6 +437,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Estilos para el modo oscuro del mapa usando filtros CSS */
+.dark-mode-map .leaflet-tile-container {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+.dark-mode-map .leaflet-control-zoom,
+.dark-mode-map .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
