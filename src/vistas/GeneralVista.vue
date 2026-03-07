@@ -501,7 +501,7 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-5 gap-6">
-      <div class="lg:col-span-3 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-3 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Entregas por Día</h2>
@@ -518,7 +518,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
         <h2 class="font-bold text-lg mb-4 text-[#092C4C] dark:text-white">Estado de Flota</h2>
         <div v-if="cargando" class="h-[250px] rounded-xl animate-pulse bg-gray-50 dark:bg-[#16181A]"></div>
         <template v-else>
@@ -544,7 +544,7 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="lg:col-span-2 p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="font-bold text-lg mb-1 text-[#092C4C] dark:text-white">Mapa en Tiempo Real</h2>
@@ -565,7 +565,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50]">
+      <div class="p-6 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#E67E50] min-w-0">
         <h2 class="font-bold text-lg mb-6 text-[#092C4C] dark:text-white">Actividad por Zona</h2>
         <div v-if="cargando" class="space-y-5">
           <div v-for="i in 5" :key="i" class="h-8 rounded-lg animate-pulse bg-gray-100 dark:bg-[#16181A]"></div>
@@ -592,8 +592,8 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
-        <div class="flex items-center justify-between p-6 pb-4">
+      <div class="lg:col-span-2 rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-6 pb-4 gap-4">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Entregas Recientes</h2>
           <div class="flex items-center gap-2">
             <div class="relative">
@@ -605,8 +605,8 @@ onUnmounted(() => {
         <div v-if="cargando" class="px-6 pb-6 space-y-3">
           <div v-for="i in 5" :key="i" class="h-12 rounded-lg animate-pulse bg-gray-50 dark:bg-[#16181A]"></div>
         </div>
-        <div v-else class="overflow-x-auto">
-          <table class="w-full text-sm">
+        <div v-else class="overflow-x-auto hide-scrollbar">
+          <table class="w-full text-sm min-w-[700px]">
             <thead>
               <tr class="border-b text-xs font-semibold uppercase tracking-wide border-gray-100 dark:border-[#374B54] text-[#9e9e9e] dark:text-[#82A1B1]">
                 <th class="py-3 px-6 text-left">ID</th>
@@ -632,8 +632,8 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
-        <div class="flex items-center justify-between p-6 pb-4">
+      <div class="rounded-2xl border shadow-sm bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-6 pb-4 gap-4">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Alertas y Notificaciones</h2>
           <div class="flex items-center gap-2">
             <template v-if="conteoNoLeidas > 0">
@@ -667,7 +667,7 @@ onUnmounted(() => {
                 <component :is="iconoNotificacion(n.titulo)" class="w-4 h-4" :class="colorNotificacion(n.titulo).icon" />
               </div>
               <div class="flex-1 min-w-0">
-                <h4 class="text-sm font-semibold leading-tight text-[#424242] dark:text-white">{{ n.titulo }}</h4>
+                <h4 class="text-sm font-semibold leading-tight break-words text-[#424242] dark:text-white">{{ n.titulo }}</h4>
                 <p class="text-xs mt-0.5 leading-relaxed line-clamp-2 text-[#757575] dark:text-[#82A1B1]">{{ n.mensaje }}</p>
                 <span class="text-[10px] font-medium mt-1 block text-gray-400 dark:text-gray-500">{{ tiempoRelativo(n.fecha) }}</span>
               </div>
@@ -679,7 +679,7 @@ onUnmounted(() => {
     </div>
 
     <div class="grid lg:grid-cols-2 gap-6">
-      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
+      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
         <h2 class="font-bold text-lg mb-5 text-[#092C4C] dark:text-white">Estado de Flota</h2>
         <div v-if="cargando" class="space-y-4">
           <div v-for="i in 4" :key="i" class="h-8 rounded-lg animate-pulse bg-gray-100 dark:bg-[#16181A]"></div>
@@ -723,8 +723,8 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
-        <div class="flex items-center justify-between mb-5">
+      <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4">
           <h2 class="font-bold text-lg text-[#092C4C] dark:text-white">Top Repartidores</h2>
           <div class="flex items-center gap-1 p-1 rounded-lg bg-gray-100 dark:bg-[#16181A]">
             <button @click="cambiarSortRanking('entregas')" class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all" :class="rankingSortBy === 'entregas' ? 'bg-[#E67E50] text-white shadow-sm' : 'text-gray-500 dark:text-[#82A1B1] hover:text-[#424242] dark:hover:text-white'">Entregas</button>
@@ -760,8 +760,8 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54]">
-      <div class="flex items-center justify-between mb-5">
+    <div class="rounded-2xl border shadow-sm p-6 bg-white dark:bg-[#272A30] border-gray-100 dark:border-[#374B54] min-w-0 overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-4">
         <h2 class="font-bold text-lg flex items-center gap-2 text-[#092C4C] dark:text-white">
           <Wifi class="w-5 h-5 text-green-500" />Repartidores Online
         </h2>

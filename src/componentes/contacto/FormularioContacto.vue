@@ -60,7 +60,7 @@ function enviarFormulario() {
               v-model="formulario.name"
               type="text"
               required
-              class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
+              class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
               placeholder="Juan Perez"
             />
           </div>
@@ -70,7 +70,7 @@ function enviarFormulario() {
               v-model="formulario.email"
               type="email"
               required
-              class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
+              class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
               placeholder="juan@empresa.com"
             />
           </div>
@@ -82,7 +82,7 @@ function enviarFormulario() {
             <input
               v-model="formulario.company"
               type="text"
-              class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
+              class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
               placeholder="Tu empresa"
             />
           </div>
@@ -91,7 +91,7 @@ function enviarFormulario() {
             <input
               v-model="formulario.phone"
               type="tel"
-              class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
+              class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white placeholder:text-gray-400"
               placeholder="+34 600 000 000"
             />
           </div>
@@ -102,7 +102,7 @@ function enviarFormulario() {
           <select
             v-model="formulario.subject"
             required
-            class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white"
+            class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all text-white"
           >
             <option value="general">Consulta general</option>
             <option value="demo">Solicitar demostración</option>
@@ -118,14 +118,14 @@ function enviarFormulario() {
             v-model="formulario.message"
             required
             rows="3"
-            class="w-full px-4 py-3 bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all resize-none text-white placeholder:text-gray-400"
+            class="w-full px-4 py-3 min-h-[48px] text-base bg-[#2A3A42]/50 backdrop-blur-sm border border-white/10 rounded-xl focus:ring-2 focus:ring-[#E67E50] focus:border-[#E67E50] focus:bg-[#2A3A42]/70 outline-none transition-all resize-none text-white placeholder:text-gray-400"
             placeholder="Cuéntanos cómo podemos ayudarte..."
           />
         </div>
 
         <button
           type="submit"
-          class="w-full bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all duration-300 flex items-center justify-center gap-2 group font-semibold text-lg"
+          class="w-full bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 min-h-[56px] rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all duration-300 flex items-center justify-center gap-2 group font-semibold text-lg"
         >
           Enviar mensaje
           <Send class="w-5 h-5 group-hover:translate-x-1 transition-transform" />

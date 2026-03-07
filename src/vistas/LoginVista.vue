@@ -1,23 +1,24 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-[#092C4C] via-[#374B54] to-[#092C4C] flex items-center justify-center relative">
     
-    <div class="absolute top-6 left-6 z-50">
+    <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-50">
       <button 
         @click="navigate('home')"
-        class="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white/20 transition-all group shadow-xl"
+        class="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 min-h-[44px] bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white hover:bg-white/20 transition-all group shadow-xl"
       >
         <ArrowLeft class="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        <span class="text-sm font-medium">Volver al inicio</span>
+        <span class="text-sm font-medium hidden sm:inline">Volver al inicio</span>
+        <span class="text-sm font-medium sm:hidden">Volver</span>
       </button>
     </div>
 
     <div class="w-full max-w-7xl flex min-h-screen">
-    <div class="w-full lg:w-1/2 flex items-start justify-center p-6 lg:p-12 lg:pt-24">
+    <div class="w-full lg:w-1/2 flex items-start justify-center p-4 sm:p-6 lg:p-12 pt-20 sm:pt-24">
       <div
         v-motion
         :initial="{ opacity: 0, x: -30 }"
         :enter="{ opacity: 1, x: 0, transition: { duration: 600 } }"
-        class="w-full max-w-md"
+        class="w-[95%] sm:w-full max-w-md mx-auto"
       >
         <div
           v-motion
@@ -34,7 +35,7 @@
             </div>
             <span class="text-white text-2xl font-semibold tracking-tight">Moveo</span>
           </div>
-          <h1 class="text-white text-3xl font-bold mb-2">
+          <h1 class="text-white text-2xl sm:text-3xl font-bold mb-2">
             Bienvenido de vuelta
           </h1>
           <p class="text-gray-300">
@@ -46,7 +47,7 @@
           v-motion
           :initial="{ opacity: 0, y: 20 }"
           :enter="{ opacity: 1, y: 0, transition: { delay: 300 } }"
-          class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl"
+          class="bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 shadow-2xl"
         >
           <form @submit.prevent="handleLogin" class="space-y-6">
             <div>
@@ -62,7 +63,7 @@
                   placeholder="tu@empresa.com"
                   required
                   :class="[
-                    'w-full pl-12 pr-4 py-3 bg-white/5 border rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all',
+                    'w-full pl-12 pr-4 py-3 min-h-[48px] text-base bg-white/5 border rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all',
                     isError 
                       ? 'border-red-500/50 focus:ring-red-500' 
                       : 'border-white/20 focus:ring-[#E67E50]'
@@ -84,7 +85,7 @@
                   placeholder="••••••••"
                   required
                   :class="[
-                    'w-full pl-12 pr-12 py-3 bg-white/5 border rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all',
+                    'w-full pl-12 pr-12 py-3 min-h-[48px] text-base bg-white/5 border rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all',
                     isError 
                       ? 'border-red-500/50 focus:ring-red-500' 
                       : 'border-white/20 focus:ring-[#E67E50]'
@@ -106,7 +107,7 @@
                 <input
                   type="checkbox"
                   v-model="rememberMe"
-                  class="w-4 h-4 rounded border-white/20 bg-white/5 text-[#E67E50] focus:ring-[#E67E50] focus:ring-offset-0"
+                  class="w-5 h-5 sm:w-4 sm:h-4 rounded border-white/20 bg-white/5 text-[#E67E50] focus:ring-[#E67E50] focus:ring-offset-0"
                 />
                 <span class="text-gray-300 text-sm">Recordarme</span>
               </label>
@@ -121,7 +122,7 @@
             <button
               type="submit"
               :disabled="isLoading"
-              class="w-full bg-[#E67E50] text-white py-3 rounded-lg hover:bg-[#d66d40] transition-all shadow-lg shadow-[#E67E50]/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed font-bold"
+              class="w-full min-h-[48px] bg-[#E67E50] text-white py-3 rounded-lg hover:bg-[#d66d40] transition-all shadow-lg shadow-[#E67E50]/20 flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed font-bold"
             >
               <div v-if="isLoading" class="flex items-center gap-2">
                 <div class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
@@ -148,7 +149,7 @@
                 <button
                   type="button"
                   @click="router.push('/contacto?sinHeader=true')"
-                  class="w-full bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-lg border border-white/10 hover:border-[#E67E50]/50 transition-all text-sm font-medium flex items-center justify-center gap-2 group/btn"
+                  class="w-full min-h-[48px] bg-white/5 hover:bg-white/10 text-white py-2.5 rounded-lg border border-white/10 hover:border-[#E67E50]/50 transition-all text-sm font-medium flex items-center justify-center gap-2 group/btn"
                 >
                   Contactar con soporte
                   <ArrowRight class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />

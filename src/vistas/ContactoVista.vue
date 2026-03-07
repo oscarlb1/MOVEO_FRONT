@@ -231,7 +231,7 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
             </div>
             <a
               href="https://maps.google.com" target="_blank" rel="noopener noreferrer"
-              class="block bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all group font-semibold text-lg text-center hover:scale-[1.02] active:scale-[0.98]"
+              class="block bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 min-h-[56px] flex items-center justify-center rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all group font-semibold text-lg text-center hover:scale-[1.02] active:scale-[0.98]"
             >
               <span class="flex items-center justify-center gap-2">
                 Abrir en Google Maps
@@ -264,17 +264,17 @@ const puntosFlotantes = Array.from({ length: 5 }, (_, i) => ({
           <p class="text-white/90 text-xl lg:text-2xl mb-12 leading-relaxed">
             Más de 500 empresas ya están optimizando sus entregas con Moveo
           </p>
-          <div class="flex flex-wrap gap-6 justify-center">
+          <div class="flex flex-col sm:flex-row gap-6 justify-center">
             <router-link
               to="/dashboard-demo"
-              class="bg-white text-[#E67E50] px-10 py-5 rounded-xl hover:bg-gray-100 transition-all flex items-center gap-3 group font-bold text-xl shadow-2xl hover:scale-105 hover:-translate-y-1 active:scale-95"
+              class="w-full sm:w-auto justify-center bg-white text-[#E67E50] px-10 py-4 sm:py-5 min-h-[56px] rounded-xl hover:bg-gray-100 transition-all flex items-center gap-3 group font-bold text-xl shadow-2xl hover:scale-105 hover:-translate-y-1 active:scale-95"
             >
               Ver dashboard en vivo
               <ArrowRight class="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </router-link>
             <router-link
               to="/servicios"
-              class="bg-transparent bg-white/10 backdrop-blur-xl border-2 border-white text-white px-10 py-5 rounded-xl hover:bg-white/20 transition-all font-bold text-xl hover:scale-105 hover:-translate-y-1 active:scale-95"
+              class="w-full sm:w-auto justify-center text-center flex items-center bg-transparent bg-white/10 backdrop-blur-xl border-2 border-white text-white px-10 py-4 sm:py-5 min-h-[56px] rounded-xl hover:bg-white/20 transition-all font-bold text-xl hover:scale-105 hover:-translate-y-1 active:scale-95"
             >
               Explorar servicios
             </router-link>

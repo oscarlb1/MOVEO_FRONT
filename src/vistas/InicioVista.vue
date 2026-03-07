@@ -173,23 +173,23 @@ function esVisible(id: string) {
             La plataforma todo-en-uno para gestionar vehículos, rutas y entregas con tecnología de vanguardia. Reduce costes, aumenta eficiencia.
           </p>
 
-          <div class="flex flex-wrap gap-4 mb-20 hero-botones">
+          <div class="flex flex-col sm:flex-row gap-4 mb-20 hero-botones">
             <router-link
               to="/dashboard-demo"
-              class="bg-[#E67E50] text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#d66d40] transition-all shadow-[0_15px_30px_-10px_rgba(230,126,80,0.3)] flex items-center gap-2 group"
+              class="w-full sm:w-auto justify-center bg-[#E67E50] text-white px-8 sm:px-10 py-4 min-h-[56px] rounded-2xl font-bold hover:bg-[#d66d40] transition-all shadow-[0_15px_30px_-10px_rgba(230,126,80,0.3)] flex items-center gap-2 group"
             >
               Ver Dashboard Demo
               <ArrowRight class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </router-link>
             <router-link 
               to="/servicios"
-              class="bg-[#3D4D5C]/50 border border-white/10 text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#3D4D5C]/70 transition-all backdrop-blur-md"
+              class="w-full sm:w-auto justify-center text-center bg-[#3D4D5C]/50 border border-white/10 text-white px-8 sm:px-10 py-4 min-h-[56px] rounded-2xl font-bold hover:bg-[#3D4D5C]/70 transition-all backdrop-blur-md flex items-center"
             >
               Explorar Servicios
             </router-link>
           </div>
 
-          <div class="flex gap-16 hero-stats-line">
+          <div class="flex flex-wrap gap-8 lg:gap-16 justify-between sm:justify-start hero-stats-line">
             <div v-for="stat in statsHero" :key="stat.label" class="flex flex-col">
               <span class="text-3xl font-bold text-[#E67E50] tracking-tight">{{ stat.value }}</span>
               <span class="text-gray-400 text-sm font-medium">{{ stat.label }}</span>
@@ -449,17 +449,17 @@ function esVisible(id: string) {
         <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
           Únete a más de 500 empresas que ya optimizaron su operación con Moveo
         </p>
-        <div class="flex flex-wrap justify-center gap-4">
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
           <button
             @click="router.push({ name: 'login' })"
-            class="bg-white text-[#E67E50] px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 cursor-pointer"
+            class="w-full sm:w-auto justify-center min-h-[56px] bg-white text-[#E67E50] px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg flex items-center gap-2 cursor-pointer"
           >
             Empezar Ahora
             <ArrowRight class="w-5 h-5" />
           </button>
           <router-link
             to="/contacto"
-            class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all text-center"
+            class="w-full sm:w-auto justify-center flex items-center min-h-[56px] border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all text-center"
           >
             Solicitar Demo
           </router-link>

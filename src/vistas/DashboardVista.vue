@@ -89,7 +89,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-screen flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white">
+  <div class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white">
 
     <Transition name="fade">
       <div v-if="sidebarAbierto"
@@ -185,7 +185,7 @@ onUnmounted(() => {
         </div>
       </header>
 
-      <div class="flex-1 overflow-auto py-4 sm:py-6 px-1.5 sm:pl-3 sm:pr-12">
+      <div class="flex-1 overflow-x-hidden overflow-y-auto py-4 sm:py-6 px-1.5 sm:pl-3 sm:pr-12">
         <div class="w-full">
           
           <GeneralVista v-if="seccionActiva === 'general'" @actualizar-no-leidas="handleActualizarNoLeidas" />

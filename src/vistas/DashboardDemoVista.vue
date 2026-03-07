@@ -202,7 +202,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen transition-colors duration-300 bg-[#EEEEEE] dark:bg-[#16181A] text-[#424242] dark:text-white">
+  <div class="min-h-screen w-full max-w-[100vw] overflow-x-hidden transition-colors duration-300 bg-[#EEEEEE] dark:bg-[#16181A] text-[#424242] dark:text-white">
     <div class="max-w-[1600px] mx-auto px-6 pt-6 pb-2">
       <div class="flex items-center justify-between p-4 rounded-2xl border transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] shadow-sm">
         
@@ -301,8 +301,8 @@ onUnmounted(() => {
       </div>
 
        <div class="grid lg:grid-cols-3 gap-6 mb-8">
-         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 400ms;">
-           <div class="flex items-center justify-between mb-4">
+         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] min-w-0 overflow-hidden" style="animation-delay: 400ms;">
+           <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
              <div>
                <h3 class="font-bold text-lg mb-1 text-[#424242] dark:text-white">Mapa en Tiempo Real</h3>
                <div class="flex items-center gap-2 text-sm">
@@ -318,7 +318,7 @@ onUnmounted(() => {
            </div>
          </div>
 
-         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 500ms;">
+         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] min-w-0" style="animation-delay: 500ms;">
            <h3 class="font-bold text-lg mb-6 text-[#424242] dark:text-white">Actividad por Zona</h3>
            <div class="space-y-5">
              <div v-for="(zone, i) in heatmapData" :key="i">
@@ -343,8 +343,8 @@ onUnmounted(() => {
        </div>
 
        <div class="grid lg:grid-cols-3 gap-6">
-         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 600ms;">
-           <div class="flex items-center justify-between mb-6">
+         <div class="lg:col-span-2 p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] min-w-0 overflow-hidden" style="animation-delay: 600ms;">
+           <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
              <h3 class="font-bold text-lg text-[#424242] dark:text-white">Entregas Recientes</h3>
              <div class="flex gap-2">
                <div class="relative">
@@ -356,8 +356,8 @@ onUnmounted(() => {
              </div>
            </div>
 
-           <div class="overflow-x-auto">
-             <table class="w-full text-sm text-left">
+           <div class="overflow-x-auto hide-scrollbar">
+             <table class="w-full text-sm text-left min-w-[700px]">
                <thead>
                  <tr class="border-b border-gray-200 dark:border-[#374B54] text-[#757575] dark:text-[#82A1B1]">
                    <th class="py-3 px-2 font-medium">ID</th>
@@ -395,7 +395,7 @@ onUnmounted(() => {
            </div>
          </div>
 
-         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54]" style="animation-delay: 700ms;">
+         <div class="p-6 rounded-2xl shadow-sm border animate-fade-in-up bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] min-w-0" style="animation-delay: 700ms;">
            <div class="flex items-center justify-between mb-6">
              <h3 class="font-bold text-lg text-[#424242] dark:text-white">Alertas</h3>
              <span class="w-6 h-6 bg-[#E67E50] text-white rounded-full flex items-center justify-center text-xs font-bold">{{ incidents.length }}</span>
