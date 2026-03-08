@@ -134,12 +134,9 @@ onUnmounted(() => {
       :class="sidebarAbierto ? 'translate-x-0' : '-translate-x-full'">
 
       <div class="h-20 flex items-center justify-between px-5 border-b border-gray-100 dark:border-[#374B54]">
-        <div class="flex items-center gap-3.5 group cursor-pointer" @click="router.push('/')">
-          <div
-            class="relative w-11 h-11 bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.08)] border border-gray-100 dark:border-[#374B54] overflow-hidden shrink-0 group-hover:shadow-[0_4px_15px_rgba(230,126,80,0.2)] transition-all duration-300">
-            <img src="@/assets/logo-moveo.png" alt="Moveo Logo"
-              class="absolute w-[175%] h-auto max-w-none left-1/2 -translate-x-1/2 -top-[15%] transition-transform duration-300 group-hover:scale-105" />
-          </div>
+        <div class="flex items-center gap-3.5 group cursor-pointer" @click="irASeccion('general')">
+          <img src="@/assets/logo-moveo.png" alt="Moveo Logo"
+            class="h-10 w-auto object-contain transition-transform duration-300" />
           <div class="flex flex-col">
             <h1
               class="text-lg font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white leading-none">
@@ -298,5 +295,22 @@ onUnmounted(() => {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.4);
+}
+</style>
+
+<style lang="scss">
+@use '@/assets/styles/base/variables' as *;
+
+[class~="text-[#E67E50]"] {
+  color: $primary-color !important;
+}
+
+[class~="bg-[#E67E50]"] {
+  background-color: $primary-color !important;
+}
+
+[class~="from-[#E67E50]"] {
+  --tw-gradient-from: #E67E50 var(--tw-gradient-from-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(230, 126, 80, 0)) !important;
 }
 </style>

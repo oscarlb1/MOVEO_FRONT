@@ -56,11 +56,11 @@ const nuevoEstadoFormData = ref({
 // Computed
 const entregasFiltradas = computed(() => {
   let resultado = entregas.value;
-  
+
   if (filtroEstado.value) {
     resultado = resultado.filter(e => e.estado === filtroEstado.value);
   }
-  
+
   if (filtroRutaId.value) {
     resultado = resultado.filter(e => e.rutaId === filtroRutaId.value);
   }
@@ -71,7 +71,7 @@ const entregasFiltradas = computed(() => {
 
   if (busqueda.value) {
     const q = busqueda.value.toLowerCase();
-    resultado = resultado.filter(e => 
+    resultado = resultado.filter(e =>
       e.id.toString().includes(q) ||
       e.cliente?.nombreEmpresa.toLowerCase().includes(q) ||
       e.cliente?.direccion.toLowerCase().includes(q)
@@ -79,15 +79,15 @@ const entregasFiltradas = computed(() => {
   }
 
   // Ordenar de más reciente a más antiguo
-  return resultado.sort((a,b) => b.id - a.id);
+  return resultado.sort((a, b) => b.id - a.id);
 });
 
 const kpis = computed(() => {
   if (!estadisticas.value) return [];
-  const pctx = estadisticas.value.totalHoy > 0 
-    ? Math.round((estadisticas.value.completadas / estadisticas.value.totalHoy) * 100) 
+  const pctx = estadisticas.value.totalHoy > 0
+    ? Math.round((estadisticas.value.completadas / estadisticas.value.totalHoy) * 100)
     : 0;
-    
+
   return [
     { label: 'Entregadas Hoy', value: estadisticas.value.completadas || 0, icon: CheckCircle2, color: '#22c55e', subtitulo: `${pctx}% de éxito` },
     { label: 'Pendientes Hoy', value: estadisticas.value.pendientes || 0, icon: Clock, color: '#f59e0b', subtitulo: 'En ruta o en almacén' },
@@ -118,7 +118,7 @@ async function cargarDatos() {
       clientesServicio.obtenerTodos()
     ]);
     entregas.value = entregasData;
-    if(statsData) estadisticas.value = statsData;
+    if (statsData) estadisticas.value = statsData;
     rutasDisponibles.value = rutasData;
     clientesDisponibles.value = clientesData;
   } catch (err) {
@@ -195,14 +195,14 @@ function abrirModalDetalle(entrega: EntregaDto) {
 }
 
 async function confirmarEliminarEntrega(id: number) {
-  if(confirm("¿Estás seguro de que quieres eliminar esta entrega?")) {
-     try {
-       await entregasServicio.eliminar(id);
-       toast.success('Entrega eliminada');
-       cargarDatos();
-     } catch (err) {
-       toast.error('Error al eliminar la entrega');
-     }
+  if (confirm("¿Estás seguro de que quieres eliminar esta entrega?")) {
+    try {
+      await entregasServicio.eliminar(id);
+      toast.success('Entrega eliminada');
+      cargarDatos();
+    } catch (err) {
+      toast.error('Error al eliminar la entrega');
+    }
   }
 }
 
@@ -215,7 +215,7 @@ function exportarListaPDF() {
     e.cliente?.direccion || '',
     `RT-${e.rutaId}`,
     e.estado,
-    e.horaEntregaReal ? new Date(e.horaEntregaReal).toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}) : '-'
+    e.horaEntregaReal ? new Date(e.horaEntregaReal).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '-'
   ]);
   exportadorServicio.exportarPDF('Reporte de Entregas', columnas, data, 'Entregas_Reporte');
 }
@@ -227,7 +227,7 @@ function exportarListaExcel() {
     Direccion: e.cliente?.direccion || '',
     RutaAsignada: `RT-${e.rutaId}`,
     Estado: e.estado,
-    HoraActualizacion: e.horaEntregaReal ? new Date(e.horaEntregaReal).toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}) : '-'
+    HoraActualizacion: e.horaEntregaReal ? new Date(e.horaEntregaReal).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : '-'
   }));
   exportadorServicio.exportarExcel('Entregas', data, 'Entregas_Reporte');
 }
@@ -239,34 +239,31 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseModuleView
-    title="Gestión de Entregas"
-    description="Control de envíos, estados y seguimiento de rutas en tiempo real"
-    themeColor="purple"
-    :headerIcon="Package"
-    :cargando="cargando"
-    :kpis="kpis"
-    v-model:searchQuery="busqueda"
-    searchPlaceholder="Buscar empresa o dirección..."
-    showNewButton
-    newButtonLabel="Nueva Entrega"
-    @new-click="abrirModalNuevaEntrega"
-  >
+  <BaseModuleView title="Gestión de Entregas"
+    description="Control de envíos, estados y seguimiento de rutas en tiempo real" themeColor="purple"
+    :headerIcon="Package" :cargando="cargando" :kpis="kpis" v-model:searchQuery="busqueda"
+    searchPlaceholder="Buscar empresa o dirección..." showNewButton newButtonLabel="Nueva Entrega"
+    @new-click="abrirModalNuevaEntrega">
     <template #title-icon>
       <Package class="w-6 h-6 text-purple-600 dark:text-purple-400" />
     </template>
 
     <template #header-actions>
-      <button @click="exportarListaPDF" class="px-3 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]" title="Exportar PDF">
-         <FileText class="w-4 h-4 text-red-500"/> <span class="hidden sm:inline">PDF</span>
+      <button @click="exportarListaPDF"
+        class="px-3 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]"
+        title="Exportar PDF">
+        <FileText class="w-4 h-4 text-red-500" /> <span class="hidden sm:inline">PDF</span>
       </button>
-      <button @click="exportarListaExcel" class="px-3 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]" title="Exportar Excel">
-         <FileSpreadsheet class="w-4 h-4 text-green-600"/> <span class="hidden sm:inline">Excel</span>
+      <button @click="exportarListaExcel"
+        class="px-3 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm font-semibold shrink-0 bg-gray-100 dark:bg-[#16181A] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#374B54]"
+        title="Exportar Excel">
+        <FileSpreadsheet class="w-4 h-4 text-green-600" /> <span class="hidden sm:inline">Excel</span>
       </button>
     </template>
 
     <template #filters>
-      <select v-model="filtroEstado" class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
+      <select v-model="filtroEstado"
+        class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
         <option value="">Todos los Estados</option>
         <option value="PENDIENTE">Pendientes</option>
         <option value="EN_CAMINO">En Camino</option>
@@ -274,21 +271,25 @@ onMounted(() => {
         <option value="FALLIDO">Fallidos</option>
       </select>
 
-      <select v-model="filtroRutaId" class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
+      <select v-model="filtroRutaId"
+        class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
         <option value="">Cualquier Ruta</option>
-        <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ruta.id}}</option>
+        <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ ruta.id }}</option>
       </select>
 
-      <select v-model="filtroClienteId" class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
+      <select v-model="filtroClienteId"
+        class="p-2.5 text-sm border rounded-xl focus:outline-none focus:border-purple-500 cursor-pointer transition-all bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white shadow-sm">
         <option value="">Cualquier Cliente</option>
-        <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{cliente.nombreEmpresa}}</option>
+        <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{ cliente.nombreEmpresa }}
+        </option>
       </select>
     </template>
 
     <template #table>
       <table class="w-full text-sm min-w-[900px]">
         <thead>
-          <tr class="border-b text-xs font-semibold uppercase tracking-wide bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54] text-[#9e9e9e] dark:text-[#82A1B1]">
+          <tr
+            class="border-b text-xs font-semibold uppercase tracking-wide bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54] text-[#9e9e9e] dark:text-[#82A1B1]">
             <th class="py-4 px-6 text-left">ID</th>
             <th class="py-4 px-6 text-left">Cliente / Destino</th>
             <th class="py-4 px-6 text-left">Ruta Asignada</th>
@@ -299,56 +300,70 @@ onMounted(() => {
         </thead>
         <tbody class="divide-y divide-gray-50 dark:divide-[#374B54]">
           <tr v-if="entregasFiltradas.length === 0">
-             <td colspan="6" class="py-20 text-center">
-                <Package class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-[#82A1B1]" />
-                <p class="text-sm text-gray-400 dark:text-gray-500">No hay entregas que coincidan</p>
-             </td>
+            <td colspan="6" class="py-20 text-center">
+              <Package class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-[#82A1B1]" />
+              <p class="text-sm text-gray-400 dark:text-gray-500">No hay entregas que coincidan</p>
+            </td>
           </tr>
-          <tr v-for="entrega in entregasFiltradas" :key="entrega.id" 
-              class="transition-colors group hover:bg-gray-50 dark:hover:bg-[#16181A]/50">
+          <tr v-for="entrega in entregasFiltradas" :key="entrega.id"
+            class="transition-colors group hover:bg-gray-50 dark:hover:bg-[#16181A]/50">
             <td class="py-4 px-6 font-semibold text-sm">
               #ENV-{{ entrega.id }}
             </td>
             <td class="py-4 px-6">
               <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
-                  {{ entrega.cliente?.nombreEmpresa ? entrega.cliente.nombreEmpresa.substring(0,1) : 'C' }}
+                <div
+                  class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  {{ entrega.cliente?.nombreEmpresa ? entrega.cliente.nombreEmpresa.substring(0, 1) : 'C' }}
                 </div>
                 <div>
-                  <p class="font-medium text-sm text-gray-900 dark:text-white">{{ entrega.cliente?.nombreEmpresa || `Cliente #${entrega.clienteId}` }}</p>
-                  <p class="text-xs truncate w-48 text-gray-500 dark:text-[#82A1B1]"><MapPin class="w-3 h-3 inline mr-0.5 opacity-50"/>{{ entrega.cliente?.direccion }}</p>
+                  <p class="font-medium text-sm text-gray-900 dark:text-white">{{ entrega.cliente?.nombreEmpresa ||
+                    `Cliente #${entrega.clienteId}` }}</p>
+                  <p class="text-xs truncate w-48 text-gray-500 dark:text-[#82A1B1]">
+                    <MapPin class="w-3 h-3 inline mr-0.5 opacity-50" />{{ entrega.cliente?.direccion }}
+                  </p>
                 </div>
               </div>
             </td>
             <td class="py-4 px-6">
-               <div class="inline-flex gap-1.5 items-center px-2 py-1 rounded text-xs font-semibold bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 border border-orange-100 dark:border-orange-900/40">
-                  <Route class="w-3 h-3"/> RT-{{ entrega.rutaId }}
-               </div>
+              <div
+                class="inline-flex gap-1.5 items-center px-2 py-1 rounded text-xs font-semibold bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 border border-orange-100 dark:border-orange-900/40">
+                <Route class="w-3 h-3" /> RT-{{ entrega.rutaId }}
+              </div>
             </td>
             <td class="py-4 px-6">
               <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider border"
-                    :class="[badgeEstado(entrega.estado).bg, badgeEstado(entrega.estado).text, badgeEstado(entrega.estado).border]">
+                :class="[badgeEstado(entrega.estado).bg, badgeEstado(entrega.estado).text, badgeEstado(entrega.estado).border]">
                 {{ entrega.estado.replace('_', ' ') }}
               </span>
             </td>
             <td class="py-4 px-6 text-center text-xs text-gray-500 dark:text-[#82A1B1]">
-              <span v-if="entrega.horaEntregaReal">{{ new Date(entrega.horaEntregaReal).toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}) }}</span>
+              <span v-if="entrega.horaEntregaReal">{{ new Date(entrega.horaEntregaReal).toLocaleTimeString('es-ES',
+                { hour: '2-digit', minute: '2-digit'}) }}</span>
               <span v-else class="text-gray-300 dark:text-gray-600">-</span>
             </td>
             <td class="py-4 px-6 text-right">
               <div class="flex justify-end gap-1 transition-opacity">
-                 <button @click="abrirModalEstado(entrega)" class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-900/20 dark:hover:text-orange-400" title="Cambiar Estado">
-                    <Activity class="w-4 h-4"/>
-                 </button>
-                 <button @click="abrirModalEditarEntrega(entrega)" class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400" title="Editar Detalles">
-                    <Edit class="w-4 h-4"/>
-                 </button>
-                 <button @click="abrirModalDetalle(entrega)" class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400" title="Ver Detalles">
-                    <Eye class="w-4 h-4"/>
-                 </button>
-                 <button @click="confirmarEliminarEntrega(entrega.id)" class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400" title="Eliminar">
-                    <Trash2 class="w-4 h-4"/>
-                 </button>
+                <button @click="abrirModalEstado(entrega)"
+                  class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-600 dark:hover:bg-orange-900/20 dark:hover:text-orange-400"
+                  title="Cambiar Estado">
+                  <Activity class="w-4 h-4" />
+                </button>
+                <button @click="abrirModalEditarEntrega(entrega)"
+                  class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+                  title="Editar Detalles">
+                  <Edit class="w-4 h-4" />
+                </button>
+                <button @click="abrirModalDetalle(entrega)"
+                  class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/20 dark:hover:text-blue-400"
+                  title="Ver Detalles">
+                  <Eye class="w-4 h-4" />
+                </button>
+                <button @click="confirmarEliminarEntrega(entrega.id)"
+                  class="p-1.5 rounded-md text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+                  title="Eliminar">
+                  <Trash2 class="w-4 h-4" />
+                </button>
               </div>
             </td>
           </tr>
@@ -358,122 +373,166 @@ onMounted(() => {
 
     <template #modals>
       <div v-if="mostrarModalEstado" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="rounded-2xl max-w-sm w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+        <div
+          class="rounded-2xl max-w-sm w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
           <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
-            <h3 class="text-lg font-bold text-[#092C4C] dark:text-white">Cambiar Estado #ENV-{{entregaSeleccionada?.id}}</h3>
-            <button @click="mostrarModalEstado = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X class="w-5 h-5"/></button>
+            <h3 class="text-lg font-bold text-[#092C4C] dark:text-white">Cambiar Estado #ENV-{{ entregaSeleccionada?.id }}
+            </h3>
+            <button @click="mostrarModalEstado = false"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <X class="w-5 h-5" />
+            </button>
           </div>
           <div class="p-6">
             <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Nuevo Estado</label>
-            <select v-model="nuevoEstadoFormData.estado" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="EN_CAMINO">En Camino</option>
-                <option value="ENTREGADO">Entregado</option>
-                <option value="FALLIDO">Fallido</option>
+            <select v-model="nuevoEstadoFormData.estado"
+              class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+              <option value="PENDIENTE">Pendiente</option>
+              <option value="EN_CAMINO">En Camino</option>
+              <option value="ENTREGADO">Entregado</option>
+              <option value="FALLIDO">Fallido</option>
             </select>
           </div>
-          <div class="p-4 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <button @click="mostrarModalEstado = false" class="px-4 py-2 border rounded-lg font-medium transition-colors text-sm border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
-            <button @click="guardarNuevoEstado" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors text-sm">Actualizar</button>
+          <div
+            class="p-4 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+            <button @click="mostrarModalEstado = false"
+              class="px-4 py-2 border rounded-lg font-medium transition-colors text-sm border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
+            <button @click="guardarNuevoEstado"
+              class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors text-sm">Actualizar</button>
           </div>
         </div>
       </div>
 
       <div v-if="mostrarModalNuevo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="rounded-2xl max-w-lg w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+        <div
+          class="rounded-2xl max-w-lg w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
           <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
-            <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">{{ entregaEditando ? 'Editar Entrega #' + entregaEditando.id : 'Registrar Nueva Entrega' }}</h3>
-            <button @click="mostrarModalNuevo = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X class="w-5 h-5"/></button>
+            <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">{{ entregaEditando ? 'Editar Entrega #' +
+              entregaEditando.id : 'Registrar Nueva Entrega' }}</h3>
+            <button @click="mostrarModalNuevo = false"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <X class="w-5 h-5" />
+            </button>
           </div>
           <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
             <div>
               <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Ruta Asignada *</label>
-              <select v-model="nuevaEntregaFormData.rutaId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-                 <option value="0" disabled>Selecciona una ruta...</option>
-                 <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ ruta.id }} ({{ruta.estado}})</option>
+              <select v-model="nuevaEntregaFormData.rutaId"
+                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+                <option value="0" disabled>Selecciona una ruta...</option>
+                <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ ruta.id }}
+                  ({{ ruta.estado }})</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Cliente Destinatario *</label>
-              <select v-model="nuevaEntregaFormData.clienteId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-                 <option value="0" disabled>Selecciona un cliente...</option>
-                 <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{ cliente.nombreEmpresa }}</option>
+              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Cliente Destinatario
+                *</label>
+              <select v-model="nuevaEntregaFormData.clienteId"
+                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+                <option value="0" disabled>Selecciona un cliente...</option>
+                <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{
+                  cliente.nombreEmpresa }}</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Orden de Parada (Opcional)</label>
-              <input type="number" v-model="nuevaEntregaFormData.ordenParada" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" />
+              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Orden de Parada
+                (Opcional)</label>
+              <input type="number" v-model="nuevaEntregaFormData.ordenParada"
+                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" />
             </div>
             <div>
               <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Notas (Opcional)</label>
-              <textarea v-model="nuevaEntregaFormData.notas" rows="3" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white"></textarea>
+              <textarea v-model="nuevaEntregaFormData.notas" rows="3"
+                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white"></textarea>
             </div>
           </div>
-          <div class="p-6 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <button @click="mostrarModalNuevo = false" class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
-            <button @click="guardarEntrega" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">{{ entregaEditando ? 'Guardar Cambios' : 'Crear Entrega' }}</button>
+          <div
+            class="p-6 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+            <button @click="mostrarModalNuevo = false"
+              class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
+            <button @click="guardarEntrega"
+              class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">{{
+                entregaEditando ? 'Guardar Cambios' : 'Crear Entrega' }}</button>
           </div>
         </div>
       </div>
 
       <div v-if="mostrarModalDetalle" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div class="rounded-2xl max-w-md w-full shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
-          <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+        <div
+          class="rounded-2xl max-w-md w-full shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+          <div
+            class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
             <h3 class="text-xl font-bold flex items-center gap-2 text-[#092C4C] dark:text-white">
-               <Package class="w-5 h-5 text-[#E67E50]"/> Entrega #ENV-{{entregaSeleccionada?.id}}
+              <Package class="w-5 h-5 text-[#E67E50]" /> Entrega #ENV-{{ entregaSeleccionada?.id }}
             </h3>
-            <button @click="mostrarModalDetalle = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X class="w-5 h-5"/></button>
+            <button @click="mostrarModalDetalle = false"
+              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <X class="w-5 h-5" />
+            </button>
           </div>
           <div class="p-6 space-y-5">
-            
+
             <div class="flex justify-between items-start">
-               <div>
-                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Estado Actual</p>
-                  <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
-                          :class="[badgeEstado(entregaSeleccionada?.estado || '').bg, badgeEstado(entregaSeleccionada?.estado || '').text, badgeEstado(entregaSeleccionada?.estado || '').border]">
-                      {{ entregaSeleccionada?.estado }}
-                  </span>
-               </div>
-               <div class="text-right">
-                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Hora Entrega Real</p>
-                  <p class="font-medium text-sm text-gray-800 dark:text-white">
-                     {{ entregaSeleccionada?.horaEntregaReal ? new Date(entregaSeleccionada.horaEntregaReal).toLocaleString() : 'Aún no entregado' }}
-                  </p>
-               </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Estado
+                  Actual</p>
+                <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
+                  :class="[badgeEstado(entregaSeleccionada?.estado || '').bg, badgeEstado(entregaSeleccionada?.estado || '').text, badgeEstado(entregaSeleccionada?.estado || '').border]">
+                  {{ entregaSeleccionada?.estado }}
+                </span>
+              </div>
+              <div class="text-right">
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Hora
+                  Entrega Real</p>
+                <p class="font-medium text-sm text-gray-800 dark:text-white">
+                  {{ entregaSeleccionada?.horaEntregaReal ? new
+                    Date(entregaSeleccionada.horaEntregaReal).toLocaleString() : 'Aún no entregado' }}
+                </p>
+              </div>
             </div>
 
-            <div class="p-4 rounded-xl border flex gap-4 items-start bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54]">
-               <MapPin class="w-5 h-5 text-[#E67E50] mt-0.5" />
-               <div>
-                  <p class="font-bold text-base text-gray-900 dark:text-white">{{ entregaSeleccionada?.cliente?.nombreEmpresa }}</p>
-                  <p class="text-sm mt-1 text-gray-600 dark:text-[#82A1B1]">{{ entregaSeleccionada?.cliente?.direccion }}</p>
-                  <p class="text-sm mt-1 flex items-center gap-1.5 text-gray-600 dark:text-[#82A1B1]">
-                     <User class="w-3.5 h-3.5"/> Tel: {{ entregaSeleccionada?.cliente?.telefono || 'No disponible' }}
-                  </p>
-               </div>
+            <div
+              class="p-4 rounded-xl border flex gap-4 items-start bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54]">
+              <MapPin class="w-5 h-5 text-[#E67E50] mt-0.5" />
+              <div>
+                <p class="font-bold text-base text-gray-900 dark:text-white">{{
+                  entregaSeleccionada?.cliente?.nombreEmpresa }}</p>
+                <p class="text-sm mt-1 text-gray-600 dark:text-[#82A1B1]">{{ entregaSeleccionada?.cliente?.direccion }}
+                </p>
+                <p class="text-sm mt-1 flex items-center gap-1.5 text-gray-600 dark:text-[#82A1B1]">
+                  <User class="w-3.5 h-3.5" /> Tel: {{ entregaSeleccionada?.cliente?.telefono || 'No disponible' }}
+                </p>
+              </div>
             </div>
 
             <div class="grid grid-cols-2 gap-4">
-               <div>
-                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Orden de Parada</p>
-                  <p class="font-medium text-gray-700 dark:text-gray-300">Posición {{ entregaSeleccionada?.ordenParada }}</p>
-               </div>
-               <div>
-                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Ruta Asociada</p>
-                  <p class="font-medium flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
-                     <Route class="w-4 h-4 text-orange-500" /> RT-{{ entregaSeleccionada?.rutaId }}
-                  </p>
-               </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Orden de
+                  Parada</p>
+                <p class="font-medium text-gray-700 dark:text-gray-300">Posición {{ entregaSeleccionada?.ordenParada }}
+                </p>
+              </div>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Ruta
+                  Asociada</p>
+                <p class="font-medium flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
+                  <Route class="w-4 h-4 text-orange-500" /> RT-{{ entregaSeleccionada?.rutaId }}
+                </p>
+              </div>
             </div>
 
             <div v-if="entregaSeleccionada?.notas" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
-               <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Notas del conductor</p>
-               <p class="text-sm italic text-gray-600 dark:text-gray-300">"{{ entregaSeleccionada?.notas }}"</p>
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Notas del
+                conductor</p>
+              <p class="text-sm italic text-gray-600 dark:text-gray-300">"{{ entregaSeleccionada?.notas }}"</p>
             </div>
 
             <div v-if="entregaSeleccionada?.codigoQr" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
-               <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Código QR Escaneado</p>
-               <p class="text-sm font-mono p-2 rounded text-center bg-gray-100 dark:bg-[#16181A] text-gray-800 dark:text-gray-300">{{ entregaSeleccionada?.codigoQr }}</p>
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Código QR
+                Escaneado</p>
+              <p
+                class="text-sm font-mono p-2 rounded text-center bg-gray-100 dark:bg-[#16181A] text-gray-800 dark:text-gray-300">
+                {{ entregaSeleccionada?.codigoQr }}</p>
             </div>
 
           </div>
