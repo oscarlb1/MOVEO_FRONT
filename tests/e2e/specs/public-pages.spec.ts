@@ -1,6 +1,5 @@
 import { test, expect, ADMIN_CREDENTIALS } from '../fixtures/auth.fixture'
 import { HeaderPage } from '../pages/HeaderPage'
-import { ADMIN_CREDENTIALS } from '../fixtures/auth.fixture'
 
 test.describe('Módulo 2 — Páginas Públicas', () => {
 
