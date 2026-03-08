@@ -2,6 +2,10 @@
 import { ref, reactive } from 'vue'
 import { Send, CheckCircle2 } from 'lucide-vue-next'
 
+// 1. Declaramos las variables reactivas (Esto es lo que faltaba)
+const enviado = ref(false)
+const cargando = ref(false)
+
 const formulario = reactive({
   name: '',
   email: '',
@@ -11,21 +15,44 @@ const formulario = reactive({
   message: ''
 })
 
-const enviado = ref(false)
+// 2. Función de envío conectada a AWS
+async function enviarFormulario() {
+  cargando.value = true
+  try {
+    const urlAWS = 'https://1efao41st6.execute-api.us-east-1.amazonaws.com/prod/Moveo_ProcesarContacto'
 
-function enviarFormulario() {
-  enviado.value = true
-  setTimeout(() => {
-    enviado.value = false
-    Object.assign(formulario, {
-      name: '',
-      email: '',
-      company: '',
-      phone: '',
-      subject: 'general',
-      message: ''
+    const response = await fetch(urlAWS, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formulario)
     })
-  }, 3000)
+
+    if (response.ok) {
+      enviado.value = true
+      
+      // Limpiamos el formulario tras 3 segundos
+      setTimeout(() => {
+        enviado.value = false
+        Object.assign(formulario, {
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          subject: 'general',
+          message: ''
+        })
+      }, 3000)
+    } else {
+      throw new Error('Error en la comunicación con AWS')
+    }
+  } catch (error) {
+    console.error("Error enviando a Moveo:", error)
+    alert("No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.")
+  } finally {
+    cargando.value = false
+  }
 }
 </script>
 
@@ -122,13 +149,10 @@ function enviarFormulario() {
             placeholder="Cuéntanos cómo podemos ayudarte..."
           />
         </div>
-
-        <button
-          type="submit"
-          class="w-full bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 min-h-[56px] rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all duration-300 flex items-center justify-center gap-2 group font-semibold text-lg"
-        >
-          Enviar mensaje
-          <Send class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        <button type="submit" :disabled="cargando"
+          class="w-full bg-gradient-to-r from-[#E67E50] to-[#d66d40] text-white px-8 py-4 min-h-[56px] rounded-xl hover:shadow-lg hover:shadow-[#E67E50]/30 transition-all duration-300 flex items-center justify-center gap-2 group font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ cargando ? 'Procesando...' : 'Enviar mensaje' }}
+          <Send v-if="!cargando" class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
         </button>
 
         <p class="text-gray-400 text-sm text-center">
