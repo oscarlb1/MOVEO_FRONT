@@ -4,6 +4,7 @@ import { MotionPlugin } from '@vueuse/motion'
 import App from './App.vue'
 import router from './rutas'
 import './assets/main.css'
+import './assets/styles/main.scss'
 import 'vue-sonner/style.css'
 import VueApexCharts from 'vue3-apexcharts'
 

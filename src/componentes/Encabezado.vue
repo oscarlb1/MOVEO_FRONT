@@ -77,7 +77,7 @@ const cerrarSesion = async () => {
             </div>
             <div class="flex flex-col">
               <span class="text-sm font-semibold text-[#424242] dark:text-white leading-none">{{ usuario.nombre
-                }}</span>
+              }}</span>
               <span class="text-xs text-gray-500 dark:text-[#82A1B1] mt-1">{{ usuario.email }}</span>
             </div>
             <button @click="toggleMenu"
@@ -220,5 +220,17 @@ const cerrarSesion = async () => {
 .fade-menu-leave-to {
   opacity: 0;
   transform: translateY(-20px) scale(0.98);
+}
+</style>
+
+<style lang="scss">
+@use '@/assets/styles/base/variables' as *;
+
+[class~="text-[#E67E50]"] {
+  color: $primary-color !important;
+}
+
+[class~="bg-[#E67E50]"] {
+  background-color: $primary-color !important;
 }
 </style>
