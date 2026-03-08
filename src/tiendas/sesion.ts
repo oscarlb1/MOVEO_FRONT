@@ -7,6 +7,7 @@ import authServicio from '@/servicios/authServicio';
 export const useSesionStore = defineStore('sesion', () => {
     const usuario = ref<Usuario | null>(null);
     const token = ref<string | null>(localStorage.getItem('token'));
+    const haVistoCargador = ref(false);
 
     const estaAutenticado = computed(() => !!token.value && !!usuario.value);
 
@@ -36,9 +37,6 @@ export const useSesionStore = defineStore('sesion', () => {
             // Try to extract user info from token
             const claims = parseJwt(respuesta.tokenDeAcceso);
             if (claims) {
-                // Map claims to Usuario object as best as we can
-                // Adjust claim keys based on actual backend JWT structure (usually 'sub', 'email', 'name', etc.)
-                // For now, we use the input email if claim is missing, or generic placeholders
                 usuario.value = {
                     id: parseInt(claims.sub || claims.id || claims.nameid || '0'),
                     nombre: claims.unique_name
@@ -73,6 +71,7 @@ export const useSesionStore = defineStore('sesion', () => {
         } finally {
             usuario.value = null;
             token.value = null;
+            haVistoCargador.value = false;
             localStorage.removeItem('token');
         }
     }
@@ -107,6 +106,7 @@ export const useSesionStore = defineStore('sesion', () => {
         usuario,
         token,
         estaAutenticado,
+        haVistoCargador,
         iniciarSesion,
         cerrarSesion
     };

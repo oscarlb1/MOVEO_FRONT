@@ -17,6 +17,7 @@ import EntregasVista from './EntregasVista.vue'
 import ClientesVista from './ClientesVista.vue'
 
 import { useTemaStore } from '@/tiendas/tema'
+import PantallaCarga from '@/componentes/PantallaCarga.vue'
 
 const router = useRouter()
 const sesionStore = useSesionStore()
@@ -40,7 +41,7 @@ const conteoNoLeidas = ref(0)
 let intervaloActualizacion: ReturnType<typeof setInterval>
 
 // Estado del Cargador
-const mostrarCargador = ref(true)
+const mostrarCargador = ref(!sesionStore.haVistoCargador)
 const progresoCarga = ref(0)
 
 function iniciarSimulacionCarga() {
@@ -55,6 +56,7 @@ function iniciarSimulacionCarga() {
       clearInterval(interval)
       setTimeout(() => {
         mostrarCargador.value = false
+        sesionStore.haVistoCargador = true
       }, 200) // Pequeño retraso al 100% antes de ocultar
     }
   }, 30)
@@ -78,10 +80,7 @@ const itemsMenu = computed(() => {
 
 function irASeccion(id: string) {
   if (seccionActiva.value !== id) {
-    iniciarSimulacionCarga()
-    setTimeout(() => {
-      seccionActiva.value = id
-    }, 400) // Cambiar sección oculto detrás de la animación
+    seccionActiva.value = id
   }
   sidebarAbierto.value = false
 }
@@ -103,7 +102,9 @@ function handleActualizarNoLeidas(conteo: number) {
 
 onMounted(() => {
   temaStore.aplicarTema()
-  iniciarSimulacionCarga()
+  if (!sesionStore.haVistoCargador) {
+    iniciarSimulacionCarga()
+  }
   dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
   intervaloActualizacion = setInterval(() => {
     dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
@@ -118,33 +119,8 @@ onUnmounted(() => {
 <template>
   <div class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white relative">
 
-    <!-- Global Loading Overlay -->
-    <Transition name="loader-fade">
-      <div v-show="mostrarCargador" class="fixed inset-0 z-[100] bg-[#FAFAFA] dark:bg-[#16181A] flex flex-col items-center justify-center">
-        <!-- Logo Text -->
-        <h1 class="text-3xl font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white mb-8 animate-pulse">
-          MOVE<span class="text-[#E67E50]">O</span>
-        </h1>
-        
-        <!-- Truck Animation -->
-        <div class="relative w-48 h-32 mb-8 animate-pulse">
-          <img src="@/assets/camion-moveo.png" alt="Loading" class="w-full h-full object-contain" />
-        </div>
-
-        <!-- Progress Bar Background -->
-        <div class="w-64 h-2 bg-gray-200 dark:bg-[#374B54] rounded-full overflow-hidden shrink-0">
-          <!-- Progress Indicator -->
-          <div class="h-full bg-gradient-to-r from-[#E67E50] to-[#f59e0b] transition-all duration-75 ease-linear rounded-full"
-               :style="{ width: `${progresoCarga}%` }">
-          </div>
-        </div>
-        
-        <!-- Progress Text -->
-        <p class="mt-3 text-sm font-semibold text-[#757575] dark:text-[#82A1B1]">
-          Cargando... {{ Math.round(progresoCarga) }}%
-        </p>
-      </div>
-    </Transition>
+    <!-- Global Loading Overlay Component -->
+    <PantallaCarga :mostrar="mostrarCargador" :progreso="progresoCarga" />
 
     <Transition name="fade">
       <div v-if="sidebarAbierto"
@@ -283,9 +259,6 @@ onUnmounted(() => {
   transform: translateY(-10px);
 }
 
-.loader-fade-enter-active, .loader-fade-leave-active {
-  transition: opacity 0.5s ease;
-}
 .loader-fade-enter-from, .loader-fade-leave-to {
   opacity: 0;
 }
