@@ -46,7 +46,7 @@ const progresoCarga = ref(0)
 function iniciarSimulacionCarga() {
   mostrarCargador.value = true
   progresoCarga.value = 0
-  
+
   const step = 100 / (1800 / 30) // 100% in ~1.8 seconds with 30ms intervals
   const interval = setInterval(() => {
     progresoCarga.value += step
@@ -104,9 +104,9 @@ function handleActualizarNoLeidas(conteo: number) {
 onMounted(() => {
   temaStore.aplicarTema()
   iniciarSimulacionCarga()
-  dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
+  dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => { })
   intervaloActualizacion = setInterval(() => {
-    dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => {})
+    dashboardServicio.obtenerConteoNoLeidas().then(c => conteoNoLeidas.value = c).catch(() => { })
   }, 60000)
 })
 
@@ -116,16 +116,19 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white relative">
+  <div
+    class="h-screen w-full max-w-[100vw] flex overflow-hidden font-inter transition-colors duration-300 bg-[#FAFAFA] dark:bg-[#16181A] text-[#092C4C] dark:text-white relative">
 
     <!-- Global Loading Overlay -->
     <Transition name="loader-fade">
-      <div v-show="mostrarCargador" class="fixed inset-0 z-[100] bg-[#FAFAFA] dark:bg-[#16181A] flex flex-col items-center justify-center">
+      <div v-show="mostrarCargador"
+        class="fixed inset-0 z-[100] bg-[#FAFAFA] dark:bg-[#16181A] flex flex-col items-center justify-center">
         <!-- Logo Text -->
-        <h1 class="text-3xl font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white mb-8 animate-pulse">
+        <h1
+          class="text-3xl font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white mb-8 animate-pulse">
           MOVE<span class="text-[#E67E50]">O</span>
         </h1>
-        
+
         <!-- Truck Animation -->
         <div class="relative w-48 h-32 mb-8 animate-pulse">
           <img src="@/assets/camion-moveo.png" alt="Loading" class="w-full h-full object-contain" />
@@ -134,11 +137,12 @@ onUnmounted(() => {
         <!-- Progress Bar Background -->
         <div class="w-64 h-2 bg-gray-200 dark:bg-[#374B54] rounded-full overflow-hidden shrink-0">
           <!-- Progress Indicator -->
-          <div class="h-full bg-gradient-to-r from-[#E67E50] to-[#f59e0b] transition-all duration-75 ease-linear rounded-full"
-               :style="{ width: `${progresoCarga}%` }">
+          <div
+            class="h-full bg-gradient-to-r from-[#E67E50] to-[#f59e0b] transition-all duration-75 ease-linear rounded-full"
+            :style="{ width: `${progresoCarga}%` }">
           </div>
         </div>
-        
+
         <!-- Progress Text -->
         <p class="mt-3 text-sm font-semibold text-[#757575] dark:text-[#82A1B1]">
           Cargando... {{ Math.round(progresoCarga) }}%
@@ -147,18 +151,18 @@ onUnmounted(() => {
     </Transition>
 
     <Transition name="fade">
-      <div v-if="sidebarAbierto"
-        class="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+      <div v-if="sidebarAbierto" class="lg:hidden fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
         @click="sidebarAbierto = false">
       </div>
     </Transition>
 
-    <aside class="fixed lg:static inset-y-0 left-0 z-50 w-46 flex flex-col transition-all duration-300 transform border-r border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#272A30] shadow-sm lg:translate-x-0"
+    <aside
+      class="fixed lg:static inset-y-0 left-0 z-50 w-46 flex flex-col transition-all duration-300 transform border-r border-gray-100 dark:border-[#374B54] bg-white dark:bg-[#272A30] shadow-sm lg:translate-x-0"
       :class="sidebarAbierto ? 'translate-x-0' : '-translate-x-full'">
 
       <div class="h-20 flex items-center justify-between px-5 border-b border-gray-100 dark:border-[#374B54]">
         <div class="flex items-center gap-3">
-          <img src="@/assets/logo-moveo.png" alt="Moveo Logo" class="h-9 w-auto object-contain drop-shadow-sm" />
+          <img src="@/assets/logo-moveo.png" alt="Moveo Logo" class="h-9 w-auto object-contain" />
           <div>
             <h1 class="text-lg font-black tracking-tight flex items-center gap-0.5 text-[#092C4C] dark:text-white">
               MOVE<span class="text-[#E67E50]">O</span>
@@ -166,18 +170,16 @@ onUnmounted(() => {
             <p class="text-[9px] font-bold tracking-widest uppercase opacity-60">Logística</p>
           </div>
         </div>
-        <button class="lg:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#16181A] text-[#424242] dark:text-[#82A1B1]"
+        <button
+          class="lg:hidden p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-[#16181A] text-[#424242] dark:text-[#82A1B1]"
           @click="sidebarAbierto = false">
           <X class="w-5 h-5" />
         </button>
       </div>
 
       <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-1 scrollbar-thin">
-        <button
-          v-for="item in itemsMenu" :key="item.id"
-          @click="irASeccion(item.id)"
-          class="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative"
-          :class="[
+        <button v-for="item in itemsMenu" :key="item.id" @click="irASeccion(item.id)"
+          class="w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative" :class="[
             seccionActiva === item.id
               ? 'bg-[#E67E50]/10 dark:bg-[#E67E50]/15 text-[#E67E50]'
               : 'text-[#757575] dark:text-[#82A1B1] hover:bg-gray-50 dark:hover:bg-[#16181A]/50 hover:text-[#092C4C] dark:hover:text-white'
@@ -185,7 +187,7 @@ onUnmounted(() => {
           <div v-if="seccionActiva === item.id"
             class="absolute left-0 w-1 h-6 bg-[#E67E50] rounded-r-full shadow-[0_0_10px_rgba(230,126,80,0.4)]">
           </div>
-          
+
           <component :is="item.icon" class="w-4.5 h-4.5 transition-transform duration-200 group-hover:scale-110"
             :class="seccionActiva === item.id ? 'stroke-[2.5px]' : ''" />
           <span class="font-bold text-sm">{{ item.label }}</span>
@@ -193,10 +195,12 @@ onUnmounted(() => {
       </nav>
 
       <div class="p-4 border-t border-gray-100 dark:border-[#374B54] bg-gray-50/50 dark:bg-[#272A30]">
-        <div class="flex items-center p-2.5 rounded-xl transition-colors cursor-pointer hover:bg-white dark:hover:bg-[#16181A] border border-transparent hover:border-gray-200 dark:hover:border-[#374B54] hover:shadow-sm"
+        <div
+          class="flex items-center p-2.5 rounded-xl transition-colors cursor-pointer hover:bg-white dark:hover:bg-[#16181A] border border-transparent hover:border-gray-200 dark:hover:border-[#374B54] hover:shadow-sm"
           @click="router.push('/configuracion')">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-9 h-9 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-xs font-bold shadow-md overflow-hidden flex-shrink-0">
+            <div
+              class="w-9 h-9 rounded-full bg-[#E67E50] flex items-center justify-center text-white text-xs font-bold shadow-md overflow-hidden flex-shrink-0">
               <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
               <span v-else>{{ inicialUsuario }}</span>
             </div>
@@ -213,27 +217,31 @@ onUnmounted(() => {
       </div>
     </aside>
 
-    <main class="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden transition-all duration-300 bg-[#F8F9FA] dark:bg-[#16181A]">
-      
+    <main
+      class="flex-1 flex flex-col min-w-0 max-w-full overflow-x-hidden transition-all duration-300 bg-[#F8F9FA] dark:bg-[#16181A]">
+
       <!-- Dashboard Header with Glassmorphism -->
-      <header class="h-20 flex items-center justify-between px-4 sm:px-8 border-b border-gray-100 dark:border-[#374B54] bg-white/70 dark:bg-[#272A30]/70 backdrop-blur-xl sticky top-0 z-30 transition-all duration-300">
-        
+      <header
+        class="h-20 flex items-center justify-between px-4 sm:px-8 border-b border-gray-100 dark:border-[#374B54] bg-white/70 dark:bg-[#272A30]/70 backdrop-blur-xl sticky top-0 z-30 transition-all duration-300">
+
         <div class="flex items-center gap-4">
-          <button class="lg:hidden p-2.5 rounded-xl transition-all active:scale-95 bg-gray-50 dark:bg-[#16181A] text-[#424242] dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] shadow-sm"
+          <button
+            class="lg:hidden p-2.5 rounded-xl transition-all active:scale-95 bg-gray-50 dark:bg-[#16181A] text-[#424242] dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] shadow-sm"
             @click="sidebarAbierto = true">
             <Menu class="w-5 h-5" />
           </button>
           <div class="hidden md:block">
             <h2 class="text-xl font-bold tracking-tight text-[#092C4C] dark:text-white flex items-center gap-2">
               <span class="w-1 h-6 bg-[#E67E50] rounded-full mr-2 hidden sm:block"></span>
-              {{ itemsMenu.find(i => i.id === seccionActiva)?.label || 'Dashboard' }}
+              {{itemsMenu.find(i => i.id === seccionActiva)?.label || 'Dashboard'}}
             </h2>
           </div>
         </div>
 
         <div class="flex items-center gap-3">
           <!-- Profile Quick Access for Mobile -->
-          <div class="lg:hidden w-10 h-10 rounded-xl bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-[#E67E50]/20 cursor-pointer overflow-hidden flex-shrink-0 transition-transform active:scale-90"
+          <div
+            class="lg:hidden w-10 h-10 rounded-xl bg-gradient-to-br from-[#E67E50] to-[#d4603a] flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-[#E67E50]/20 cursor-pointer overflow-hidden flex-shrink-0 transition-transform active:scale-90"
             @click="irASeccion('general')">
             <img v-if="imagenUsuario" :src="imagenUsuario" class="w-full h-full object-cover" />
             <span v-else>{{ inicialUsuario }}</span>
@@ -241,9 +249,10 @@ onUnmounted(() => {
 
           <!-- Quick Settings Toggle (Desktop/Tablet) -->
           <div class="hidden sm:flex items-center gap-2">
-             <button @click="router.push('/configuracion')" class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
-               <Settings class="w-5 h-5" />
-             </button>
+            <button @click="router.push('/configuracion')"
+              class="p-2.5 rounded-xl bg-gray-50 dark:bg-[#16181A] text-gray-500 dark:text-[#82A1B1] border border-gray-200 dark:border-[#374B54] hover:text-[#E67E50] transition-colors">
+              <Settings class="w-5 h-5" />
+            </button>
           </div>
         </div>
       </header>
@@ -268,25 +277,38 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
 
-.page-fade-enter-active, .page-fade-leave-active {
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.page-fade-enter-active,
+.page-fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
 .page-fade-enter-from {
   opacity: 0;
   transform: translateY(10px);
 }
+
 .page-fade-leave-to {
   opacity: 0;
   transform: translateY(-10px);
 }
 
-.loader-fade-enter-active, .loader-fade-leave-active {
+.loader-fade-enter-active,
+.loader-fade-leave-active {
   transition: opacity 0.5s ease;
 }
-.loader-fade-enter-from, .loader-fade-leave-to {
+
+.loader-fade-enter-from,
+.loader-fade-leave-to {
   opacity: 0;
 }
 
@@ -295,13 +317,16 @@ onUnmounted(() => {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(156, 163, 175, 0.2);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(156, 163, 175, 0.4);
 }
