@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Mail, Phone, MapPin, Linkedin, Twitter, Github, Truck } from 'lucide-vue-next'
+import { RouterLink } from 'vue-router'
 
 const productLinks = [
   { label: 'Características', href: '#' },
@@ -101,14 +102,14 @@ const legalLinks = [
       <div class="border-t border-white/10 dark:border-[#374B54] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
         <p class="text-gray-400 dark:text-gray-500">© 2025 Moveo. Todos los derechos reservados.</p>
         <div class="flex gap-6 text-gray-400 dark:text-gray-500">
-          <a 
+          <RouterLink 
             v-for="link in legalLinks" 
             :key="link.label"
-            :href="link.href" 
+            :to="link.href" 
             class="hover:text-[#E67E50] dark:hover:text-white transition-colors"
           >
             {{ link.label }}
-          </a>
+          </RouterLink>
         </div>
       </div>
     </div>

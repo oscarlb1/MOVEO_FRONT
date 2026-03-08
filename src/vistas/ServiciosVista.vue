@@ -238,21 +238,7 @@ const navegar = (ruta: string) => {
             class="relative"
           >
             <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200 dark:border-[#374B54] bg-gray-100 dark:bg-[#16181A]">
-              <img src="https://images.unsplash.com/photo-1586155638764-bf045442fcc3?auto=format&fit=crop&q=80&w=1000" alt="Rutas" class="w-full h-auto object-cover min-h-[400px]" />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#092C4C]/90 dark:from-[#16181A]/90 via-[#092C4C]/30 dark:via-[#16181A]/30 to-transparent flex items-end p-8">
-                <div class="text-white w-full">
-                  <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-3">
-                      <div class="w-3 h-3 bg-[#E67E50] rounded-full animate-pulse"></div>
-                      <span class="text-lg font-medium">Calculando ruta óptima...</span>
-                    </div>
-                    <div class="text-[#E67E50] font-bold">87%</div>
-                  </div>
-                  <div class="h-2 bg-white/20 dark:bg-[#374B54] rounded-full overflow-hidden">
-                    <div class="h-full bg-[#E67E50] rounded-full w-[87%] animate-pulse"></div>
-                  </div>
-                </div>
-              </div>
+              <img src="https://cdn.prod.website-files.com/64ca37391046bd0e764dc522/680908635f18d63db57e9e23_planificacion-de-rutas%2043%201000x750%20px.png" alt="Optimización de Rutas" class="w-full h-auto object-cover min-h-[400px]" />
             </div>
           </div>
         </div>
