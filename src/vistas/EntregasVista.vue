@@ -372,172 +372,167 @@ onMounted(() => {
     </template>
 
     <template #modals>
-      <div v-if="mostrarModalEstado" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div
-          class="rounded-2xl max-w-sm w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
-          <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
-            <h3 class="text-lg font-bold text-[#092C4C] dark:text-white">Cambiar Estado #ENV-{{ entregaSeleccionada?.id }}
-            </h3>
-            <button @click="mostrarModalEstado = false"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-              <X class="w-5 h-5" />
-            </button>
-          </div>
-          <div class="p-6">
-            <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Nuevo Estado</label>
-            <select v-model="nuevoEstadoFormData.estado"
-              class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-              <option value="PENDIENTE">Pendiente</option>
-              <option value="EN_CAMINO">En Camino</option>
-              <option value="ENTREGADO">Entregado</option>
-              <option value="FALLIDO">Fallido</option>
-            </select>
-          </div>
-          <div
-            class="p-4 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <button @click="mostrarModalEstado = false"
-              class="px-4 py-2 border rounded-lg font-medium transition-colors text-sm border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
-            <button @click="guardarNuevoEstado"
-              class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors text-sm">Actualizar</button>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="mostrarModalNuevo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div
-          class="rounded-2xl max-w-lg w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
-          <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
-            <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">{{ entregaEditando ? 'Editar Entrega #' +
-              entregaEditando.id : 'Registrar Nueva Entrega' }}</h3>
-            <button @click="mostrarModalNuevo = false"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-              <X class="w-5 h-5" />
-            </button>
-          </div>
-          <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-            <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Ruta Asignada *</label>
-              <select v-model="nuevaEntregaFormData.rutaId"
-                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-                <option value="0" disabled>Selecciona una ruta...</option>
-                <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ ruta.id }}
-                  ({{ ruta.estado }})</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Cliente Destinatario
-                *</label>
-              <select v-model="nuevaEntregaFormData.clienteId"
-                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
-                <option value="0" disabled>Selecciona un cliente...</option>
-                <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{
-                  cliente.nombreEmpresa }}</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Orden de Parada
-                (Opcional)</label>
-              <input type="number" v-model="nuevaEntregaFormData.ordenParada"
-                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" />
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Notas (Opcional)</label>
-              <textarea v-model="nuevaEntregaFormData.notas" rows="3"
-                class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white"></textarea>
-            </div>
-          </div>
-          <div
-            class="p-6 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <button @click="mostrarModalNuevo = false"
-              class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
-            <button @click="guardarEntrega"
-              class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">{{
-                entregaEditando ? 'Guardar Cambios' : 'Crear Entrega' }}</button>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="mostrarModalDetalle" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-        <div
-          class="rounded-2xl max-w-md w-full shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
-          <div
-            class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
-            <h3 class="text-xl font-bold flex items-center gap-2 text-[#092C4C] dark:text-white">
-              <Package class="w-5 h-5 text-[#E67E50]" /> Entrega #ENV-{{ entregaSeleccionada?.id }}
-            </h3>
-            <button @click="mostrarModalDetalle = false"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-              <X class="w-5 h-5" />
-            </button>
-          </div>
-          <div class="p-6 space-y-5">
-
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Estado
-                  Actual</p>
-                <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
-                  :class="[badgeEstado(entregaSeleccionada?.estado || '').bg, badgeEstado(entregaSeleccionada?.estado || '').text, badgeEstado(entregaSeleccionada?.estado || '').border]">
-                  {{ entregaSeleccionada?.estado }}
-                </span>
+      <Teleport to="body">
+        <Transition name="fade">
+          <div v-if="mostrarModalEstado" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="mostrarModalEstado = false">
+            <div class="rounded-2xl max-w-sm w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+              <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
+                <h3 class="text-lg font-bold text-[#092C4C] dark:text-white">Cambiar Estado #ENV-{{ entregaSeleccionada?.id }}</h3>
+                <button @click="mostrarModalEstado = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                  <X class="w-5 h-5" />
+                </button>
               </div>
-              <div class="text-right">
-                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Hora
-                  Entrega Real</p>
-                <p class="font-medium text-sm text-gray-800 dark:text-white">
-                  {{ entregaSeleccionada?.horaEntregaReal ? new
-                    Date(entregaSeleccionada.horaEntregaReal).toLocaleString() : 'Aún no entregado' }}
-                </p>
+              <div class="p-6">
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Nuevo Estado</label>
+                <select v-model="nuevoEstadoFormData.estado" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+                  <option value="PENDIENTE">Pendiente</option>
+                  <option value="EN_CAMINO">En Camino</option>
+                  <option value="ENTREGADO">Entregado</option>
+                  <option value="FALLIDO">Fallido</option>
+                </select>
+              </div>
+              <div class="p-4 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+                <button @click="mostrarModalEstado = false" class="px-4 py-2 border rounded-lg font-medium transition-colors text-sm border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
+                <button @click="guardarNuevoEstado" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors text-sm">Actualizar</button>
               </div>
             </div>
+          </div>
+        </Transition>
+      </Teleport>
 
+      <Teleport to="body">
+        <Transition name="fade">
+          <div v-if="mostrarModalNuevo" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="mostrarModalNuevo = false">
+            <div class="rounded-2xl max-w-lg w-full shadow-xl bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+              <div class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54]">
+                <h3 class="text-xl font-bold text-[#092C4C] dark:text-white">{{ entregaEditando ? 'Editar Entrega #' + entregaEditando.id : 'Registrar Nueva Entrega' }}</h3>
+                <button @click="mostrarModalNuevo = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                  <X class="w-5 h-5" />
+                </button>
+              </div>
+              <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div>
+                  <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Ruta Asignada *</label>
+                  <select v-model="nuevaEntregaFormData.rutaId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+                    <option value="0" disabled>Selecciona una ruta...</option>
+                    <option v-for="ruta in rutasDisponibles" :key="ruta.id" :value="ruta.id">Ruta #RT-{{ ruta.id }} ({{ ruta.estado }})</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Cliente Destinatario *</label>
+                  <select v-model="nuevaEntregaFormData.clienteId" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white">
+                    <option value="0" disabled>Selecciona un cliente...</option>
+                    <option v-for="cliente in clientesDisponibles" :key="cliente.id" :value="cliente.id">{{ cliente.nombreEmpresa }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Orden de Parada (Opcional)</label>
+                  <input type="number" v-model="nuevaEntregaFormData.ordenParada" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Notas (Opcional)</label>
+                  <textarea v-model="nuevaEntregaFormData.notas" rows="3" class="w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E67E50] dark:focus:ring-[#E67E50] bg-gray-50 dark:bg-[#16181A] border-gray-200 dark:border-[#374B54] text-[#424242] dark:text-white"></textarea>
+                </div>
+              </div>
+              <div class="p-6 border-t flex justify-end gap-3 rounded-b-2xl border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+                <button @click="mostrarModalNuevo = false" class="px-4 py-2 border rounded-lg font-medium transition-colors border-gray-200 dark:border-[#374B54] text-gray-600 dark:text-[#82A1B1] hover:bg-gray-100 dark:hover:bg-[#374B54]/50">Cancelar</button>
+                <button @click="guardarEntrega" class="px-4 py-2 bg-[#E67E50] text-white rounded-lg font-semibold hover:bg-[#d46b3f] transition-colors">{{ entregaEditando ? 'Guardar Cambios' : 'Crear Entrega' }}</button>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
+
+      <Teleport to="body">
+        <Transition name="fade">
+          <div v-if="mostrarModalDetalle" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="mostrarModalDetalle = false">
             <div
-              class="p-4 rounded-xl border flex gap-4 items-start bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54]">
-              <MapPin class="w-5 h-5 text-[#E67E50] mt-0.5" />
-              <div>
-                <p class="font-bold text-base text-gray-900 dark:text-white">{{
-                  entregaSeleccionada?.cliente?.nombreEmpresa }}</p>
-                <p class="text-sm mt-1 text-gray-600 dark:text-[#82A1B1]">{{ entregaSeleccionada?.cliente?.direccion }}
-                </p>
-                <p class="text-sm mt-1 flex items-center gap-1.5 text-gray-600 dark:text-[#82A1B1]">
-                  <User class="w-3.5 h-3.5" /> Tel: {{ entregaSeleccionada?.cliente?.telefono || 'No disponible' }}
-                </p>
+              class="rounded-2xl max-w-md w-full shadow-xl overflow-hidden bg-white dark:bg-[#272A30] border border-gray-100 dark:border-[#374B54]">
+              <div
+                class="p-6 border-b flex justify-between items-center border-gray-100 dark:border-[#374B54] bg-gray-50 dark:bg-[#16181A]">
+                <h3 class="text-xl font-bold flex items-center gap-2 text-[#092C4C] dark:text-white">
+                  <Package class="w-5 h-5 text-[#E67E50]" /> Entrega #ENV-{{ entregaSeleccionada?.id }}
+                </h3>
+                <button @click="mostrarModalDetalle = false"
+                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                  <X class="w-5 h-5" />
+                </button>
+              </div>
+              <div class="p-6 space-y-5">
+
+                <div class="flex justify-between items-start">
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Estado
+                      Actual</p>
+                    <span class="px-3 py-1.5 rounded-md text-sm font-bold uppercase tracking-wider border"
+                      :class="[badgeEstado(entregaSeleccionada?.estado || '').bg, badgeEstado(entregaSeleccionada?.estado || '').text, badgeEstado(entregaSeleccionada?.estado || '').border]">
+                      {{ entregaSeleccionada?.estado }}
+                    </span>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Hora
+                      Entrega Real</p>
+                    <p class="font-medium text-sm text-gray-800 dark:text-white">
+                      {{ entregaSeleccionada?.horaEntregaReal ? new
+                        Date(entregaSeleccionada.horaEntregaReal).toLocaleString() : 'Aún no entregado' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  class="p-4 rounded-xl border flex gap-4 items-start bg-gray-50 dark:bg-[#16181A] border-gray-100 dark:border-[#374B54]">
+                  <MapPin class="w-5 h-5 text-[#E67E50] mt-0.5" />
+                  <div>
+                    <p class="font-bold text-base text-gray-900 dark:text-white">{{
+                      entregaSeleccionada?.cliente?.nombreEmpresa }}</p>
+                    <p class="text-sm mt-1 text-gray-600 dark:text-[#82A1B1]">{{ entregaSeleccionada?.cliente?.direccion }}
+                    </p>
+                    <p class="text-sm mt-1 flex items-center gap-1.5 text-gray-600 dark:text-[#82A1B1]">
+                      <User class="w-3.5 h-3.5" /> Tel: {{ entregaSeleccionada?.cliente?.telefono || 'No disponible' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Orden de
+                      Parada</p>
+                    <p class="font-medium text-gray-700 dark:text-gray-300">Posición {{ entregaSeleccionada?.ordenParada }}
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Ruta
+                      Asociada</p>
+                    <p class="font-medium flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
+                      <Route class="w-4 h-4 text-orange-500" /> RT-{{ entregaSeleccionada?.rutaId }}
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="entregaSeleccionada?.notas" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
+                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Notas del
+                    conductor</p>
+                  <p class="text-sm italic text-gray-600 dark:text-gray-300">"{{ entregaSeleccionada?.notas }}"</p>
+                </div>
+
+                <div v-if="entregaSeleccionada?.codigoQr" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
+                  <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Código QR
+                    Escaneado</p>
+                  <p
+                    class="text-sm font-mono p-2 rounded text-center bg-gray-100 dark:bg-[#16181A] text-gray-800 dark:text-gray-300">
+                    {{ entregaSeleccionada?.codigoQr }}</p>
+                </div>
+
               </div>
             </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Orden de
-                  Parada</p>
-                <p class="font-medium text-gray-700 dark:text-gray-300">Posición {{ entregaSeleccionada?.ordenParada }}
-                </p>
-              </div>
-              <div>
-                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-1">Ruta
-                  Asociada</p>
-                <p class="font-medium flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
-                  <Route class="w-4 h-4 text-orange-500" /> RT-{{ entregaSeleccionada?.rutaId }}
-                </p>
-              </div>
-            </div>
-
-            <div v-if="entregaSeleccionada?.notas" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
-              <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Notas del
-                conductor</p>
-              <p class="text-sm italic text-gray-600 dark:text-gray-300">"{{ entregaSeleccionada?.notas }}"</p>
-            </div>
-
-            <div v-if="entregaSeleccionada?.codigoQr" class="pt-4 border-t border-gray-100 dark:border-[#374B54]">
-              <p class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-[#82A1B1] mb-2">Código QR
-                Escaneado</p>
-              <p
-                class="text-sm font-mono p-2 rounded text-center bg-gray-100 dark:bg-[#16181A] text-gray-800 dark:text-gray-300">
-                {{ entregaSeleccionada?.codigoQr }}</p>
-            </div>
-
           </div>
-        </div>
-      </div>
+        </Transition>
+      </Teleport>
     </template>
   </BaseModuleView>
 </template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+</style>
