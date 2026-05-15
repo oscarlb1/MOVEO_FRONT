@@ -19,7 +19,11 @@ const formulario = reactive({
 async function enviarFormulario() {
   cargando.value = true
   try {
+<<<<<<< Updated upstream
     const urlAWS = 'https://xgxc4swa3a.execute-api.us-east-1.amazonaws.com/prod/contacto'
+=======
+    const urlAWS = 'https://17d0mrgrgf.execute-api.us-east-1.amazonaws.com/prod/contacto'
+>>>>>>> Stashed changes
 
     const response = await fetch(urlAWS, {
       method: 'POST',
