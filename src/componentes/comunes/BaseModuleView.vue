@@ -23,10 +23,12 @@ const props = withDefaults(defineProps<{
   headerIcon?: any
   sidePosition?: 'left' | 'right'
   viewMode?: 'table' | 'cards'
+  showSide?: boolean
 }>(), {
   themeColor: 'emerald',
   sidePosition: 'right',
-  viewMode: 'table'
+  viewMode: 'table',
+  showSide: true
 })
 
 const emit = defineEmits<{
@@ -112,7 +114,7 @@ const themeClasses = computed(() => {
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6 relative z-10 w-full overflow-hidden" 
-         :class="[ { 'items-start': $slots.side }, props.sidePosition === 'left' ? 'lg:flex-row-reverse' : '' ]">
+         :class="[ { 'items-start': $slots.side && props.showSide }, props.sidePosition === 'left' ? 'lg:flex-row-reverse' : '' ]">
       <!-- Main Card -->
       <div class="flex-1 min-w-0 w-full overflow-hidden border rounded-2xl flex flex-col bg-white dark:bg-[#272A30] border-gray-200 dark:border-[#374B54] shadow-sm transition-colors duration-300">
         
@@ -176,7 +178,7 @@ const themeClasses = computed(() => {
       </div>
 
       <!-- Side Panel Content -->
-      <div v-if="$slots.side" class="w-full lg:w-80 shrink-0">
+      <div v-if="$slots.side && props.showSide" class="w-full lg:w-80 shrink-0">
         <slot name="side"></slot>
       </div>
     </div>

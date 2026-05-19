@@ -229,6 +229,7 @@ onMounted(async () => {
     :showNewButton="esAdmin"
     newButtonLabel="Nuevo Usuario"
     @new-click="abrirModalCrearUsuario"
+    :showSide="!!usuarioViendoStats"
   >
     <template #title-icon>
       <Users class="w-6 h-6 text-blue-600 dark:text-blue-400" />
